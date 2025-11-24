@@ -1,0 +1,36 @@
+```
+<aside class="sidebar" [class.open]="layoutService.isOpen()">
+    <div class="logo-container" routerLink="/dashboard" style="cursor: pointer;">
+        <div class="logo-icon">
+            <span class="material-icons">event_note</span>
+        </div>
+        <h1 class="logo-text">EventPlanner</h1>
+    </div>
+
+    <nav class="nav-menu">
+        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="label">Dashboard</span>
+        </a>
+        <a routerLink="/events" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="label">Events</span>
+        </a>
+        <a routerLink="/guests" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="label">Guests</span>
+        </a>
+        <a routerLink="/tasks" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="label">Tasks</span>
+        </a>
+        <a routerLink="/calendar" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="label">Calendar</span>
+        </a>
+    </nav>
+
+    <div class="user-profile" routerLink="/profile" (click)="closeSidebar()">
+        <div class="avatar">JD</div>
+        <div class="user-info">
+            <span class="name">John Doe</span>
+            <span class="role">Event Manager</span>
+        </div>
+    </div>
+</aside>
+```

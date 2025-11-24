@@ -1,0 +1,103 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Create New Event</h1>
+            <p class="page-subtitle">Fill in the details to organize your next big event</p>
+        </div>
+        <div class="actions">
+            <button class="btn-secondary" routerLink="/events">Cancel</button>
+            <button class="btn-primary" (click)="saveEvent()">Save Event</button>
+        </div>
+    </div>
+
+    <div class="form-container" [formGroup]="eventForm">
+        <div class="form-section">
+            <h2 class="section-title">Basic Information</h2>
+
+            <div class="form-group">
+                <label for="title">Event Title *</label>
+                <input type="text" id="title" formControlName="title" placeholder="e.g. Annual Tech Conference"
+                    [class.error]="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" />
+                <span class="error-msg" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">Title
+                    is required</span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="type">Event Type *</label>
+                    <select id="type" formControlName="type">
+                        <option value="conference">Conference</option>
+                        <option value="wedding">Wedding</option>
+                        <option value="party">Birthday Party</option>
+                        <option value="meeting">Corporate Meeting</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status *</label>
+                    <select id="status" formControlName="status">
+                        <option value="planning">Planning</option>
+                        <option value="active">Active</option>
+                        <option value="draft">Draft</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" formControlName="description" rows="4"
+                    placeholder="Describe your event..."></textarea>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Date & Location</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="start-date">Start Date *</label>
+                    <input type="date" id="start-date" formControlName="startDate"
+                        [class.error]="eventForm.get('startDate')?.invalid && eventForm.get('startDate')?.touched" />
+                    <span class="error-msg"
+                        *ngIf="eventForm.get('startDate')?.invalid && eventForm.get('startDate')?.touched">Start date is
+                        required</span>
+                </div>
+                <div class="form-group">
+                    <label for="start-time">Start Time</label>
+                    <input type="time" id="start-time" formControlName="startTime" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="end-date">End Date</label>
+                    <input type="date" id="end-date" formControlName="endDate" />
+                </div>
+                <div class="form-group">
+                    <label for="end-time">End Time</label>
+                    <input type="time" id="end-time" formControlName="endTime" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="location">Location / Venue *</label>
+                <input type="text" id="location" formControlName="location"
+                    placeholder="e.g. Moscone Center, San Francisco"
+                    [class.error]="eventForm.get('location')?.invalid && eventForm.get('location')?.touched" />
+                <span class="error-msg"
+                    *ngIf="eventForm.get('location')?.invalid && eventForm.get('location')?.touched">Location is
+                    required</span>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Cover Image</h2>
+            <div class="image-upload">
+                <div class="upload-placeholder">
+                    <span class="icon">📷</span>
+                    <p>Click to upload or drag and drop</p>
+                    <span class="hint">SVG, PNG, JPG or GIF (max. 800x400px)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

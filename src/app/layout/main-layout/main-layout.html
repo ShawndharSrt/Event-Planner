@@ -1,0 +1,13 @@
+<div class="app-container">
+    <app-sidebar></app-sidebar>
+    <div class="mobile-backdrop" (click)="closeSidebar()" [class.open]="isOpen"></div>
+
+    <div class="main-content">
+        <app-header></app-header>
+
+        <main class="content-area">
+            <router-outlet></router-outlet>
+        </main>
+        <app-footer></app-footer>
+    </div>
+</div>

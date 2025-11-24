@@ -1,0 +1,74 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Events</h1>
+            <p class="page-subtitle">Manage all your upcoming and past events</p>
+        </div>
+        <button class="create-btn" routerLink="/events/new">
+            <span class="icon">+</span>
+            Create Event
+        </button>
+    </div>
+
+    <div class="filters-bar">
+        <div class="search-input">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="Search events..." />
+        </div>
+
+        <div class="filter-group">
+            <select class="filter-select">
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="planning">Planning</option>
+                <option value="completed">Completed</option>
+            </select>
+
+            <select class="filter-select">
+                <option value="upcoming">Upcoming</option>
+                <option value="past">Past</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="events-grid">
+        <div class="event-card" *ngFor="let event of events()" [routerLink]="['/events', event.id]">
+            <div class="card-image"
+                [style.background-image]="'url(' + (event.coverImage || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') + ')'">
+                <div class="status-badge" [ngClass]="event.status">{{ event.status | titlecase }}</div>
+            </div>
+            <div class="card-content">
+                <div class="date">
+                    <span class="icon">📅</span>
+                    {{ event.startDate | date:'mediumDate' }} • {{ event.startTime }}
+                </div>
+                <h3 class="title">{{ event.title }}</h3>
+                <p class="location">
+                    <span class="icon">📍</span>
+                    {{ event.location }}
+                </p>
+                <div class="stats">
+                    <div class="stat">
+                        <span class="value">1,200</span>
+                        <span class="label">Guests</span>
+                    </div>
+                    <div class="stat">
+                        <span class="value">85%</span>
+                        <span class="label">RSVP</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="organizer">
+                    <div class="avatar">JD</div>
+                    <span>John Doe</span>
+                </div>
+                <span class="arrow">→</span>
+            </div>
+        </div>
+
+        <div *ngIf="events().length === 0" class="no-events">
+            <p>No events found.</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,77 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Add New Guest</h1>
+            <p class="page-subtitle">Add a new contact to your guest list</p>
+        </div>
+        <div class="actions">
+            <button class="btn-secondary" routerLink="/guests">Cancel</button>
+            <button class="btn-primary" (click)="saveGuest()">Save Guest</button>
+        </div>
+    </div>
+
+    <div class="form-container" [formGroup]="guestForm">
+        <div class="form-section">
+            <h2 class="section-title">Personal Information</h2>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="first-name">First Name *</label>
+                    <input type="text" id="first-name" formControlName="firstName" placeholder="e.g. John"
+                        [class.error]="guestForm.get('firstName')?.invalid && guestForm.get('firstName')?.touched" />
+                    <span class="error-msg"
+                        *ngIf="guestForm.get('firstName')?.invalid && guestForm.get('firstName')?.touched">First name is
+                        required</span>
+                </div>
+                <div class="form-group">
+                    <label for="last-name">Last Name *</label>
+                    <input type="text" id="last-name" formControlName="lastName" placeholder="e.g. Doe"
+                        [class.error]="guestForm.get('lastName')?.invalid && guestForm.get('lastName')?.touched" />
+                    <span class="error-msg"
+                        *ngIf="guestForm.get('lastName')?.invalid && guestForm.get('lastName')?.touched">Last name is
+                        required</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" formControlName="email" placeholder="e.g. john.doe@example.com"
+                    [class.error]="guestForm.get('email')?.invalid && guestForm.get('email')?.touched" />
+                <span class="error-msg" *ngIf="guestForm.get('email')?.invalid && guestForm.get('email')?.touched">Valid
+                    email is required</span>
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" formControlName="phone" placeholder="e.g. +1 (555) 123-4567" />
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2 class="section-title">Preferences & Group</h2>
+
+            <div class="form-group">
+                <label for="group">Group</label>
+                <select id="group" formControlName="group">
+                    <option value="none">Select Group...</option>
+                    <option value="vip">VIP</option>
+                    <option value="family">Family</option>
+                    <option value="friends">Friends</option>
+                    <option value="colleagues">Colleagues</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="dietary">Dietary Requirements</label>
+                <textarea id="dietary" formControlName="dietary" rows="3"
+                    placeholder="e.g. Vegetarian, Gluten-free..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="notes">Additional Notes</label>
+                <textarea id="notes" formControlName="notes" rows="3"
+                    placeholder="Any other important information..."></textarea>
+            </div>
+        </div>
+    </div>
+</div>

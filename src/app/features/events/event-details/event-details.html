@@ -1,0 +1,151 @@
+<div class="details-container" *ngIf="event()">
+    <!-- Hero Section -->
+    <div class="event-hero"
+        [style.background-image]="'linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), url(' + (event()?.coverImage || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') + ')'">
+        <div class="hero-content">
+            <div class="badges">
+                <span class="status-badge" [ngClass]="event()?.status">{{ event()?.status | titlecase }}</span>
+                <span class="type-badge">{{ event()?.type | titlecase }}</span>
+            </div>
+            <h1 class="event-title">{{ event()?.title }}</h1>
+            <div class="event-meta">
+                <span class="meta-item"><span class="icon">📅</span> {{ event()?.startDate | date:'mediumDate' }} • {{
+                    event()?.startTime }}</span>
+                <span class="meta-item"><span class="icon">📍</span> {{ event()?.location }}</span>
+            </div>
+        </div>
+        <div class="hero-actions">
+            <button class="btn-white" [routerLink]="['/events', event()?.id, 'edit']">Edit Event</button>
+            <button class="btn-primary">Send Invites</button>
+        </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <app-event-tabs [activeTab]="activeTab()" [guestCount]="1200" [taskCount]="8" (tabChange)="onTabChange($event)">
+    </app-event-tabs>
+
+    <!-- Tab Content (Overview) -->
+    <div class="tab-content" *ngIf="activeTab() === 'overview'">
+        <div class="grid-layout">
+            <!-- Left Column -->
+            <div class="main-column">
+                <div class="section-card">
+                    <h3 class="card-title">About Event</h3>
+                    <p class="description">
+                        {{ event()?.description }}
+                    </p>
+                </div>
+
+                <div class="section-card">
+                    <h3 class="card-title">Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item" *ngFor="let item of timeline()">
+                            <div class="time">{{ item.time }}</div>
+                            <div class="content">
+                                <h4>{{ item.title }}</h4>
+                                <p>{{ item.location }}</p>
+                            </div>
+                        </div>
+                        <div *ngIf="timeline().length === 0" class="empty-state">No timeline available.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="side-column">
+                <div class="section-card">
+                    <h3 class="card-title">Quick Stats</h3>
+                    <div class="stats-list" *ngIf="stats()">
+                        <div class="stat-row">
+                            <span class="label">Total Guests</span>
+                            <span class="value">{{ stats()?.totalGuests }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="label">Confirmed</span>
+                            <span class="value success">{{ stats()?.confirmed }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="label">Pending</span>
+                            <span class="value warning">{{ stats()?.pending }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="label">Declined</span>
+                            <span class="value danger">{{ stats()?.declined }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3 class="card-title">Team</h3>
+                    <div class="team-list">
+                        <div class="team-member" *ngFor="let member of team()">
+                            <div class="avatar" [class.secondary]="member.isSecondary">{{ member.avatar }}</div>
+                            <div class="info">
+                                <span class="name">{{ member.name }}</span>
+                                <span class="role">{{ member.role }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-text">+ Add Member</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab() === 'guests'">
+        <div class="section-card">
+            <div class="card-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 class="card-title" style="margin: 0;">Guest List</h3>
+                <div class="actions">
+                    <button class="btn-white" style="padding: 8px 16px; font-size: 14px; margin-right: 8px;"
+                        [routerLink]="['/guests/new']" [queryParams]="{ eventId: event()?.id }">+ Add Guest</button>
+                    <button class="btn-primary" style="padding: 8px 16px; font-size: 14px;">Export CSV</button>
+                </div>
+            </div>
+            <app-data-table [data]="guestData()" [columns]="guestColumns" [pageSize]="5">
+            </app-data-table>
+        </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab() === 'tasks'">
+        <div class="section-card">
+            <div class="card-header"
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 class="card-title" style="margin: 0;">Event Tasks</h3>
+                <button class="btn-primary" routerLink="/tasks" style="padding: 8px 16px; font-size: 14px;">Manage
+                    Tasks</button>
+            </div>
+
+            <div class="tasks-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <div class="task-item" *ngFor="let task of taskData()"
+                    style="padding: 16px; border: 1px solid #eee; border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="task-info">
+                        <h4 style="margin: 0 0 4px 0; font-size: 16px;">{{ task.title }}</h4>
+                        <p style="margin: 0; color: #666; font-size: 14px;">{{ task.description }}</p>
+                    </div>
+                    <div class="task-meta" style="display: flex; gap: 12px; align-items: center;">
+                        <span class="status-badge" [class]="task.status"
+                            style="padding: 4px 8px; border-radius: 4px; font-size: 12px; text-transform: uppercase; font-weight: 600; background: #f0f0f0;">
+                            {{ task.status }}
+                        </span>
+                        <span class="assignee-avatar"
+                            style="width: 32px; height: 32px; background: #e0e0e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;">
+                            {{ task.assignee | slice:0:2 }}
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="taskData().length === 0" style="text-align: center; padding: 40px; color: #999;">
+                    No tasks found for this event.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab() === 'budget'">
+        <div class="placeholder-content">
+            <h3>Budget Tracker</h3>
+            <p>Budget management content will go here.</p>
+        </div>
+    </div>
+</div>

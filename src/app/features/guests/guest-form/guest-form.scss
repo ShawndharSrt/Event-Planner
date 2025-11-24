@@ -1,0 +1,128 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.page-header {
+    @include flex-between;
+    margin-bottom: $spacing-md;
+
+    .header-content {
+        .page-title {
+            font-size: $font-size-2xl;
+            color: $text-primary;
+            margin-bottom: $spacing-xs;
+        }
+
+        .page-subtitle {
+            color: $text-secondary;
+            font-size: $font-size-sm;
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $spacing-md;
+
+        button {
+            padding: $spacing-sm $spacing-lg;
+            border-radius: $border-radius-md;
+            font-weight: $font-weight-medium;
+            transition: $transition-base;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid $text-light;
+            color: $text-secondary;
+
+            &:hover {
+                border-color: $text-secondary;
+                color: $text-primary;
+            }
+        }
+
+        .btn-primary {
+            background-color: $primary-color;
+            color: white;
+            box-shadow: $shadow-sm;
+
+            &:hover {
+                background-color: $primary-dark;
+                box-shadow: $shadow-md;
+            }
+        }
+    }
+}
+
+.form-container {
+    @include card-style;
+    padding: $spacing-xl;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-2xl;
+}
+
+.form-section {
+    .section-title {
+        font-size: $font-size-lg;
+        color: $text-primary;
+        margin-bottom: $spacing-lg;
+        padding-bottom: $spacing-sm;
+        border-bottom: 1px solid var(--border-color);
+    }
+}
+
+.form-group {
+    margin-bottom: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xs;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $text-secondary;
+    }
+
+    input,
+    select,
+    textarea {
+        padding: $spacing-md;
+        border: 1px solid var(--border-color-subtle);
+        border-radius: $border-radius-md;
+        font-family: $font-family-base;
+        font-size: $font-size-base;
+        color: $text-primary;
+        background-color: $background-color;
+        transition: $transition-base;
+        outline: none;
+
+        &:focus {
+            border-color: $primary-color;
+            box-shadow: 0 0 0 3px var(--primary-focus-glow);
+        }
+
+        &::placeholder {
+            color: $text-light;
+        }
+    }
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-lg;
+
+    @media (max-width: map.get($breakpoints, 'sm')) {
+        grid-template-columns: 1fr;
+    }
+}

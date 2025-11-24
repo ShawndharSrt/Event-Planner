@@ -1,0 +1,54 @@
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: $background-color;
+}
+
+.mobile-backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 95; // Below sidebar (100) but above header (90)
+    opacity: 0;
+    transition: opacity $transition-base;
+    pointer-events: none;
+
+    &.open {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    @media (max-width: map.get($breakpoints, 'md')) {
+        display: block;
+    }
+}
+
+.main-content {
+    flex: 1;
+    margin-left: 200px;
+    display: flex;
+    flex-direction: column;
+    transition: $transition-base;
+
+    @media (max-width: map.get($breakpoints, 'md')) {
+        margin-left: 0;
+    }
+}
+
+.content-area {
+    flex: 1;
+    padding: $spacing-xl;
+    overflow-y: auto;
+
+    @media (max-width: map.get($breakpoints, 'md')) {
+        padding: $spacing-md;
+    }
+}

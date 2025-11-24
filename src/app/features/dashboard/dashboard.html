@@ -1,0 +1,86 @@
+<div class="dashboard-container">
+    <div class="page-header">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Welcome back! Here's what's happening with your events.</p>
+    </div>
+
+    <div class="stats-grid" *ngIf="stats()">
+        <div class="stat-card">
+            <div class="icon-container primary">
+                <span class="icon">📅</span>
+            </div>
+            <div class="stat-info">
+                <span class="value">{{ stats()?.upcomingEvents }}</span>
+                <span class="label">Upcoming Events</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon-container secondary">
+                <span class="icon">👥</span>
+            </div>
+            <div class="stat-info">
+                <span class="value">{{ stats()?.totalGuests }}</span>
+                <span class="label">Total Guests</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon-container warning">
+                <span class="icon">⏳</span>
+            </div>
+            <div class="stat-info">
+                <span class="value">{{ stats()?.pendingTasks }}</span>
+                <span class="label">Pending Tasks</span>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="icon-container success">
+                <span class="icon">✅</span>
+            </div>
+            <div class="stat-info">
+                <span class="value">{{ stats()?.completedTasks }}</span>
+                <span class="label">Completed Tasks</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-grid">
+        <div class="section-card recent-events">
+            <div class="card-header">
+                <h3>Recent Events</h3>
+                <button class="view-all" routerLink="/events">View All</button>
+            </div>
+            <div class="card-body">
+                <div class="event-item" *ngFor="let event of recentEvents()" [routerLink]="['/events', event.id]">
+                    <div class="date-badge">
+                        <span class="month">{{ event.month }}</span>
+                        <span class="day">{{ event.day }}</span>
+                    </div>
+                    <div class="event-details">
+                        <h4>{{ event.title }}</h4>
+                        <p>{{ event.location }} • {{ event.time }}</p>
+                    </div>
+                    <span class="status-badge" [ngClass]="event.status">{{ event.status | titlecase }}</span>
+                </div>
+                <div *ngIf="recentEvents().length === 0" class="empty-state">No recent events.</div>
+            </div>
+        </div>
+
+        <div class="section-card tasks-overview">
+            <div class="card-header">
+                <h3>Tasks Overview</h3>
+                <button class="view-all" routerLink="/tasks">View All</button>
+            </div>
+            <div class="card-body">
+                <div class="task-item" *ngFor="let task of tasks()">
+                    <input type="checkbox" [id]="'task-' + task.id" [checked]="task.completed" />
+                    <label [for]="'task-' + task.id" [class.completed]="task.completed">{{ task.title }}</label>
+                    <span class="tag" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
+                </div>
+                <div *ngIf="tasks().length === 0" class="empty-state">No pending tasks.</div>
+            </div>
+        </div>
+    </div>
+</div>

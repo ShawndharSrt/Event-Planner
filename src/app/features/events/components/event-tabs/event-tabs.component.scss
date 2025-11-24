@@ -1,0 +1,46 @@
+@use 'styles/variables' as *;
+
+.tabs-nav {
+    display: flex;
+    gap: $spacing-lg;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: $spacing-xl;
+    overflow-x: auto;
+
+    .tab-item {
+        padding: $spacing-md 0;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        color: $text-secondary;
+        font-weight: $font-weight-medium;
+        cursor: pointer;
+        transition: $transition-base;
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
+
+        .count {
+            background-color: var(--background-alt);
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: $font-size-xs;
+            color: $text-secondary;
+        }
+
+        &:hover {
+            color: $primary-color;
+        }
+
+        &.active {
+            color: $primary-color;
+            border-bottom-color: $primary-color;
+
+            .count {
+                background-color: var(--primary-lighter-bg);
+                color: $primary-color;
+            }
+        }
+    }
+}

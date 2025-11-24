@@ -1,0 +1,6 @@
+<div class="snackbar" [class.show]="snackbarService.snackbarState().isVisible"
+    [class.success]="snackbarService.snackbarState().type === 'success'"
+    [class.error]="snackbarService.snackbarState().type === 'error'"
+    [class.info]="snackbarService.snackbarState().type === 'info'">
+    {{ snackbarService.snackbarState().message }}
+</div>

@@ -1,0 +1,230 @@
+@use 'sass:color';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba($primary-color, 0.9) 0%, rgba($secondary-color, 0.9) 100%), url('/assets/login-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    padding: $spacing-lg;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-xl;
+    padding: $spacing-2xl;
+    width: 100%;
+    max-width: 420px;
+    animation: slideUp 0.5s ease-out;
+
+    .brand-header {
+        text-align: center;
+        margin-bottom: $spacing-2xl;
+
+        .logo {
+            width: 64px;
+            height: 64px;
+            background-color: var(--primary-light-bg);
+            color: $primary-color;
+            border-radius: $border-radius-lg;
+            @include flex-center;
+            margin: 0 auto $spacing-md;
+
+            .material-icons {
+                font-size: 32px;
+            }
+        }
+
+        h1 {
+            font-size: $font-size-2xl;
+            color: $text-primary;
+            margin-bottom: $spacing-xs;
+        }
+
+        p {
+            color: $text-secondary;
+            font-size: $font-size-base;
+        }
+    }
+
+    .form-group {
+        margin-bottom: $spacing-lg;
+
+        label {
+            display: block;
+            font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
+            color: $text-secondary;
+            margin-bottom: $spacing-xs;
+        }
+
+        .input-wrapper {
+            position: relative;
+
+            .icon {
+                position: absolute;
+                left: $spacing-md;
+                top: 50%;
+                transform: translateY(-50%);
+                color: $text-light;
+                font-size: 20px;
+            }
+
+            input {
+                width: 100%;
+                padding: $spacing-md $spacing-md $spacing-md 44px; // Left padding for icon
+                border: 1px solid var(--border-color-subtle);
+                border-radius: $border-radius-md;
+                font-size: $font-size-base;
+                color: $text-primary;
+                transition: $transition-base;
+                outline: none;
+
+                &:focus {
+                    border-color: $primary-color;
+                    box-shadow: 0 0 0 3px var(--primary-focus-glow);
+                }
+
+                &.error {
+                    border-color: $danger-color;
+
+                    &:focus {
+                        box-shadow: 0 0 0 3px var(--danger-focus-glow);
+                    }
+                }
+            }
+        }
+
+        .error-msg {
+            color: $danger-color;
+            font-size: $font-size-xs;
+            margin-top: 4px;
+        }
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: $spacing-lg;
+
+        .forgot-password {
+            color: $primary-color;
+            font-size: $font-size-sm;
+            text-decoration: none;
+            font-weight: $font-weight-medium;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    .alert {
+        padding: $spacing-md;
+        border-radius: $border-radius-md;
+        margin-bottom: $spacing-lg;
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        font-size: $font-size-sm;
+
+        &.error {
+            background-color: var(--danger-light-bg);
+            color: $danger-color;
+            border: 1px solid var(--danger-border);
+        }
+    }
+
+    .btn-submit {
+        width: 100%;
+        padding: $spacing-md;
+        background-color: $primary-color;
+        color: white;
+        border: none;
+        border-radius: $border-radius-md;
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        cursor: pointer;
+        transition: $transition-base;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 48px;
+
+        &:hover:not(:disabled) {
+            background-color: $primary-dark;
+            box-shadow: $shadow-md;
+            transform: translateY(-1px);
+        }
+
+        &:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+    }
+
+    .login-footer {
+        margin-top: $spacing-xl;
+        text-align: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: $spacing-lg;
+
+        p {
+            color: $text-secondary;
+            font-size: $font-size-sm;
+            margin-bottom: $spacing-sm;
+
+            a {
+                color: $primary-color;
+                text-decoration: none;
+                font-weight: $font-weight-bold;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .demo-credentials {
+            color: $text-light;
+            font-size: $font-size-xs;
+            background-color: var(--background-darker);
+            padding: $spacing-xs $spacing-sm;
+            border-radius: $border-radius-sm;
+            display: inline-block;
+        }
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

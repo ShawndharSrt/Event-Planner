@@ -1,0 +1,82 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Task Board</h1>
+            <p class="page-subtitle">Track progress and manage event tasks</p>
+        </div>
+        <button class="create-btn" (click)="addTask()">
+            <span class="icon">+</span>
+            Add Task
+        </button>
+    </div>
+
+    <div class="board-container">
+        <!-- To Do Column -->
+        <div class="board-column">
+            <div class="column-header">
+                <h3 class="title">To Do</h3>
+                <span class="count">{{ getTasksByStatus('todo').length }}</span>
+            </div>
+            <div class="column-content">
+                <div class="task-card" *ngFor="let task of getTasksByStatus('todo')">
+                    <div class="task-header">
+                        <span class="priority" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
+                        <button class="more-btn" (click)="moveTask(task)">→</button>
+                    </div>
+                    <div style="font-size: 11px; color: #888; margin-bottom: 4px;">Event ID: {{ task.eventId }}</div>
+                    <h4 class="task-title">{{ task.title }}</h4>
+                    <p class="task-desc">{{ task.description }}</p>
+                    <div class="task-footer">
+                        <div class="assignee" [class.secondary]="task.assignee === 'AS'"
+                            [class.warning]="task.assignee === 'MJ'">{{ task.assignee }}</div>
+                        <span class="due-date" [class.warning]="task.dueDate?.includes('Nov')">{{ task.dueDate }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- In Progress Column -->
+        <div class="board-column">
+            <div class="column-header">
+                <h3 class="title">In Progress</h3>
+                <span class="count">{{ getTasksByStatus('in-progress').length }}</span>
+            </div>
+            <div class="column-content">
+                <div class="task-card" *ngFor="let task of getTasksByStatus('in-progress')">
+                    <div class="task-header">
+                        <span class="priority" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
+                        <button class="more-btn" (click)="moveTask(task)">→</button>
+                    </div>
+                    <h4 class="task-title">{{ task.title }}</h4>
+                    <p class="task-desc">{{ task.description }}</p>
+                    <div class="task-footer">
+                        <div class="assignee" [class.secondary]="task.assignee === 'AS'">{{ task.assignee }}</div>
+                        <span class="due-date">{{ task.dueDate }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Done Column -->
+        <div class="board-column">
+            <div class="column-header">
+                <h3 class="title">Done</h3>
+                <span class="count">{{ getTasksByStatus('done').length }}</span>
+            </div>
+            <div class="column-content">
+                <div class="task-card completed" *ngFor="let task of getTasksByStatus('done')">
+                    <div class="task-header">
+                        <span class="priority" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
+                        <button class="more-btn" (click)="moveTask(task)">↺</button>
+                    </div>
+                    <h4 class="task-title">{{ task.title }}</h4>
+                    <p class="task-desc">{{ task.description }}</p>
+                    <div class="task-footer">
+                        <div class="assignee">{{ task.assignee }}</div>
+                        <span class="due-date success">Done</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

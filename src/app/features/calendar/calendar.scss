@@ -1,0 +1,191 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-lg;
+    height: calc(100vh - 120px);
+}
+
+.page-header {
+    @include flex-between;
+
+    .header-content {
+        .page-title {
+            font-size: $font-size-2xl;
+            color: $text-primary;
+            margin-bottom: $spacing-xs;
+        }
+
+        .page-subtitle {
+            color: $text-secondary;
+            font-size: $font-size-sm;
+        }
+    }
+
+    .actions {
+        display: flex;
+        gap: $spacing-lg;
+
+        .view-toggle {
+            display: flex;
+            background-color: var(--background-alt);
+            padding: 4px;
+            border-radius: $border-radius-md;
+            border: 1px solid var(--border-color);
+
+            .toggle-btn {
+                padding: $spacing-xs $spacing-md;
+                border-radius: $border-radius-sm;
+                background: none;
+                color: $text-secondary;
+                font-size: $font-size-sm;
+                font-weight: $font-weight-medium;
+
+                &.active {
+                    background-color: white;
+                    color: $primary-color;
+                    box-shadow: $shadow-sm;
+                }
+            }
+        }
+
+        .create-btn {
+            background-color: $primary-color;
+            color: white;
+            padding: $spacing-sm $spacing-lg;
+            border-radius: $border-radius-md;
+            font-weight: $font-weight-medium;
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+            transition: $transition-base;
+            box-shadow: $shadow-sm;
+
+            &:hover {
+                background-color: $primary-dark;
+                box-shadow: $shadow-md;
+            }
+        }
+    }
+}
+
+.calendar-container {
+    @include card-style;
+    padding: $spacing-lg;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendar-header {
+    @include flex-center;
+    justify-content: space-between;
+    margin-bottom: $spacing-lg;
+
+    .current-month {
+        font-size: $font-size-xl;
+        color: $text-primary;
+    }
+
+    .nav-btn {
+        background: none;
+        font-size: $font-size-lg;
+        color: $text-secondary;
+        padding: $spacing-xs $spacing-md;
+        border-radius: $border-radius-md;
+        transition: $transition-base;
+
+        &:hover {
+            background-color: var(--text-light-bg);
+            color: $primary-color;
+        }
+    }
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1px;
+    background-color: var(--border-color);
+    border: 1px solid var(--border-color);
+    border-radius: $border-radius-md;
+    overflow: hidden;
+    flex: 1;
+
+    .weekday {
+        background-color: var(--background-alt);
+        padding: $spacing-sm;
+        text-align: center;
+        font-weight: $font-weight-bold;
+        color: $text-secondary;
+        font-size: $font-size-sm;
+    }
+
+    .day {
+        background-color: white;
+        min-height: 100px;
+        padding: $spacing-xs;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        transition: $transition-base;
+        cursor: pointer;
+
+        &:hover {
+            background-color: var(--background-alt-2);
+        }
+
+        &.prev-month {
+            background-color: var(--background-alt);
+            color: $text-light;
+        }
+
+        .date {
+            font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
+            color: $text-primary;
+            margin-bottom: 4px;
+            width: 24px;
+            height: 24px;
+            @include flex-center;
+            border-radius: $border-radius-full;
+        }
+
+        &.today .date {
+            background-color: $primary-color;
+            color: white;
+        }
+
+        .event-indicator {
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: $border-radius-sm;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: $font-weight-medium;
+
+            &.primary {
+                background-color: var(--primary-subtle);
+                color: $primary-color;
+                border-left: 2px solid $primary-color;
+            }
+
+            &.secondary {
+                background-color: var(--secondary-subtle);
+                color: $secondary-color;
+                border-left: 2px solid $secondary-color;
+            }
+
+            &.warning {
+                background-color: var(--warning-subtle);
+                color: var(--warning-darker);
+                border-left: 2px solid $warning-color;
+            }
+        }
+    }
+}

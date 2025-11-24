@@ -1,0 +1,50 @@
+<div class="table-container">
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th *ngFor="let col of columns" (click)="sort(col.key)" [class.sortable]="true"
+                    [class.sorted-asc]="sortColumn() === col.key && sortDirection() === 'asc'"
+                    [class.sorted-desc]="sortColumn() === col.key && sortDirection() === 'desc'">
+                    {{ col.label }}
+                    <span class="sort-icon" *ngIf="sortColumn() === col.key">
+                        {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                    </span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let row of pagedData()">
+                <td *ngFor="let col of columns">
+                    <!-- Status Cell -->
+                    <span *ngIf="col.type === 'status'" class="status-badge" [ngClass]="row[col.key].toLowerCase()">
+                        {{ row[col.key] }}
+                    </span>
+
+                    <!-- Default Cell -->
+                    <span *ngIf="col.type !== 'status'">
+                        {{ row[col.key] }}
+                    </span>
+                </td>
+            </tr>
+            <tr *ngIf="data.length === 0">
+                <td [attr.colspan]="columns.length" class="no-data">
+                    No data available
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="pagination" *ngIf="totalPages() > 1">
+        <span class="page-info">
+            Page {{ currentPage() }} of {{ totalPages() }}
+        </span>
+        <div class="page-controls">
+            <button class="icon-btn" [disabled]="currentPage() === 1" (click)="prevPage()">
+                ←
+            </button>
+            <button class="icon-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()">
+                →
+            </button>
+        </div>
+    </div>
+</div>

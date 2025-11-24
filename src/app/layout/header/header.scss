@@ -1,0 +1,145 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.header {
+    height: 80px;
+    background-color: $surface-color;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0 $spacing-xl;
+    @include flex-between;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    transition: $transition-base;
+
+    @media (max-width: map.get($breakpoints, 'md')) {
+        padding: 0 $spacing-md;
+    }
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    flex: 1;
+
+    .menu-btn {
+        display: none;
+
+        @media (max-width: map.get($breakpoints, 'md')) {
+            display: flex;
+        }
+    }
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: $background-color;
+    padding: $spacing-sm $spacing-md;
+    border-radius: $border-radius-md;
+    width: 300px;
+    transition: $transition-base;
+
+    &:focus-within {
+        box-shadow: 0 0 0 2px var(--primary-focus-ring);
+        width: 320px;
+    }
+
+    @media (max-width: map.get($breakpoints, 'md')) {
+        display: none; // Hide search on mobile for simplicity or make it an icon toggle
+    }
+
+    .search-icon {
+        color: $text-light;
+        margin-right: $spacing-sm;
+        font-size: 20px;
+    }
+
+    input {
+        border: none;
+        background: transparent;
+        outline: none;
+        width: 100%;
+        color: $text-primary;
+        font-family: $font-family-base;
+
+        &::placeholder {
+            color: $text-light;
+        }
+    }
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: $spacing-lg;
+
+    .icon-btn {
+        background: none;
+        color: $text-secondary;
+        position: relative;
+        padding: $spacing-xs;
+        border-radius: $border-radius-full;
+        transition: $transition-base;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background-color: var(--text-light-bg);
+            color: $primary-color;
+        }
+
+        .material-icons {
+            font-size: 24px;
+        }
+
+        .badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: $danger-color;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            min-width: 16px;
+            height: 16px;
+            border-radius: $border-radius-full;
+            @include flex-center;
+            border: 2px solid $surface-color;
+        }
+    }
+
+    .create-btn {
+        background-color: $primary-color;
+        color: white;
+        padding: $spacing-sm $spacing-lg;
+        border-radius: $border-radius-md;
+        font-weight: $font-weight-medium;
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        transition: $transition-base;
+        box-shadow: $shadow-sm;
+
+        &:hover {
+            background-color: $primary-dark;
+            box-shadow: $shadow-md;
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+
+        @media (max-width: map.get($breakpoints, 'sm')) {
+            span:not(.icon) {
+                display: none;
+            }
+
+            padding: $spacing-sm;
+        }
+    }
+}

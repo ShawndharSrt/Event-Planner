@@ -1,0 +1,10 @@
+<div class="tabs-nav">
+    <button class="tab-item" [class.active]="activeTab === 'overview'" (click)="setTab('overview')">Overview</button>
+    <button class="tab-item" [class.active]="activeTab === 'guests'" (click)="setTab('guests')">
+        Guests <span class="count">{{ guestCount }}</span>
+    </button>
+    <button class="tab-item" [class.active]="activeTab === 'tasks'" (click)="setTab('tasks')">
+        Tasks <span class="count">{{ taskCount }}</span>
+    </button>
+    <button class="tab-item" [class.active]="activeTab === 'budget'" (click)="setTab('budget')">Budget</button>
+</div>

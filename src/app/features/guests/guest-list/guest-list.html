@@ -1,0 +1,63 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="header-content">
+            <h1 class="page-title">Guest List</h1>
+            <p class="page-subtitle">Manage your contacts and guest lists</p>
+        </div>
+        <button class="create-btn" routerLink="/guests/new">
+            <span class="icon">+</span>
+            Add Guest
+        </button>
+    </div>
+
+    <div class="filters-bar">
+        <div class="search-input">
+            <span class="icon">🔍</span>
+            <input type="text" placeholder="Search guests by name or email..." />
+        </div>
+
+        <div class="filter-group">
+            <select class="filter-select">
+                <option value="all">All Groups</option>
+                <option value="vip">VIP</option>
+                <option value="family">Family</option>
+                <option value="friends">Friends</option>
+                <option value="colleagues">Colleagues</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="guests-grid">
+        <div class="guest-card" *ngFor="let guest of guests()">
+            <div class="card-header">
+                <div class="avatar-lg" [class.secondary]="guest.id % 2 === 0" [class.warning]="guest.id % 3 === 0">
+                    {{ guest.firstName[0] }}{{ guest.lastName[0] }}
+                </div>
+                <div class="actions">
+                    <button class="icon-btn">✏️</button>
+                    <button class="icon-btn danger">🗑️</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <h3 class="name">{{ guest.firstName }} {{ guest.lastName }}</h3>
+                <p class="email">{{ guest.email }}</p>
+                <p class="phone">{{ guest.phone || 'No phone' }}</p>
+                <div class="tags">
+                    <span class="tag" [ngClass]="guest.group">{{ guest.group | titlecase }}</span>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="stat">
+                    <span class="value">{{ (guest.id * 2) % 10 + 1 }}</span>
+                    <span class="label">Events</span>
+                </div>
+                <div class="stat">
+                    <span class="value">{{ (guest.id * 10) % 100 }}%</span>
+                    <span class="label">Attendance</span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="guests().length === 0" class="empty-state">No guests found.</div>
+    </div>
+</div>

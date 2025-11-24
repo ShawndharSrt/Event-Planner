@@ -1,0 +1,58 @@
+<div class="login-container">
+    <div class="login-card">
+        <div class="brand-header">
+            <div class="logo">
+                <span class="material-icons">event</span>
+            </div>
+            <h1>Event Planner</h1>
+            <p>Sign in to manage your events</p>
+        </div>
+
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <div class="input-wrapper">
+                    <span class="material-icons icon">person</span>
+                    <input type="text" id="username" formControlName="username" placeholder="Enter your username"
+                        [class.error]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                </div>
+                <div class="error-msg" *ngIf="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+                    Username is required
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <span class="material-icons icon">lock</span>
+                    <input type="password" id="password" formControlName="password" placeholder="Enter your password"
+                        [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                </div>
+                <div class="error-msg" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    Password is required
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <a routerLink="/forgot-password" class="forgot-password">Forgot password?</a>
+            </div>
+
+            <div class="alert error" *ngIf="errorMessage">
+                <span class="material-icons">error_outline</span>
+                {{ errorMessage }}
+            </div>
+
+            <button type="submit" class="btn-submit" [disabled]="loginForm.invalid || isLoading">
+                <span *ngIf="!isLoading">Sign In</span>
+                <span *ngIf="isLoading" class="spinner"></span>
+            </button>
+        </form>
+
+        <div class="login-footer">
+            <p>Don't have an account? <a routerLink="/register">Sign up</a></p>
+            <div class="demo-credentials">
+                <small>Demo Credentials: admin / password</small>
+            </div>
+        </div>
+    </div>
+</div>
