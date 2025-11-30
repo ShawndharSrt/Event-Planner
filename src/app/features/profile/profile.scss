@@ -197,17 +197,36 @@
     box-shadow: $shadow-md;
     border: 1px solid var(--border-color);
     overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        box-shadow: $shadow-lg;
+        transform: translateY(-2px);
+    }
 
     .card-header {
-        padding: $spacing-lg;
-        border-bottom: 1px solid var(--border-color);
-        background: linear-gradient(135deg, var(--background-alt) 0%, $surface-color 100%);
+        padding: $spacing-xl $spacing-lg;
+        border-bottom: 2px solid var(--border-color);
+        background: linear-gradient(135deg, var(--primary-lightest-bg) 0%, var(--background-alt) 50%, $surface-color 100%);
+        position: relative;
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, $primary-color 0%, transparent 100%);
+        }
 
         h2 {
             margin: 0;
             font-size: $font-size-xl;
-            font-weight: $font-weight-semibold;
+            font-weight: $font-weight-bold;
             color: $text-primary;
+            position: relative;
+            z-index: 1;
         }
     }
 
@@ -219,42 +238,82 @@
 .info-row {
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
-    margin-bottom: $spacing-lg;
-    padding-bottom: $spacing-lg;
-    border-bottom: 1px solid var(--border-color);
+    gap: $spacing-sm;
+    padding: $spacing-lg;
+    margin-bottom: $spacing-md;
+    background: linear-gradient(135deg, var(--background-alt) 0%, transparent 100%);
+    border-radius: $border-radius-md;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background: linear-gradient(180deg, $primary-color, $primary-light);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+        background: linear-gradient(135deg, var(--primary-lightest-bg) 0%, var(--background-alt) 100%);
+        border-color: rgba($primary-color, 0.3);
+        box-shadow: 0 4px 12px rgba($primary-color, 0.08);
+        transform: translateX(4px);
+
+        &::before {
+            opacity: 1;
+        }
+
+        .label {
+            color: $primary-color;
+        }
+    }
 
     &:last-child {
         margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
     }
 
     .label {
-        font-weight: $font-weight-medium;
+        font-weight: $font-weight-semibold;
         color: $text-secondary;
         font-size: $font-size-sm;
         text-transform: uppercase;
-        letter-spacing: 0.5px;
+        letter-spacing: 0.8px;
+        transition: color 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: $spacing-xs;
     }
 
     .value {
         color: $text-primary;
         font-weight: $font-weight-medium;
-        font-size: $font-size-base;
+        font-size: $font-size-lg;
+        padding: $spacing-xs 0;
     }
 
     .bio-text {
         color: $text-primary;
-        line-height: 1.6;
+        line-height: 1.8;
         margin: 0;
         font-size: $font-size-base;
+        padding: $spacing-xs 0;
+        opacity: 0.9;
     }
 }
 
 .edit-form {
+    padding: $spacing-lg;
+
     .form-group {
-        margin-bottom: $spacing-lg;
+        margin-bottom: $spacing-xl;
+        position: relative;
 
         &:last-child {
             margin-bottom: 0;
@@ -263,40 +322,59 @@
         label {
             display: block;
             font-size: $font-size-sm;
-            font-weight: $font-weight-medium;
+            font-weight: $font-weight-semibold;
             color: $text-secondary;
             margin-bottom: $spacing-sm;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.8px;
+            transition: color 0.3s ease;
         }
 
         input,
         textarea {
             width: 100%;
-            padding: $spacing-md;
-            border: 1px solid var(--border-color);
+            padding: $spacing-md $spacing-lg;
+            border: 2px solid var(--border-color);
             border-radius: $border-radius-md;
             font-family: $font-family-base;
             font-size: $font-size-base;
             color: $text-primary;
-            transition: $transition-base;
+            background: linear-gradient(135deg, var(--background-alt) 0%, $surface-color 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             outline: none;
-            background-color: $surface-color;
+
+            &:hover {
+                border-color: rgba($primary-color, 0.4);
+                background: $surface-color;
+            }
 
             &:focus {
                 border-color: $primary-color;
-                box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+                background: $surface-color;
+                box-shadow: 0 0 0 4px rgba($primary-color, 0.1);
+                transform: translateY(-1px);
+
+                &+label {
+                    color: $primary-color;
+                }
             }
 
             &::placeholder {
                 color: $text-light;
+                opacity: 0.6;
             }
         }
 
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px;
             font-family: $font-family-base;
+            line-height: 1.6;
+        }
+
+        // Focus state for label when input is focused
+        &:focus-within label {
+            color: $primary-color;
         }
     }
 }
@@ -307,7 +385,7 @@
     gap: $spacing-lg;
     padding: $spacing-lg;
 
-        .stat-item {
+    .stat-item {
         display: flex;
         flex-direction: column;
         align-items: center;

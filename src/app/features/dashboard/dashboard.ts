@@ -13,7 +13,9 @@ import { DashboardService, DashboardStats, RecentEvent, DashboardTask } from '..
 export class DashboardComponent {
   private dashboardService: DashboardService = inject(DashboardService);
 
-  stats = toSignal(this.dashboardService.getStats());
+  stats = toSignal(this.dashboardService.getStats(), {
+    initialValue: { upcomingEvents: 0, totalGuests: 0, pendingTasks: 0, completedTasks: 0 }
+  });
   recentEvents = toSignal(this.dashboardService.getRecentEvents(), { initialValue: [] as RecentEvent[] });
   tasks = toSignal(this.dashboardService.getTasks(), { initialValue: [] as DashboardTask[] });
 }

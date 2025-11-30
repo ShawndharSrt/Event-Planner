@@ -1,0 +1,108 @@
+<div class="auth-container">
+    <div class="auth-content">
+        <div class="content-overlay"></div>
+        <div class="content-body">
+            <h1>Join Event Planner</h1>
+            <p>Create an account to start planning your dream events. Access powerful tools and manage everything in one
+                place.</p>
+        </div>
+    </div>
+
+    <div class="auth-form-container">
+        <div class="login-card">
+            <div class="brand-header">
+                <div class="logo">
+                    <span class="material-icons">event</span>
+                </div>
+                <h2>Create Account</h2>
+                <p>Sign up to start planning your events</p>
+            </div>
+
+            <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons icon">badge</span>
+                        <input type="text" id="fullName" formControlName="fullName" placeholder="Enter your full name"
+                            [class.error]="signUpForm.get('fullName')?.invalid && signUpForm.get('fullName')?.touched">
+                    </div>
+                    <div class="error-msg"
+                        *ngIf="signUpForm.get('fullName')?.invalid && signUpForm.get('fullName')?.touched">
+                        Full Name is required
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons icon">person</span>
+                        <input type="text" id="username" formControlName="username" placeholder="Choose a username"
+                            [class.error]="signUpForm.get('username')?.invalid && signUpForm.get('username')?.touched">
+                    </div>
+                    <div class="error-msg"
+                        *ngIf="signUpForm.get('username')?.invalid && signUpForm.get('username')?.touched">
+                        <span *ngIf="signUpForm.get('username')?.errors?.['required']">Username is required</span>
+                        <span *ngIf="signUpForm.get('username')?.errors?.['minlength']">Username must be at least 3
+                            characters</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons icon">email</span>
+                        <input type="email" id="email" formControlName="email" placeholder="Enter your email"
+                            [class.error]="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched">
+                    </div>
+                    <div class="error-msg" *ngIf="signUpForm.get('email')?.invalid && signUpForm.get('email')?.touched">
+                        <span *ngIf="signUpForm.get('email')?.errors?.['required']">Email is required</span>
+                        <span *ngIf="signUpForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons icon">lock</span>
+                        <input type="password" id="password" formControlName="password" placeholder="Create a password"
+                            [class.error]="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched">
+                    </div>
+                    <div class="error-msg"
+                        *ngIf="signUpForm.get('password')?.invalid && signUpForm.get('password')?.touched">
+                        <span *ngIf="signUpForm.get('password')?.errors?.['required']">Password is required</span>
+                        <span *ngIf="signUpForm.get('password')?.errors?.['minlength']">Password must be at least 6
+                            characters</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <span class="material-icons icon">lock_clock</span>
+                        <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                            placeholder="Confirm your password"
+                            [class.error]="signUpForm.hasError('mismatch') && signUpForm.get('confirmPassword')?.touched">
+                    </div>
+                    <div class="error-msg"
+                        *ngIf="signUpForm.hasError('mismatch') && signUpForm.get('confirmPassword')?.touched">
+                        Passwords do not match
+                    </div>
+                </div>
+
+                <div class="alert error" *ngIf="errorMessage">
+                    <span class="material-icons">error_outline</span>
+                    {{ errorMessage }}
+                </div>
+
+                <button type="submit" class="btn-submit" [disabled]="signUpForm.invalid || isLoading">
+                    <span *ngIf="!isLoading">Sign Up</span>
+                    <span *ngIf="isLoading" class="spinner"></span>
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+            </div>
+        </div>
+    </div>
+</div>

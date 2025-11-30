@@ -70,12 +70,12 @@
 
 .login-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 480px;
     animation: slideUp 0.5s ease-out;
 
     .brand-header {
         text-align: center;
-        margin-bottom: $spacing-2xl;
+        margin-bottom: $spacing-xl;
 
         .logo {
             width: 56px;
@@ -105,7 +105,7 @@
     }
 
     .form-group {
-        margin-bottom: $spacing-lg;
+        margin-bottom: $spacing-md;
 
         label {
             display: block;
@@ -165,23 +165,6 @@
         }
     }
 
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        margin-bottom: $spacing-lg;
-
-        .forgot-password {
-            color: $primary-color;
-            font-size: $font-size-sm;
-            text-decoration: none;
-            font-weight: $font-weight-medium;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
-    }
-
     .alert {
         padding: $spacing-md;
         border-radius: $border-radius-md;
@@ -214,6 +197,7 @@
         justify-content: center;
         align-items: center;
         height: 48px;
+        margin-top: $spacing-lg;
 
         &:hover:not(:disabled) {
             background-color: $primary-dark;
@@ -239,11 +223,13 @@
     .login-footer {
         margin-top: $spacing-xl;
         text-align: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: $spacing-lg;
 
         p {
             color: #6b7280;
             font-size: $font-size-sm;
-            margin-bottom: $spacing-lg;
+            margin-bottom: $spacing-sm;
 
             a {
                 color: $primary-color;
@@ -254,15 +240,6 @@
                     text-decoration: underline;
                 }
             }
-        }
-
-        .demo-credentials {
-            color: #9ca3af;
-            font-size: $font-size-xs;
-            background-color: #f3f4f6;
-            padding: $spacing-xs $spacing-sm;
-            border-radius: $border-radius-sm;
-            display: inline-block;
         }
     }
 }

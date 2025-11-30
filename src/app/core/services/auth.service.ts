@@ -57,6 +57,28 @@ export class AuthService {
         );
     }
 
+    register(user: Partial<User>): Observable<boolean> {
+        // Mock registration logic
+        return of(true).pipe(
+            delay(1000),
+            tap(() => {
+                // Automatically login after registration for better UX
+                const newUser: User = {
+                    id: Math.random().toString(36).substr(2, 9),
+                    username: user.username || '',
+                    email: user.email || '',
+                    fullName: user.fullName || '',
+                    role: 'user',
+                    avatarUrl: 'assets/avatars/default-avatar.png',
+                    bio: 'New member'
+                };
+                this.currentUser.set(newUser);
+                this.isAuthenticated.set(true);
+                localStorage.setItem('user', JSON.stringify(newUser));
+            })
+        );
+    }
+
     logout(): void {
         this.currentUser.set(null);
         this.isAuthenticated.set(false);
