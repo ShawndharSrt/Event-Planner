@@ -1,27 +1,32 @@
-```
 <aside class="sidebar" [class.open]="layoutService.isOpen()">
     <div class="logo-container" routerLink="/dashboard" style="cursor: pointer;">
-        <div class="logo-icon">
-            <span class="material-icons">event_note</span>
-        </div>
-        <h1 class="logo-text">EventPlanner</h1>
+        <img src="https://cdn-icons-png.flaticon.com/512/3174/3174845.png" alt="Event Planner Logo" class="logo-image">
     </div>
 
     <nav class="nav-menu">
         <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="material-icons nav-icon">dashboard</span>
             <span class="label">Dashboard</span>
         </a>
         <a routerLink="/events" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="material-icons nav-icon">event</span>
             <span class="label">Events</span>
         </a>
         <a routerLink="/guests" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="material-icons nav-icon">people</span>
             <span class="label">Guests</span>
         </a>
         <a routerLink="/tasks" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="material-icons nav-icon">checklist</span>
             <span class="label">Tasks</span>
         </a>
         <a routerLink="/calendar" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="material-icons nav-icon">calendar_today</span>
             <span class="label">Calendar</span>
+        </a>
+        <a routerLink="/notifications" routerLinkActive="active" class="nav-item" (click)="closeSidebar()">
+            <span class="material-icons nav-icon">notifications</span>
+            <span class="label">Notifications</span>
         </a>
     </nav>
 
@@ -33,4 +38,3 @@
         </div>
     </div>
 </aside>
-```

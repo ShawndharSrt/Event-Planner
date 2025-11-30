@@ -18,12 +18,12 @@
     .header-content {
         .page-title {
             font-size: $font-size-2xl;
-            color: $text-primary;
+            color: #1a1a1a;
             margin-bottom: $spacing-xs;
         }
 
         .page-subtitle {
-            color: $text-secondary;
+            color: #6b7280;
             font-size: $font-size-sm;
         }
     }
@@ -41,12 +41,12 @@
 
         .btn-secondary {
             background-color: transparent;
-            border: 1px solid $text-light;
-            color: $text-secondary;
+            border: 1px solid #9ca3af;
+            color: #6b7280;
 
             &:hover {
-                border-color: $text-secondary;
-                color: $text-primary;
+                border-color: #6b7280;
+                color: #1a1a1a;
             }
         }
 
@@ -74,7 +74,7 @@
 .form-section {
     .section-title {
         font-size: $font-size-lg;
-        color: $text-primary;
+        color: #1a1a1a;
         margin-bottom: $spacing-lg;
         padding-bottom: $spacing-sm;
         border-bottom: 1px solid var(--border-color);
@@ -90,7 +90,7 @@
     label {
         font-size: $font-size-sm;
         font-weight: $font-weight-medium;
-        color: $text-secondary;
+        color: #6b7280;
     }
 
     input,
@@ -101,7 +101,7 @@
         border-radius: $border-radius-md;
         font-family: $font-family-base;
         font-size: $font-size-base;
-        color: $text-primary;
+        color: #1a1a1a;
         background-color: $background-color;
         transition: $transition-base;
         outline: none;
@@ -112,7 +112,7 @@
         }
 
         &::placeholder {
-            color: $text-light;
+            color: #9ca3af;
         }
     }
 }

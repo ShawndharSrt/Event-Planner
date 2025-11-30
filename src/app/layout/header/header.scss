@@ -23,7 +23,6 @@
     display: flex;
     align-items: center;
     gap: $spacing-md;
-    flex: 1;
 
     .menu-btn {
         display: none;
@@ -32,42 +31,43 @@
             display: flex;
         }
     }
-}
 
-.search-bar {
-    display: flex;
-    align-items: center;
-    background-color: $background-color;
-    padding: $spacing-sm $spacing-md;
-    border-radius: $border-radius-md;
-    width: 300px;
-    transition: $transition-base;
-
-    &:focus-within {
-        box-shadow: 0 0 0 2px var(--primary-focus-ring);
-        width: 320px;
-    }
-
-    @media (max-width: map.get($breakpoints, 'md')) {
-        display: none; // Hide search on mobile for simplicity or make it an icon toggle
-    }
-
-    .search-icon {
-        color: $text-light;
-        margin-right: $spacing-sm;
-        font-size: 20px;
-    }
-
-    input {
-        border: none;
-        background: transparent;
-        outline: none;
-        width: 100%;
+    .app-logo {
+        display: flex;
+        align-items: center;
+        gap: $spacing-sm;
+        cursor: pointer;
+        text-decoration: none;
         color: $text-primary;
-        font-family: $font-family-base;
+        transition: $transition-base;
+        padding: $spacing-xs $spacing-sm;
+        border-radius: $border-radius-md;
 
-        &::placeholder {
-            color: $text-light;
+        &:hover {
+            color: $primary-color;
+            background-color: var(--primary-lightest-bg);
+        }
+
+        .logo-icon {
+            font-size: 28px;
+            color: $primary-color;
+        }
+
+        .app-title {
+            font-family: $font-family-heading;
+            font-size: $font-size-xl;
+            font-weight: $font-weight-semibold;
+            letter-spacing: -0.5px;
+        }
+
+        @media (max-width: map.get($breakpoints, 'sm')) {
+            .app-title {
+                display: none;
+            }
+
+            .logo-icon {
+                font-size: 24px;
+            }
         }
     }
 }
@@ -76,6 +76,7 @@
     display: flex;
     align-items: center;
     gap: $spacing-lg;
+    position: relative;
 
     .icon-btn {
         background: none;
@@ -102,7 +103,7 @@
             top: 0;
             right: 0;
             background-color: $danger-color;
-            color: white;
+            color: $surface-color;
             font-size: 10px;
             font-weight: bold;
             min-width: 16px;
@@ -115,7 +116,7 @@
 
     .create-btn {
         background-color: $primary-color;
-        color: white;
+        color: $surface-color;
         padding: $spacing-sm $spacing-lg;
         border-radius: $border-radius-md;
         font-weight: $font-weight-medium;

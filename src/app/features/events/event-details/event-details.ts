@@ -2,8 +2,10 @@ import { Component, signal, inject, computed } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { EventTabsComponent, EventTab } from '../components/event-tabs/event-tabs.component';
 import { DataTableComponent, TableColumn } from '../../../shared/components/data-table/data-table.component';
+import { BudgetTrackerComponent } from '../../../features/budget/budget-tracker/budget-tracker.component';
 import { GuestService } from '../../../core/services/guest.service';
 import { Guest } from '../../../core/models/guest.model';
 import { TaskService } from '../../../core/services/task.service';
@@ -16,7 +18,7 @@ import { switchMap } from 'rxjs/operators';
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [RouterLink, CommonModule, EventTabsComponent, DataTableComponent],
+  imports: [RouterLink, CommonModule, FormsModule, EventTabsComponent, DataTableComponent, BudgetTrackerComponent],
   templateUrl: './event-details.html',
   styleUrl: './event-details.scss',
 })

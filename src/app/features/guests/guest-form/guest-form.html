@@ -1,12 +1,12 @@
 <div class="page-container">
     <div class="page-header">
         <div class="header-content">
-            <h1 class="page-title">Add New Guest</h1>
-            <p class="page-subtitle">Add a new contact to your guest list</p>
+            <h1 class="page-title">{{ isEditMode ? 'Edit Guest' : 'Add New Guest' }}</h1>
+            <p class="page-subtitle">{{ isEditMode ? 'Update guest information' : 'Add a new contact to your guest list' }}</p>
         </div>
         <div class="actions">
             <button class="btn-secondary" routerLink="/guests">Cancel</button>
-            <button class="btn-primary" (click)="saveGuest()">Save Guest</button>
+            <button class="btn-primary" (click)="saveGuest()">{{ isEditMode ? 'Update Guest' : 'Save Guest' }}</button>
         </div>
     </div>
 

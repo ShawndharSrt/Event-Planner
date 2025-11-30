@@ -5,7 +5,7 @@
     padding: $spacing-lg;
     border-top: 1px solid var(--border-color);
     background-color: var(--background-color);
-    color: $text-secondary;
+    color: #6b7280;
     font-size: $font-size-sm;
 
     .footer-content {
@@ -27,7 +27,7 @@
         gap: $spacing-lg;
 
         a {
-            color: $text-secondary;
+            color: #6b7280;
             text-decoration: none;
             transition: color 0.2s;
 

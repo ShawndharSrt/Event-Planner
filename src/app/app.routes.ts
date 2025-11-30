@@ -11,6 +11,7 @@ import { CalendarComponent } from './features/calendar/calendar';
 import { LoginComponent } from './features/auth/login/login';
 import { ProfileComponent } from './features/profile/profile';
 import { SettingsComponent } from './features/settings/settings';
+import { NotificationsListComponent } from './features/notifications/notifications-list/notifications-list.component';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,7 @@ export const routes: Routes = [
             { path: 'guests/:id/edit', component: GuestFormComponent },
             { path: 'tasks', component: TaskBoardComponent },
             { path: 'calendar', component: CalendarComponent },
+            { path: 'notifications', component: NotificationsListComponent },
             { path: 'profile', component: ProfileComponent },
             { path: 'settings', component: SettingsComponent }
         ]

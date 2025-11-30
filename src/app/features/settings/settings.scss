@@ -4,158 +4,217 @@
 @use 'styles/mixins' as *;
 
 .page-container {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-lg;
-    max-width: 1000px;
+    padding: $spacing-xl;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
 .page-header {
     @include flex-between;
-    margin-bottom: $spacing-md;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 2px solid var(--border-color);
 
     .header-content {
         .page-title {
-            font-size: $font-size-2xl;
+            margin: 0 0 $spacing-xs 0;
+            font-size: 2rem;
+            font-weight: $font-weight-bold;
             color: $text-primary;
-            margin-bottom: $spacing-xs;
         }
 
         .page-subtitle {
+            margin: 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $font-size-base;
         }
     }
 
     .btn-primary {
+        @include flex-center;
+        gap: $spacing-sm;
+        padding: $spacing-sm $spacing-md;
         background-color: $primary-color;
-        color: white;
-        padding: $spacing-sm $spacing-lg;
+        color: $surface-color;
+        border: none;
         border-radius: $border-radius-md;
         font-weight: $font-weight-medium;
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
+        font-size: $font-size-sm;
+        cursor: pointer;
         transition: $transition-base;
         box-shadow: $shadow-sm;
 
         &:hover {
             background-color: $primary-dark;
             box-shadow: $shadow-md;
+            transform: translateY(-1px);
+        }
+
+        .material-icons {
+            font-size: 1rem;
         }
     }
 }
 
 .settings-grid {
     display: grid;
-    grid-template-columns: 1fr;
-    gap: $spacing-lg;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: $spacing-xl;
 
-    @media (min-width: map.get($breakpoints, 'md')) {
-        grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
     }
 }
 
 .settings-card {
-    @include card-style;
-    padding: 0;
+    background-color: $surface-color;
+    border-radius: $border-radius-lg;
+    box-shadow: $shadow-md;
+    border: 1px solid var(--border-color);
     overflow: hidden;
+    transition: $transition-base;
+
+    &:hover {
+        box-shadow: $shadow-lg;
+        transform: translateY(-2px);
+    }
 
     .card-header {
-        padding: $spacing-lg;
-        border-bottom: 1px solid var(--border-color);
-        display: flex;
-        align-items: center;
+        @include flex-center;
         gap: $spacing-md;
-        background-color: var(--background-alt);
+        padding: $spacing-lg;
+        background: linear-gradient(135deg, var(--background-alt) 0%, $surface-color 100%);
+        border-bottom: 1px solid var(--border-color);
 
         .icon {
             color: $primary-color;
-            font-size: 24px;
+            font-size: 1.5rem;
         }
 
         h2 {
-            font-size: $font-size-lg;
-            color: $text-primary;
             margin: 0;
+            font-size: $font-size-xl;
+            font-weight: $font-weight-semibold;
+            color: $text-primary;
         }
     }
 
     .card-body {
         padding: $spacing-lg;
-        display: flex;
-        flex-direction: column;
-        gap: $spacing-lg;
     }
 }
 
 .form-group {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-xs;
+    margin-bottom: $spacing-lg;
 
-    label {
-        font-size: $font-size-sm;
-        font-weight: $font-weight-medium;
-        color: $text-secondary;
+    &:last-child {
+        margin-bottom: 0;
     }
 
-    input,
+    label {
+        display: block;
+        margin-bottom: $spacing-sm;
+        font-weight: $font-weight-medium;
+        color: $text-primary;
+        font-size: $font-size-sm;
+    }
+
+    input[type="text"],
     select {
+        width: 100%;
         padding: $spacing-md;
-        border: 1px solid var(--border-color-subtle);
+        border: 1px solid var(--border-color);
         border-radius: $border-radius-md;
-        font-family: $font-family-base;
         font-size: $font-size-base;
         color: $text-primary;
-        background-color: white;
+        background-color: $surface-color;
         transition: $transition-base;
-        outline: none;
 
         &:focus {
+            outline: none;
             border-color: $primary-color;
-            box-shadow: 0 0 0 3px var(--primary-focus-glow);
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+        }
+
+        &::placeholder {
+            color: $text-light;
         }
     }
 
+    select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right $spacing-md center;
+        padding-right: $spacing-xl;
+    }
+
     small {
+        display: block;
+        margin-top: $spacing-xs;
         font-size: $font-size-xs;
-        color: $text-light;
+        color: $text-secondary;
     }
 }
 
 .toggle-row {
     @include flex-between;
+    padding: $spacing-md 0;
+    border-bottom: 1px solid var(--border-color);
+
+    &:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    &:first-child {
+        padding-top: 0;
+    }
 
     .toggle-info {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
+        flex: 1;
 
         .label {
+            display: block;
             font-weight: $font-weight-medium;
             color: $text-primary;
+            font-size: $font-size-base;
+            margin-bottom: 4px;
         }
 
         .description {
-            font-size: $font-size-xs;
+            display: block;
+            font-size: $font-size-sm;
             color: $text-secondary;
         }
     }
 }
 
-/* Toggle Switch */
+// Custom toggle switch
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px;
+    width: 48px;
     height: 24px;
+    flex-shrink: 0;
 
     input {
         opacity: 0;
         width: 0;
         height: 0;
+
+        &:checked+.slider {
+            background-color: $primary-color;
+        }
+
+        &:focus+.slider {
+            box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+        }
+
+        &:checked+.slider.round:before {
+            transform: translateX(24px);
+        }
     }
 
     .slider {
@@ -166,38 +225,27 @@
         right: 0;
         bottom: 0;
         background-color: var(--border-color);
-        transition: .4s;
+        transition: 0.3s;
 
         &:before {
             position: absolute;
             content: "";
-            height: 16px;
-            width: 16px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: $surface-color;
+            transition: 0.3s;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         &.round {
-            border-radius: 34px;
+            border-radius: 24px;
 
             &:before {
                 border-radius: 50%;
             }
         }
-    }
-
-    input:checked+.slider {
-        background-color: $primary-color;
-    }
-
-    input:focus+.slider {
-        box-shadow: 0 0 1px $primary-color;
-    }
-
-    input:checked+.slider:before {
-        transform: translateX(26px);
     }
 }
 
@@ -207,35 +255,41 @@
     gap: $spacing-md;
 
     button {
-        padding: $spacing-md;
+        @include flex-center;
+        gap: $spacing-sm;
+        padding: $spacing-md $spacing-lg;
         border-radius: $border-radius-md;
         font-weight: $font-weight-medium;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: $spacing-sm;
-        transition: $transition-base;
         cursor: pointer;
+        transition: $transition-base;
+        font-size: $font-size-base;
+        width: 100%;
+
+        .material-icons {
+            font-size: 1.25rem;
+        }
     }
 
     .btn-secondary {
-        background-color: transparent;
-        border: 1px solid $text-light;
+        background-color: var(--text-light-bg);
+        border: 1px solid var(--border-color);
         color: $text-primary;
 
         &:hover {
-            border-color: $text-primary;
-            background-color: var(--text-lighter-bg);
+            background-color: var(--border-color);
+            border-color: var(--border-color-subtle);
         }
     }
 
     .btn-danger-outline {
-        background-color: transparent;
+        background-color: $surface-color;
         border: 1px solid $danger-color;
         color: $danger-color;
 
         &:hover {
-            background-color: var(--danger-light-bg);
+            background-color: var(--danger-subtle);
+            border-color: var(--danger-border);
+            color: var(--danger-border);
         }
     }
 }

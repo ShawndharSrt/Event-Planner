@@ -52,7 +52,7 @@
 
         .btn-primary {
             background-color: $primary-color;
-            color: white;
+            color: $surface-color;
             box-shadow: $shadow-sm;
 
             &:hover {
@@ -165,11 +165,11 @@
 }
 
 .error {
-    border-color: #f44336 !important;
+    border-color: $danger-color !important;
 }
 
 .error-msg {
-    color: #f44336;
+    color: $danger-color;
     font-size: 0.8rem;
     margin-top: 4px;
     display: block;

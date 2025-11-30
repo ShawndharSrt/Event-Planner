@@ -26,7 +26,7 @@
 
     .create-btn {
         background-color: $primary-color;
-        color: white;
+        color: $surface-color;
         padding: $spacing-sm $spacing-lg;
         border-radius: $border-radius-md;
         font-weight: $font-weight-medium;
@@ -207,7 +207,7 @@
                 width: 24px;
                 height: 24px;
                 background-color: $primary-light;
-                color: white;
+                color: $surface-color;
                 border-radius: $border-radius-full;
                 @include flex-center;
                 font-size: 10px;

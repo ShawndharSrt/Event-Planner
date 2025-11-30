@@ -1,0 +1,200 @@
+<div class="budget-tracker" *ngIf="budget()">
+    <!-- Budget Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card total">
+            <div class="card-icon">
+                <span class="material-icons">account_balance_wallet</span>
+            </div>
+            <div class="card-content">
+                <span class="label">Total Budget</span>
+                <span class="value">{{ formatCurrency(budget()!.totalBudget) }}</span>
+            </div>
+        </div>
+
+        <div class="summary-card spent">
+            <div class="card-icon">
+                <span class="material-icons">payments</span>
+            </div>
+            <div class="card-content">
+                <span class="label">Total Spent</span>
+                <span class="value">{{ formatCurrency(totalSpent()) }}</span>
+                <span class="percentage">{{ budgetPercentage() }}% of budget</span>
+            </div>
+        </div>
+
+        <div class="summary-card remaining" [class.warning]="budgetPercentage() > 80"
+            [class.danger]="budgetPercentage() > 95">
+            <div class="card-icon">
+                <span class="material-icons">savings</span>
+            </div>
+            <div class="card-content">
+                <span class="label">Remaining</span>
+                <span class="value">{{ formatCurrency(totalRemaining()) }}</span>
+                <span class="percentage">{{ 100 - budgetPercentage() }}% left</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Budget Progress Bar -->
+    <div class="progress-section">
+        <div class="progress-header">
+            <h3>Budget Utilization</h3>
+            <span class="progress-label">{{ budgetPercentage() }}%</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" [style.width.%]="budgetPercentage()" [class.warning]="budgetPercentage() > 80"
+                [class.danger]="budgetPercentage() > 95">
+            </div>
+        </div>
+    </div>
+
+    <!-- Category Breakdown -->
+    <div class="category-section">
+        <h3 class="section-title">Budget by Category</h3>
+        <div class="category-grid">
+            <div class="category-card" *ngFor="let category of budget()!.categories">
+                <div class="category-header">
+                    <div class="category-info">
+                        <span class="material-icons" [style.color]="category.color">{{ category.icon }}</span>
+                        <span class="category-name">{{ category.name }}</span>
+                    </div>
+                    <span class="category-percentage">{{ getCategorySpentPercentage(category) }}%</span>
+                </div>
+                <div class="category-amounts">
+                    <span class="spent">{{ formatCurrency(category.spentAmount) }}</span>
+                    <span class="allocated">of {{ formatCurrency(category.allocatedAmount) }}</span>
+                </div>
+                <div class="category-progress">
+                    <div class="category-progress-fill" [style.width.%]="getCategorySpentPercentage(category)"
+                        [style.background-color]="category.color">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Expenses Section -->
+    <div class="expenses-section">
+        <div class="expenses-header">
+            <h3 class="section-title">Expense Details</h3>
+            <div class="filters">
+                <select [(ngModel)]="selectedCategory"
+                    (change)="selectedCategory.set($any($event.target).value ? +$any($event.target).value : null)"
+                    class="filter-select">
+                    <option [value]="null">All Categories</option>
+                    <option *ngFor="let category of budget()!.categories" [value]="category.id">
+                        {{ category.name }}
+                    </option>
+                </select>
+                <select [(ngModel)]="selectedStatus" (change)="selectedStatus.set($any($event.target).value || null)"
+                    class="filter-select">
+                    <option [value]="null">All Status</option>
+                    <option value="paid">Paid</option>
+                    <option value="pending">Pending</option>
+                    <option value="overdue">Overdue</option>
+                </select>
+                <button class="btn-clear" (click)="clearFilters()" *ngIf="selectedCategory() || selectedStatus()">
+                    Clear Filters
+                </button>
+                <button class="btn-add" (click)="openAddExpenseForm()">
+                    <span class="material-icons">add</span>
+                    Add Expense
+                </button>
+            </div>
+        </div>
+
+        <!-- Expense Form -->
+        <div class="expense-form" *ngIf="showExpenseForm()" [formGroup]="expenseForm">
+            <h4>{{ editingExpense() ? 'Edit Expense' : 'Add New Expense' }}</h4>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Category *</label>
+                    <select formControlName="categoryId">
+                        <option value="">Select Category</option>
+                        <option *ngFor="let category of budget()!.categories" [value]="category.id">
+                            {{ category.name }}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description *</label>
+                    <input type="text" formControlName="description" placeholder="Enter expense description">
+                </div>
+                <div class="form-group">
+                    <label>Vendor *</label>
+                    <input type="text" formControlName="vendor" placeholder="Enter vendor name">
+                </div>
+                <div class="form-group">
+                    <label>Amount *</label>
+                    <input type="number" formControlName="amount" placeholder="0.00" step="0.01" min="0.01">
+                </div>
+                <div class="form-group">
+                    <label>Date *</label>
+                    <input type="date" formControlName="date">
+                </div>
+                <div class="form-group">
+                    <label>Status *</label>
+                    <select formControlName="status">
+                        <option value="pending">Pending</option>
+                        <option value="paid">Paid</option>
+                        <option value="overdue">Overdue</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Notes</label>
+                <textarea formControlName="notes" rows="3" placeholder="Additional notes (optional)"></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" (click)="cancelExpenseForm()">Cancel</button>
+                <button type="button" class="btn-save" (click)="saveExpense()">
+                    {{ editingExpense() ? 'Update' : 'Add' }} Expense
+                </button>
+            </div>
+        </div>
+
+        <!-- Expenses Table with Actions -->
+        <div class="expenses-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Vendor</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let expense of filteredExpenses()">
+                        <td>{{ expense.date | date:'shortDate' }}</td>
+                        <td>{{ expense.categoryName }}</td>
+                        <td>{{ expense.description }}</td>
+                        <td>{{ expense.vendor }}</td>
+                        <td>{{ formatCurrency(expense.amount) }}</td>
+                        <td>
+                            <span class="status-badge" [class]="getStatusClass(expense.status)">
+                                {{ expense.status | titlecase }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-icon" (click)="openEditExpenseForm(expense)" title="Edit">
+                                    <span class="material-icons">edit</span>
+                                </button>
+                                <button class="btn-icon danger" (click)="deleteExpense(expense)" title="Delete">
+                                    <span class="material-icons">delete</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="filteredExpenses().length === 0">
+                        <td colspan="7" class="no-data">No expenses found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

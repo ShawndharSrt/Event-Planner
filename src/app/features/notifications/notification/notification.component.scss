@@ -1,0 +1,222 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
+.notification-dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    right: 0;
+    width: 360px;
+    background-color: $surface-color;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    overflow: hidden;
+    animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid var(--border-color);
+
+    .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        background-color: $surface-color;
+
+        h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: $text-primary;
+        }
+
+        .clear-btn {
+            background: none;
+            border: none;
+            font-size: 12px;
+            color: $text-secondary;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: all 0.2s;
+
+            &:hover {
+                background-color: var(--text-light-bg);
+                color: $primary-color;
+            }
+        }
+    }
+
+    .notification-list {
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: var(--background-alt);
+
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: var(--border-color);
+            border-radius: 3px;
+        }
+    }
+
+    .notification-item {
+        display: flex;
+        gap: 16px;
+        padding: 16px 20px;
+        background-color: $surface-color;
+        border-bottom: 1px solid var(--border-color);
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+
+        &:hover {
+            background-color: var(--text-light-bg);
+        }
+
+        &.unread {
+            background-color: var(--primary-light-bg);
+
+            &:hover {
+                background-color: var(--primary-subtle);
+            }
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: 3px;
+                background-color: $primary-color;
+            }
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+
+            .material-icons {
+                font-size: 20px;
+                color: white;
+            }
+
+            &.info {
+                background-color: #3b82f6;
+            }
+
+            &.success {
+                background-color: #10b981;
+            }
+
+            &.warning {
+                background-color: #f59e0b;
+            }
+
+            &.error {
+                background-color: #ef4444;
+            }
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+
+            .notification-title {
+                margin: 0 0 4px 0;
+                font-size: 14px;
+                font-weight: 600;
+                color: $text-primary;
+                line-height: 1.4;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 8px;
+
+                .time {
+                    font-size: 12px;
+                    color: $text-light;
+                    font-weight: 400;
+                    white-space: nowrap;
+                }
+            }
+
+            .notification-message {
+                margin: 0;
+                font-size: 13px;
+                color: $text-secondary;
+                line-height: 1.4;
+            }
+        }
+
+        .notification-status {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+
+            .dot {
+                width: 8px;
+                height: 8px;
+                background-color: $primary-color;
+                border-radius: 50%;
+                display: block;
+            }
+        }
+    }
+
+    .empty-state {
+        padding: 40px 20px;
+        text-align: center;
+        color: $text-light;
+        background-color: $surface-color;
+
+        .material-icons {
+            font-size: 48px;
+            margin-bottom: 10px;
+            color: var(--border-color);
+        }
+
+        p {
+            margin: 0;
+            font-size: 14px;
+        }
+    }
+
+    .notification-footer {
+        padding: 12px;
+        text-align: center;
+        background-color: $surface-color;
+        border-top: 1px solid var(--border-color);
+
+        a {
+            color: $primary-color;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,39 @@
+<div class="notification-dropdown">
+    <div class="notification-header">
+        <h3>Notifications</h3>
+        <button class="clear-btn" (click)="clearAll()" *ngIf="notifications.length > 0">Clear All</button>
+    </div>
+
+    <div class="notification-list" *ngIf="notifications.length > 0; else noNotifications">
+        <div class="notification-item" *ngFor="let notification of notifications" [class.unread]="!notification.read"
+            (click)="markAsRead(notification.id)">
+            <div class="notification-icon" [ngClass]="notification.type">
+                <span class="material-icons" *ngIf="notification.type === 'info'">info</span>
+                <span class="material-icons" *ngIf="notification.type === 'warning'">warning</span>
+                <span class="material-icons" *ngIf="notification.type === 'success'">check_circle</span>
+                <span class="material-icons" *ngIf="notification.type === 'error'">error</span>
+            </div>
+            <div class="notification-content">
+                <div class="notification-title">
+                    {{ notification.title }}
+                    <span class="time">{{ notification.time }}</span>
+                </div>
+                <div class="notification-message">{{ notification.message }}</div>
+            </div>
+            <div class="notification-status" *ngIf="!notification.read">
+                <span class="dot"></span>
+            </div>
+        </div>
+    </div>
+
+    <ng-template #noNotifications>
+        <div class="empty-state">
+            <span class="material-icons">notifications_off</span>
+            <p>No new notifications</p>
+        </div>
+    </ng-template>
+
+    <div class="notification-footer" *ngIf="notifications.length > 0">
+        <a routerLink="/notifications">View all notifications</a>
+    </div>
+</div>

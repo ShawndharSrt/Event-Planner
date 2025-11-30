@@ -34,8 +34,12 @@
                     {{ guest.firstName[0] }}{{ guest.lastName[0] }}
                 </div>
                 <div class="actions">
-                    <button class="icon-btn">✏️</button>
-                    <button class="icon-btn danger">🗑️</button>
+                    <button class="icon-btn" (click)="editGuest(guest)" title="Edit guest">
+                        <span class="material-icons">edit</span>
+                    </button>
+                    <button class="icon-btn danger" (click)="deleteGuest(guest)" title="Delete guest">
+                        <span class="material-icons">delete</span>
+                    </button>
                 </div>
             </div>
             <div class="card-body">

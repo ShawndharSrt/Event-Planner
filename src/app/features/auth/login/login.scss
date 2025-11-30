@@ -43,12 +43,12 @@
 
         h1 {
             font-size: $font-size-2xl;
-            color: $text-primary;
+            color: #1a1a1a;
             margin-bottom: $spacing-xs;
         }
 
         p {
-            color: $text-secondary;
+            color: #6b7280;
             font-size: $font-size-base;
         }
     }
@@ -60,7 +60,7 @@
             display: block;
             font-size: $font-size-sm;
             font-weight: $font-weight-medium;
-            color: $text-secondary;
+            color: #6b7280;
             margin-bottom: $spacing-xs;
         }
 
@@ -72,7 +72,7 @@
                 left: $spacing-md;
                 top: 50%;
                 transform: translateY(-50%);
-                color: $text-light;
+                color: #9ca3af;
                 font-size: 20px;
             }
 
@@ -82,7 +82,7 @@
                 border: 1px solid var(--border-color-subtle);
                 border-radius: $border-radius-md;
                 font-size: $font-size-base;
-                color: $text-primary;
+                color: #1a1a1a;
                 transition: $transition-base;
                 outline: none;
 
@@ -185,7 +185,7 @@
         padding-top: $spacing-lg;
 
         p {
-            color: $text-secondary;
+            color: #6b7280;
             font-size: $font-size-sm;
             margin-bottom: $spacing-sm;
 
@@ -201,7 +201,7 @@
         }
 
         .demo-credentials {
-            color: $text-light;
+            color: #9ca3af;
             font-size: $font-size-xs;
             background-color: var(--background-darker);
             padding: $spacing-xs $spacing-sm;

@@ -3,17 +3,17 @@
         <button class="icon-btn menu-btn" (click)="toggleSidebar()">
             <span class="material-icons">menu</span>
         </button>
-        <div class="search-bar">
-            <span class="material-icons search-icon">search</span>
-            <input type="text" placeholder="Search events, guests, tasks..." />
+        <div class="app-logo" routerLink="/dashboard">
+            <span class="app-title">Event Planner</span>
         </div>
     </div>
 
     <div class="header-right">
-        <button class="icon-btn">
+        <button #notificationButton data-notification-button class="icon-btn" (click)="toggleNotifications()">
             <span class="material-icons">notifications</span>
             <span class="badge">3</span>
         </button>
+        <app-notification #notificationDropdown *ngIf="showNotifications"></app-notification>
         <button class="icon-btn" routerLink="/settings">
             <span class="material-icons">settings</span>
         </button>

@@ -27,7 +27,7 @@
 
     .create-btn {
         background-color: $primary-color;
-        color: white;
+        color: $surface-color;
         padding: $spacing-sm $spacing-lg;
         border-radius: $border-radius-md;
         font-weight: $font-weight-medium;
@@ -93,17 +93,39 @@
         display: flex;
         flex-direction: column;
         gap: $spacing-md;
+        min-height: 100px;
+
+        &.cdk-drop-list-dragging .task-card:not(.cdk-drag-placeholder) {
+            transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+        }
     }
 }
 
 .task-card {
     @include card-style;
     padding: $spacing-md;
-    cursor: pointer;
+    cursor: move;
     border: 1px solid transparent;
+    transition: box-shadow 200ms cubic-bezier(0, 0, 0.2, 1);
 
     &:hover {
         border-color: $primary-light;
+    }
+
+    &.cdk-drag-animating {
+        transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    }
+
+    &.cdk-drag-preview {
+        box-shadow: $shadow-lg;
+        opacity: 0.8;
+        transform: rotate(2deg);
+    }
+
+    &.cdk-drag-placeholder {
+        opacity: 0.3;
+        background-color: var(--border-color);
+        border: 2px dashed $primary-color;
     }
 
     &.completed {
@@ -143,11 +165,40 @@
             }
         }
 
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+        }
+
+        .drag-handle {
+            color: $text-light;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            padding: 2px;
+            transition: $transition-base;
+
+            &:active {
+                cursor: grabbing;
+            }
+
+            &:hover {
+                color: $text-secondary;
+            }
+
+            .material-icons {
+                font-size: 18px;
+            }
+        }
+
         .more-btn {
             background: none;
             color: $text-light;
             padding: 0;
             font-size: $font-size-sm;
+            border: none;
+            cursor: pointer;
 
             &:hover {
                 color: $text-primary;
@@ -159,6 +210,12 @@
         font-size: $font-size-base;
         margin-bottom: 4px;
         color: $text-primary;
+    }
+
+    .event-id {
+        font-size: 11px;
+        color: $text-light;
+        margin-bottom: 4px;
     }
 
     .task-desc {
@@ -179,7 +236,7 @@
             width: 24px;
             height: 24px;
             background-color: $primary-light;
-            color: white;
+            color: $surface-color;
             border-radius: $border-radius-full;
             @include flex-center;
             font-size: 10px;
@@ -206,6 +263,197 @@
             &.success {
                 color: $success-color;
                 font-weight: bold;
+            }
+        }
+    }
+}
+
+
+// Modal Styles
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background-color: $surface-color;
+    border-radius: $border-radius-lg;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: $shadow-xl;
+    animation: slideIn 0.3s ease-out;
+    overflow: hidden;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    padding: $spacing-lg;
+    border-bottom: 1px solid var(--border-color);
+    @include flex-between;
+
+    h2 {
+        margin: 0;
+        font-size: $font-size-xl;
+        color: $text-primary;
+    }
+
+    .close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: $text-light;
+        cursor: pointer;
+        padding: 0;
+        line-height: 1;
+
+        &:hover {
+            color: $text-primary;
+        }
+    }
+}
+
+form {
+    padding: $spacing-lg;
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-md;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: $spacing-xs;
+
+        label {
+            font-size: $font-size-sm;
+            font-weight: $font-weight-medium;
+            color: $text-secondary;
+        }
+
+        input,
+        textarea,
+        select {
+            padding: $spacing-sm;
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius-md;
+            background-color: var(--background-color);
+            color: $text-primary;
+            font-family: inherit;
+            transition: border-color 0.2s;
+
+            &:focus {
+                outline: none;
+                border-color: $primary-color;
+                box-shadow: 0 0 0 2px var(--primary-lightest-bg);
+            }
+        }
+
+        textarea {
+            resize: vertical;
+        }
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: $spacing-md;
+    }
+
+    .priority-options {
+        display: flex;
+        gap: $spacing-md;
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+            cursor: pointer;
+
+            input {
+                cursor: pointer;
+            }
+        }
+
+        .priority-badge {
+            padding: 2px 8px;
+            border-radius: $border-radius-sm;
+            font-size: $font-size-xs;
+            font-weight: bold;
+            text-transform: uppercase;
+
+            &.low {
+                background-color: var(--success-subtle);
+                color: $success-color;
+            }
+
+            &.medium {
+                background-color: var(--warning-subtle);
+                color: $warning-color;
+            }
+
+            &.high {
+                background-color: var(--danger-subtle);
+                color: $danger-color;
+            }
+        }
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-md;
+        margin-top: $spacing-md;
+
+        button {
+            padding: $spacing-sm $spacing-lg;
+            border-radius: $border-radius-md;
+            font-weight: $font-weight-medium;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &.btn-cancel {
+                background: none;
+                border: 1px solid var(--border-color);
+                color: $text-secondary;
+
+                &:hover {
+                    background-color: var(--background-alt);
+                    color: $text-primary;
+                }
+            }
+
+            &.btn-save {
+                background-color: $primary-color;
+                border: none;
+                color: white;
+
+                &:hover {
+                    background-color: $primary-dark;
+                }
+
+                &:disabled {
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
             }
         }
     }

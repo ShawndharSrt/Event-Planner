@@ -26,7 +26,7 @@
 
     .create-btn {
         background-color: $primary-color;
-        color: white;
+        color: $surface-color;
         padding: $spacing-sm $spacing-lg;
         border-radius: $border-radius-md;
         font-weight: $font-weight-medium;
@@ -110,7 +110,7 @@
             width: 64px;
             height: 64px;
             background-color: $primary-light;
-            color: white;
+            color: $surface-color;
             border-radius: $border-radius-full;
             @include flex-center;
             font-size: $font-size-xl;
@@ -135,6 +135,13 @@
                 padding: $spacing-xs;
                 border-radius: $border-radius-sm;
                 transition: $transition-base;
+                @include flex-center;
+                border: none;
+                cursor: pointer;
+
+                .material-icons {
+                    font-size: 18px;
+                }
 
                 &:hover {
                     background-color: var(--text-light-bg);

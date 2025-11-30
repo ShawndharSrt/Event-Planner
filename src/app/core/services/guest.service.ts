@@ -51,4 +51,20 @@ export class GuestService {
         }
         throw new Error('Guest not found');
     }
+
+    deleteGuest(id: number): Observable<void> {
+        // return this.api.delete<void>(`/guests/${id}`);
+        const index = this.guests.findIndex(g => g.id === id);
+        if (index !== -1) {
+            this.guests.splice(index, 1);
+            return of(undefined).pipe(delay(500));
+        }
+        throw new Error('Guest not found');
+    }
+
+    getGuestById(id: number): Observable<Guest | undefined> {
+        // return this.api.get<Guest>(`/guests/${id}`);
+        const guest = this.guests.find(g => g.id === id);
+        return of(guest).pipe(delay(500));
+    }
 }

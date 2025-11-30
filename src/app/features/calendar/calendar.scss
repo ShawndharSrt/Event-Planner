@@ -4,103 +4,144 @@
 @use 'styles/mixins' as *;
 
 .page-container {
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-lg;
-    height: calc(100vh - 120px);
+    padding: $spacing-xl;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .page-header {
     @include flex-between;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 2px solid var(--border-color);
+    flex-wrap: wrap;
+    gap: $spacing-lg;
 
     .header-content {
         .page-title {
-            font-size: $font-size-2xl;
+            margin: 0 0 $spacing-xs 0;
+            font-size: 2rem;
+            font-weight: $font-weight-bold;
             color: $text-primary;
-            margin-bottom: $spacing-xs;
         }
 
         .page-subtitle {
+            margin: 0;
             color: $text-secondary;
-            font-size: $font-size-sm;
+            font-size: $font-size-base;
         }
     }
 
     .actions {
         display: flex;
-        gap: $spacing-lg;
+        align-items: center;
+        gap: $spacing-md;
+        flex-wrap: wrap;
 
         .view-toggle {
             display: flex;
-            background-color: var(--background-alt);
+            background-color: var(--text-light-bg);
             padding: 4px;
             border-radius: $border-radius-md;
-            border: 1px solid var(--border-color);
+            gap: 4px;
 
             .toggle-btn {
-                padding: $spacing-xs $spacing-md;
-                border-radius: $border-radius-sm;
+                padding: $spacing-sm $spacing-lg;
+                border: none;
                 background: none;
-                color: $text-secondary;
+                border-radius: $border-radius-sm;
                 font-size: $font-size-sm;
                 font-weight: $font-weight-medium;
+                color: $text-secondary;
+                cursor: pointer;
+                transition: $transition-base;
 
                 &.active {
-                    background-color: white;
+                    background-color: $surface-color;
                     color: $primary-color;
                     box-shadow: $shadow-sm;
+                }
+
+                &:hover:not(.active) {
+                    color: $text-primary;
                 }
             }
         }
 
         .create-btn {
-            background-color: $primary-color;
-            color: white;
+            @include flex-center;
+            gap: $spacing-xs;
             padding: $spacing-sm $spacing-lg;
+            background-color: $primary-color;
+            color: $surface-color;
+            border: none;
             border-radius: $border-radius-md;
             font-weight: $font-weight-medium;
-            display: flex;
-            align-items: center;
-            gap: $spacing-sm;
+            cursor: pointer;
             transition: $transition-base;
             box-shadow: $shadow-sm;
 
             &:hover {
                 background-color: $primary-dark;
                 box-shadow: $shadow-md;
+                transform: translateY(-1px);
+            }
+
+            .icon {
+                font-size: 1.25rem;
+                font-weight: $font-weight-bold;
             }
         }
     }
 }
 
 .calendar-container {
-    @include card-style;
-    padding: $spacing-lg;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    background-color: $surface-color;
+    border-radius: $border-radius-lg;
+    padding: $spacing-xl;
+    box-shadow: $shadow-md;
+    border: 1px solid var(--border-color);
 }
 
 .calendar-header {
     @include flex-center;
-    justify-content: space-between;
-    margin-bottom: $spacing-lg;
-
-    .current-month {
-        font-size: $font-size-xl;
-        color: $text-primary;
-    }
+    justify-content: center;
+    gap: $spacing-xl;
+    margin-bottom: $spacing-xl;
+    padding-bottom: $spacing-lg;
+    border-bottom: 1px solid var(--border-color);
 
     .nav-btn {
-        background: none;
-        font-size: $font-size-lg;
-        color: $text-secondary;
-        padding: $spacing-xs $spacing-md;
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--border-color);
+        background-color: $surface-color;
         border-radius: $border-radius-md;
+        @include flex-center;
+        cursor: pointer;
+        color: $text-secondary;
+        font-size: 1.25rem;
+        font-weight: $font-weight-bold;
         transition: $transition-base;
 
         &:hover {
-            background-color: var(--text-light-bg);
+            background-color: var(--background-alt);
+            color: $primary-color;
+            border-color: $primary-color;
+        }
+    }
+
+    .current-month {
+        margin: 0;
+        font-size: $font-size-2xl;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+        min-width: 200px;
+        text-align: center;
+        cursor: pointer;
+        transition: color 0.2s;
+
+        &:hover {
             color: $primary-color;
         }
     }
@@ -114,78 +155,152 @@
     border: 1px solid var(--border-color);
     border-radius: $border-radius-md;
     overflow: hidden;
-    flex: 1;
 
     .weekday {
         background-color: var(--background-alt);
-        padding: $spacing-sm;
+        padding: $spacing-md;
         text-align: center;
-        font-weight: $font-weight-bold;
-        color: $text-secondary;
+        font-weight: $font-weight-semibold;
         font-size: $font-size-sm;
+        color: $text-secondary;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
     }
 
     .day {
-        background-color: white;
-        min-height: 100px;
-        padding: $spacing-xs;
+        background-color: $surface-color;
+        padding: $spacing-md;
+        min-height: 120px;
         display: flex;
         flex-direction: column;
-        gap: 4px;
-        transition: $transition-base;
+        gap: $spacing-xs;
         cursor: pointer;
+        transition: background-color 0.2s;
+        position: relative;
 
         &:hover {
-            background-color: var(--background-alt-2);
+            background-color: var(--background-alt);
         }
 
         &.prev-month {
-            background-color: var(--background-alt);
-            color: $text-light;
+            background-color: var(--background-alt-2);
+
+            .date {
+                color: $text-light;
+            }
+        }
+
+        &.today {
+            background-color: var(--primary-light-bg);
+
+            .date {
+                background-color: $primary-color;
+                color: $surface-color;
+                font-weight: $font-weight-bold;
+            }
+        }
+
+        &.has-event {
+            .date {
+                font-weight: $font-weight-semibold;
+            }
         }
 
         .date {
             font-size: $font-size-sm;
-            font-weight: $font-weight-medium;
             color: $text-primary;
-            margin-bottom: 4px;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             @include flex-center;
             border-radius: $border-radius-full;
-        }
-
-        &.today .date {
-            background-color: $primary-color;
-            color: white;
+            align-self: flex-end;
         }
 
         .event-indicator {
-            font-size: 10px;
-            padding: 2px 4px;
+            font-size: 11px;
+            padding: 4px 8px;
             border-radius: $border-radius-sm;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: $surface-color;
             font-weight: $font-weight-medium;
+            background-color: $primary-color;
+            margin-top: 2px;
 
-            &.primary {
-                background-color: var(--primary-subtle);
-                color: $primary-color;
-                border-left: 2px solid $primary-color;
+            &.meeting {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
 
-            &.secondary {
-                background-color: var(--secondary-subtle);
-                color: $secondary-color;
-                border-left: 2px solid $secondary-color;
+            &.party {
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             }
 
-            &.warning {
-                background-color: var(--warning-subtle);
-                color: var(--warning-darker);
-                border-left: 2px solid $warning-color;
+            &.deadline {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
             }
+
+            &.conference {
+                background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .calendar-grid .day {
+        min-height: 100px;
+        padding: $spacing-sm;
+
+        .event-indicator {
+            font-size: 10px;
+            padding: 2px 6px;
+        }
+    }
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+
+        .actions {
+            width: 100%;
+            justify-content: space-between;
+
+            .create-btn {
+                flex: 1;
+            }
+        }
+    }
+
+    .calendar-grid .day {
+        min-height: 80px;
+        padding: $spacing-xs;
+
+        .date {
+            width: 24px;
+            height: 24px;
+            font-size: 12px;
+        }
+
+        .event-indicator {
+            font-size: 9px;
+            padding: 2px 4px;
+        }
+    }
+
+    .calendar-header {
+        gap: $spacing-md;
+
+        .current-month {
+            font-size: $font-size-xl;
+            min-width: 150px;
+        }
+
+        .nav-btn {
+            width: 36px;
+            height: 36px;
         }
     }
 }

@@ -41,7 +41,7 @@
 
             .status-badge.active {
                 background-color: $success-color;
-                color: white;
+                color: $surface-color;
             }
 
             .type-badge {
@@ -86,17 +86,17 @@
         }
 
         .btn-white {
-            background-color: white;
+            background-color: $surface-color;
             color: $text-primary;
 
             &:hover {
-                background-color: color.adjust(white, $lightness: -10%);
+                background-color: var(--text-light-bg);
             }
         }
 
         .btn-primary {
             background-color: $primary-color;
-            color: white;
+            color: $surface-color;
 
             &:hover {
                 background-color: $primary-dark;
@@ -214,12 +214,13 @@
                 height: 10px;
                 background-color: $primary-color;
                 border-radius: $border-radius-full;
-                border: 2px solid white;
+                border: 2px solid $surface-color;
             }
 
             h4 {
                 font-size: $font-size-base;
                 margin-bottom: 4px;
+                color: $text-primary;
             }
 
             p {
@@ -283,7 +284,7 @@
             width: 32px;
             height: 32px;
             background-color: $primary-light;
-            color: white;
+            color: $surface-color;
             border-radius: $border-radius-full;
             @include flex-center;
             font-size: 12px;
@@ -300,6 +301,7 @@
             .name {
                 font-weight: $font-weight-medium;
                 font-size: $font-size-sm;
+                color: $text-primary;
             }
 
             .role {
@@ -320,5 +322,72 @@
 
     &:hover {
         text-decoration: underline;
+    }
+}
+
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .task-item {
+        padding: 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: $surface-color;
+
+        .task-info {
+            flex: 1;
+
+            .task-title {
+                margin: 0 0 4px 0;
+                font-size: 16px;
+                color: $text-primary;
+            }
+
+            .task-description {
+                margin: 0;
+                color: $text-secondary;
+                font-size: 14px;
+            }
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+
+            .status-badge {
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 12px;
+                text-transform: uppercase;
+                font-weight: 600;
+                background: var(--text-light-bg);
+                color: $text-secondary;
+            }
+
+            .assignee-avatar {
+                width: 32px;
+                height: 32px;
+                background: var(--border-color);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+                font-weight: 600;
+                color: $text-primary;
+            }
+        }
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px;
+        color: $text-light;
     }
 }
