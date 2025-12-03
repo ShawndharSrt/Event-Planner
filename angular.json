@@ -70,7 +70,8 @@
               "buildTarget": "event-planner:build:production"
             },
             "development": {
-              "buildTarget": "event-planner:build:development"
+              "buildTarget": "event-planner:build:development",
+              "proxyConfig": "proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

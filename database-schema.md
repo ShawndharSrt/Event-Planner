@@ -1,101 +1,240 @@
-# MongoDB Database Schema
+# Event Planner Database Schema
 
-This document outlines the MongoDB collections and their schema definitions for the Event Planner application.
+## Entity Relationship Diagram
 
-## Overview
+```mermaid
+erDiagram
+    USER ||--o{ EVENT : organizes
+    EVENT ||--o{ GUEST : "has"
+    EVENT ||--o{ TASK : "has"
+    EVENT ||--|| BUDGET : "has"
+    BUDGET ||--o{ BUDGET_CATEGORY : "contains"
+    BUDGET ||--o{ EXPENSE : "tracks"
+    BUDGET_CATEGORY ||--o{ EXPENSE : "categorizes"
 
-The database consists of the following collections:
-1.  **`users`**: Stores user information.
-2.  **`events`**: Stores event details.
-3.  **`guests`**: Stores guest lists associated with events.
-4.  **`tasks`**: Stores tasks associated with events.
+    USER {
+        ObjectId _id PK
+        string name
+        string email UK
+        string role "admin, planner, viewer"
+        string avatar
+        datetime createdAt
+        datetime updatedAt
+    }
 
----
+    EVENT {
+        ObjectId _id PK
+        string title
+        string type "conference, wedding, party, meeting, other"
+        string status "planning, active, draft, completed"
+        datetime startDate
+        string startTime
+        datetime endDate
+        string endTime
+        string location
+        string description
+        string coverImage
+        ObjectId organizerId FK
+        datetime createdAt
+        datetime updatedAt
+    }
 
-## Collections
+    GUEST {
+        ObjectId _id PK
+        ObjectId eventId FK
+        string firstName
+        string lastName
+        string email
+        string phone
+        string group "vip, family, friends, colleagues, speaker, sponsor, media, attendee, none"
+        string status "confirmed, pending, declined"
+        string dietary
+        string notes
+        datetime createdAt
+        datetime updatedAt
+    }
 
-### 1. Users Collection (`users`)
-Stores application users.
+    TASK {
+        ObjectId _id PK
+        ObjectId eventId FK
+        string title
+        string description
+        string assignee
+        datetime dueDate
+        string priority "high, medium, low"
+        string status "todo, in-progress, done"
+        datetime createdAt
+        datetime updatedAt
+    }
 
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `_id` | `ObjectId` | Yes | Unique identifier (Auto-generated). |
-| `name` | `String` | Yes | Full name of the user. |
-| `email` | `String` | Yes | User's email address (Unique). |
-| `role` | `String` | Yes | User role (e.g., 'admin', 'planner', 'viewer'). |
-| `avatar` | `String` | No | URL to the user's avatar image. |
-| `createdAt` | `Date` | Yes | Timestamp of creation. |
-| `updatedAt` | `Date` | Yes | Timestamp of last update. |
+    BUDGET {
+        ObjectId _id PK
+        ObjectId eventId FK
+        number totalBudget
+        string currency "USD, EUR, etc"
+        datetime createdAt
+        datetime updatedAt
+    }
 
-### 2. Events Collection (`events`)
-Stores event details.
+    BUDGET_CATEGORY {
+        number id PK
+        ObjectId budgetId FK
+        string name
+        number allocatedAmount
+        number spentAmount
+        string color
+        string icon
+    }
 
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `_id` | `ObjectId` | Yes | Unique identifier (Auto-generated). |
-| `title` | `String` | Yes | Title of the event. |
-| `type` | `String` | Yes | Type of event (e.g., 'conference', 'wedding'). |
-| `status` | `String` | Yes | Current status (e.g., 'planning', 'active'). |
-| `startDate` | `Date` | Yes | Start date of the event. |
-| `startTime` | `String` | No | Start time (e.g., "09:00"). |
-| `endDate` | `Date` | No | End date of the event. |
-| `endTime` | `String` | No | End time (e.g., "17:00"). |
-| `location` | `String` | Yes | Physical location or venue. |
-| `description` | `String` | No | Detailed description. |
-| `coverImage` | `String` | No | URL to cover image. |
-| `organizerId` | `ObjectId` | Yes | Reference to `users` collection (User who created/owns the event). |
-| `createdAt` | `Date` | Yes | Timestamp of creation. |
-| `updatedAt` | `Date` | Yes | Timestamp of last update. |
+    EXPENSE {
+        ObjectId _id PK
+        ObjectId eventId FK
+        number categoryId FK
+        string categoryName
+        string description
+        string vendor
+        number amount
+        datetime date
+        string status "pending, paid, overdue"
+        string notes
+    }
+```
 
-### 3. Guests Collection (`guests`)
-Stores guests invited to specific events.
+## Collection Details
 
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `_id` | `ObjectId` | Yes | Unique identifier (Auto-generated). |
-| `eventId` | `ObjectId` | Yes | **Foreign Key**: Reference to `events` collection. |
-| `firstName` | `String` | Yes | Guest's first name. |
-| `lastName` | `String` | Yes | Guest's last name. |
-| `email` | `String` | Yes | Guest's email address. |
-| `phone` | `String` | No | Guest's phone number. |
-| `group` | `String` | No | Group category (e.g., 'vip', 'family'). |
-| `status` | `String` | Yes | RSVP status ('confirmed', 'pending', 'declined'). |
-| `dietary` | `String` | No | Dietary restrictions. |
-| `notes` | `String` | No | Additional notes. |
-| `createdAt` | `Date` | Yes | Timestamp of creation. |
-| `updatedAt` | `Date` | Yes | Timestamp of last update. |
+### Users Collection
+- **Purpose**: Store user accounts and authentication data
+- **Key Fields**: 
+  - `role`: Defines user permissions (admin, planner, viewer)
+  - `email`: Unique identifier for login
+  - `avatar`: Profile picture URL
 
-### 4. Tasks Collection (`tasks`)
-Stores tasks related to planning an event.
+### Events Collection
+- **Purpose**: Core event information and metadata
+- **Key Fields**:
+  - `type`: Event category for filtering and organization
+  - `status`: Workflow state tracking
+  - `organizerId`: Links to the user who created the event
+  - `coverImage`: Visual representation for the event
 
-| Field | Type | Required | Description |
-| :--- | :--- | :--- | :--- |
-| `_id` | `ObjectId` | Yes | Unique identifier (Auto-generated). |
-| `eventId` | `ObjectId` | Yes | **Foreign Key**: Reference to `events` collection. |
-| `title` | `String` | Yes | Task title. |
-| `description` | `String` | No | Task description. |
-| `assignee` | `String` | No | Name or ID of the person assigned (could be linked to `users`). |
-| `dueDate` | `Date` | No | Due date for the task. |
-| `priority` | `String` | Yes | Priority level ('high', 'medium', 'low'). |
-| `status` | `String` | Yes | Task status ('todo', 'in-progress', 'done'). |
-| `createdAt` | `Date` | Yes | Timestamp of creation. |
-| `updatedAt` | `Date` | Yes | Timestamp of last update. |
+### Guests Collection
+- **Purpose**: Track attendees and RSVPs for each event
+- **Key Fields**:
+  - `eventId`: Links guest to specific event
+  - `group`: Categorizes guests for seating/organization
+  - `status`: RSVP status tracking
+  - `dietary`: Special meal requirements
 
----
+### Tasks Collection
+- **Purpose**: Project management and task tracking per event
+- **Key Fields**:
+  - `eventId`: Links task to specific event
+  - `assignee`: Person responsible for completion
+  - `priority`: Urgency level
+  - `status`: Progress tracking
 
-## Relationships & Mappings
+### Budgets Collection
+- **Purpose**: Financial planning and tracking for events
+- **Key Fields**:
+  - `eventId`: One-to-one relationship with events
+  - `totalBudget`: Overall budget cap
+  - `categories`: Embedded array of budget allocations
+  - `expenses`: Embedded array of actual spending
 
-### Event -> Guests
-- **Relationship**: One-to-Many
-- **Mapping**: The `guests` collection contains an `eventId` field that references the `_id` of a document in the `events` collection.
-- **Query**: To get all guests for an event: `db.guests.find({ eventId: ObjectId("...") })`
+### Budget Categories (Embedded)
+- **Purpose**: Organize budget into spending categories
+- **Key Fields**:
+  - `allocatedAmount`: Planned spending
+  - `spentAmount`: Actual spending
+  - `color` & `icon`: UI visualization
 
-### Event -> Tasks
-- **Relationship**: One-to-Many
-- **Mapping**: The `tasks` collection contains an `eventId` field that references the `_id` of a document in the `events` collection.
-- **Query**: To get all tasks for an event: `db.tasks.find({ eventId: ObjectId("...") })`
+### Expenses (Embedded)
+- **Purpose**: Track individual transactions and payments
+- **Key Fields**:
+  - `categoryId`: Links to budget category
+  - `vendor`: Payment recipient
+  - `status`: Payment state tracking
+  - `date`: Transaction date
 
-### User -> Events
-- **Relationship**: One-to-Many
-- **Mapping**: The `events` collection contains an `organizerId` field that references the `_id` of a document in the `users` collection.
-- **Query**: To get all events created by a user: `db.events.find({ organizerId: ObjectId("...") })`
+## Relationships
+
+1. **User → Event** (One-to-Many)
+   - A user can organize multiple events
+   - Each event has one organizer
+
+2. **Event → Guest** (One-to-Many)
+   - An event can have multiple guests
+   - Each guest belongs to one event
+
+3. **Event → Task** (One-to-Many)
+   - An event can have multiple tasks
+   - Each task belongs to one event
+
+4. **Event → Budget** (One-to-One)
+   - Each event has exactly one budget
+   - Each budget belongs to one event
+
+5. **Budget → Categories** (One-to-Many, Embedded)
+   - A budget contains multiple categories
+   - Categories are embedded documents
+
+6. **Budget → Expenses** (One-to-Many, Embedded)
+   - A budget tracks multiple expenses
+   - Expenses are embedded documents
+
+7. **Category → Expense** (One-to-Many, Reference)
+   - Expenses reference their category by ID
+   - Multiple expenses can belong to one category
+
+## Indexes Recommendations
+
+```javascript
+// Users
+db.users.createIndex({ email: 1 }, { unique: true })
+db.users.createIndex({ role: 1 })
+
+// Events
+db.events.createIndex({ organizerId: 1 })
+db.events.createIndex({ status: 1 })
+db.events.createIndex({ startDate: 1 })
+db.events.createIndex({ type: 1 })
+
+// Guests
+db.guests.createIndex({ eventId: 1 })
+db.guests.createIndex({ email: 1 })
+db.guests.createIndex({ status: 1 })
+
+// Tasks
+db.tasks.createIndex({ eventId: 1 })
+db.tasks.createIndex({ status: 1 })
+db.tasks.createIndex({ dueDate: 1 })
+db.tasks.createIndex({ assignee: 1 })
+
+// Budgets
+db.budgets.createIndex({ eventId: 1 }, { unique: true })
+
+// Expenses (if separated from budgets)
+db.expenses.createIndex({ eventId: 1 })
+db.expenses.createIndex({ categoryId: 1 })
+db.expenses.createIndex({ status: 1 })
+db.expenses.createIndex({ date: 1 })
+```
+
+## Data Integrity Rules
+
+1. **Cascading Deletes**:
+   - Deleting an event should delete all associated guests, tasks, and budget
+   - Deleting a user should reassign or delete their events
+
+2. **Required Fields**:
+   - User: name, email, role
+   - Event: title, type, status, startDate, location, organizerId
+   - Guest: eventId, firstName, lastName, email, status
+   - Task: eventId, title, priority, status
+   - Budget: eventId, totalBudget, currency
+
+3. **Validation**:
+   - Email format validation
+   - Date validation (endDate >= startDate)
+   - Budget validation (spentAmount <= allocatedAmount warnings)
+   - Enum validation for status, type, priority, etc.

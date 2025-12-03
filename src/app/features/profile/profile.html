@@ -81,15 +81,15 @@
             </div>
             <div class="stats-grid" *ngIf="stats()">
                 <div class="stat-item">
-                    <span class="value">{{ stats()?.eventsCreated }}</span>
+                    <span class="value">{{ stats().eventsCreated }}</span>
                     <span class="label">Events Created</span>
                 </div>
                 <div class="stat-item">
-                    <span class="value">{{ stats()?.tasksCompleted }}</span>
+                    <span class="value">{{ stats().tasksCompleted }}</span>
                     <span class="label">Tasks Completed</span>
                 </div>
                 <div class="stat-item">
-                    <span class="value">{{ stats()?.guestsManaged }}</span>
+                    <span class="value">{{ stats().guestsManaged }}</span>
                     <span class="label">Guests Managed</span>
                 </div>
             </div>

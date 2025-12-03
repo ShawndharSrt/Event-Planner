@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { delay } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { ApiService } from './api.service';
+import { ApiResponse } from '../models/api-response.model';
 
 export interface UserProfile {
     id: number;
@@ -23,30 +24,27 @@ export interface UserStats {
 })
 export class UserService {
 
-    private currentUser: UserProfile = {
-        id: 1,
-        username: 'johndoe',
-        email: 'john.doe@example.com',
-        fullName: 'John Doe',
-        role: 'admin',
-        bio: 'Event planning enthusiast with 5 years of experience.',
-        avatarUrl: ''
-    };
+    // private currentUser: UserProfile = {
+    //     id: 1,
+    //     username: 'johndoe',
+    //     email: 'john.doe@example.com',
+    //     fullName: 'John Doe',
+    //     role: 'admin',
+    //     bio: 'Event planning enthusiast with 5 years of experience.',
+    //     avatarUrl: ''
+    // };
 
-    getUser(): Observable<UserProfile> {
-        return of(this.currentUser).pipe(delay(500));
+    constructor(private api: ApiService) { }
+
+    getUser(): Observable<ApiResponse<UserProfile>> {
+        return this.api.get<ApiResponse<UserProfile>>('/users/me');
     }
 
-    updateUser(changes: Partial<UserProfile>): Observable<UserProfile> {
-        this.currentUser = { ...this.currentUser, ...changes };
-        return of(this.currentUser).pipe(delay(500));
+    updateUser(changes: Partial<UserProfile>): Observable<ApiResponse<UserProfile>> {
+        return this.api.patch<ApiResponse<UserProfile>>('/users/me', changes);
     }
 
-    getUserStats(): Observable<UserStats> {
-        return of({
-            eventsCreated: 12,
-            tasksCompleted: 48,
-            guestsManaged: 156
-        }).pipe(delay(500));
+    getUserStats(): Observable<ApiResponse<UserStats>> {
+        return this.api.get<ApiResponse<UserStats>>('/users/me/stats');
     }
 }

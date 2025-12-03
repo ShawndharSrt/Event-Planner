@@ -37,7 +37,10 @@
         height: 50px;
         border-radius: $border-radius-md;
         @include flex-center;
-        font-size: $font-size-xl;
+
+        .material-icons {
+            font-size: 28px;
+        }
 
         &.primary {
             background-color: var(--primary-subtle);

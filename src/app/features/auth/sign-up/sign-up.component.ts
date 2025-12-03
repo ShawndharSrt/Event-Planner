@@ -46,13 +46,13 @@ export class SignUpComponent {
 
         const { fullName, username, email, password } = this.signUpForm.value;
 
-        this.authService.register({ fullName, username, email }).subscribe({
-            next: (success) => {
+        this.authService.register({ fullName, username, email, password }).subscribe({
+            next: (response) => {
                 this.isLoading = false;
-                if (success) {
+                if (response.success && response.data) {
                     this.router.navigateByUrl('/dashboard');
                 } else {
-                    this.errorMessage = 'Registration failed. Please try again.';
+                    this.errorMessage = response.message || 'Registration failed. Please try again.';
                 }
             },
             error: () => {

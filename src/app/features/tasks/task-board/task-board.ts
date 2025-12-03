@@ -40,7 +40,8 @@ export class TaskBoardComponent {
   }
 
   loadTasks() {
-    this.taskService.getTasks(1).subscribe(tasks => {
+    this.taskService.getTasks(1).subscribe(response => {
+      const tasks = response.data ?? [];
       this.tasks.set(tasks);
       this.updateColumnSignals();
     });
@@ -80,7 +81,12 @@ export class TaskBoardComponent {
         status: 'todo'
       };
 
-      this.taskService.addTask(newTask).subscribe(task => {
+      this.taskService.addTask(newTask).subscribe(response => {
+        const task = response.data;
+        if (!task) {
+          this.snackbar.show('Failed to add task', 'error');
+          return;
+        }
         this.tasks.update(tasks => [...tasks, task]);
         this.updateColumnSignals();
         this.snackbar.show('New task added', 'success');
@@ -100,7 +106,12 @@ export class TaskBoardComponent {
 
     const nextStatus = nextStatusMap[task.status];
 
-    this.taskService.updateTask(task.id, { status: nextStatus }).subscribe(updatedTask => {
+    this.taskService.updateTask(task.id, { status: nextStatus }).subscribe(response => {
+      const updatedTask = response.data;
+      if (!updatedTask) {
+        this.snackbar.show('Failed to update task status', 'error');
+        return;
+      }
       this.tasks.update(tasks => tasks.map(t =>
         t.id === updatedTask.id ? updatedTask : t
       ));
@@ -147,7 +158,12 @@ export class TaskBoardComponent {
 
       // Update task status via service
       this.taskService.updateTask(task.id, { status: newStatus }).subscribe({
-        next: (updatedTask) => {
+        next: (response) => {
+          const updatedTask = response.data;
+          if (!updatedTask) {
+            this.snackbar.show('Failed to move task', 'error');
+            return;
+          }
           // Ensure the task is properly updated with server response
           this.tasks.update(tasks => tasks.map(t =>
             t.id === updatedTask.id ? updatedTask : t

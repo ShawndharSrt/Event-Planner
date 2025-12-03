@@ -50,7 +50,10 @@ export class BudgetTrackerComponent {
 
     loadBudget() {
         if (this.eventId) {
-            this.budget.set(this.budgetService.getBudgetByEventId(this.eventId));
+            this.budgetService.getBudgetByEventId(this.eventId).subscribe({
+                next: (response) => this.budget.set(response.data ?? null),
+                error: (err) => console.error('Failed to load budget', err)
+            });
         }
     }
 
@@ -150,7 +153,7 @@ export class BudgetTrackerComponent {
 
             if (this.editingExpense()) {
                 // Update existing expense
-                const updated = this.budgetService.updateExpense(this.editingExpense()!.id, {
+                this.budgetService.updateExpense(this.editingExpense()!.id, {
                     categoryId: formValue.categoryId,
                     categoryName: category?.name || '',
                     description: formValue.description,
@@ -159,15 +162,16 @@ export class BudgetTrackerComponent {
                     date: formValue.date,
                     status: formValue.status,
                     notes: formValue.notes || undefined
+                }).subscribe({
+                    next: (response) => {
+                        if (response.data) {
+                            this.snackbarService.show('Expense updated successfully', 'success');
+                            this.loadBudget();
+                            this.cancelExpenseForm();
+                        }
+                    },
+                    error: () => this.snackbarService.show('Failed to update expense', 'error')
                 });
-
-                if (updated) {
-                    this.snackbarService.show('Expense updated successfully', 'success');
-                    this.loadBudget();
-                    this.cancelExpenseForm();
-                } else {
-                    this.snackbarService.show('Failed to update expense', 'error');
-                }
             } else {
                 // Create new expense
                 this.budgetService.addExpense({
@@ -180,11 +184,16 @@ export class BudgetTrackerComponent {
                     date: formValue.date,
                     status: formValue.status,
                     notes: formValue.notes || undefined
+                }).subscribe({
+                    next: (response) => {
+                        if (response.data) {
+                        this.snackbarService.show('Expense added successfully', 'success');
+                        this.loadBudget();
+                        this.cancelExpenseForm();
+                        }
+                    },
+                    error: () => this.snackbarService.show('Failed to add expense', 'error')
                 });
-
-                this.snackbarService.show('Expense added successfully', 'success');
-                this.loadBudget();
-                this.cancelExpenseForm();
             }
         } else {
             this.snackbarService.show('Please fill in all required fields', 'error');
@@ -193,13 +202,13 @@ export class BudgetTrackerComponent {
 
     deleteExpense(expense: Expense) {
         if (confirm(`Are you sure you want to delete this expense: ${expense.description}?`)) {
-            const deleted = this.budgetService.deleteExpense(expense.id);
-            if (deleted) {
-                this.snackbarService.show('Expense deleted successfully', 'success');
-                this.loadBudget();
-            } else {
-                this.snackbarService.show('Failed to delete expense', 'error');
-            }
+            this.budgetService.deleteExpense(expense.id).subscribe({
+                next: () => {
+                    this.snackbarService.show('Expense deleted successfully', 'success');
+                    this.loadBudget();
+                },
+                error: () => this.snackbarService.show('Failed to delete expense', 'error')
+            });
         }
     }
 

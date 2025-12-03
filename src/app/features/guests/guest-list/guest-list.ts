@@ -6,7 +6,7 @@ import { GuestService } from '../../../core/services/guest.service';
 import { Guest } from '../../../core/models/guest.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { Subject } from 'rxjs';
-import { switchMap, startWith } from 'rxjs/operators';
+import { switchMap, startWith, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-guest-list',
@@ -24,7 +24,11 @@ export class GuestListComponent {
   guests = toSignal(
     this.refreshTrigger.pipe(
       startWith(null),
-      switchMap(() => this.guestService.getAllGuests())
+      switchMap(() =>
+        this.guestService.getAllGuests().pipe(
+          map(response => response.data ?? [])
+        )
+      )
     ),
     { initialValue: [] as Guest[] }
   );

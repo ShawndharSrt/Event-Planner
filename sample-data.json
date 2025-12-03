@@ -1,0 +1,1295 @@
+{
+    "_comments": [
+        "Sample data for Event Planner MongoDB collections",
+        "All ObjectIds are example IDs - MongoDB will generate actual IDs",
+        "Relationships are maintained via referenced ObjectIds",
+        "Insert order: users -> events -> guests, tasks, budgets"
+    ],
+    "users": [
+        {
+            "_id": {
+                "$oid": "507f1f77bcf86cd799439011"
+            },
+            "name": "Sarah Johnson",
+            "email": "sarah.johnson@example.com",
+            "role": "admin",
+            "avatar": "https://i.pravatar.cc/150?img=1",
+            "createdAt": {
+                "$date": "2024-01-15T08:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-01T10:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "507f1f77bcf86cd799439012"
+            },
+            "name": "Michael Chen",
+            "email": "michael.chen@example.com",
+            "role": "planner",
+            "avatar": "https://i.pravatar.cc/150?img=12",
+            "createdAt": {
+                "$date": "2024-02-20T09:15:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-28T14:20:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "507f1f77bcf86cd799439013"
+            },
+            "name": "Emily Rodriguez",
+            "email": "emily.rodriguez@example.com",
+            "role": "planner",
+            "avatar": "https://i.pravatar.cc/150?img=5",
+            "createdAt": {
+                "$date": "2024-03-10T11:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-15T16:45:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "507f1f77bcf86cd799439014"
+            },
+            "name": "David Kim",
+            "email": "david.kim@example.com",
+            "role": "viewer",
+            "avatar": "https://i.pravatar.cc/150?img=8",
+            "createdAt": {
+                "$date": "2024-04-05T13:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-20T09:10:00.000Z"
+            }
+        }
+    ],
+    "events": [
+        {
+            "_id": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "title": "Tech Innovation Summit 2025",
+            "type": "conference",
+            "status": "active",
+            "startDate": {
+                "$date": "2025-03-15T09:00:00.000Z"
+            },
+            "startTime": "09:00",
+            "endDate": {
+                "$date": "2025-03-17T18:00:00.000Z"
+            },
+            "endTime": "18:00",
+            "location": "San Francisco Convention Center, CA",
+            "description": "A three-day conference bringing together tech leaders, innovators, and entrepreneurs to discuss the future of technology and innovation.",
+            "coverImage": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800",
+            "organizerId": {
+                "$oid": "507f1f77bcf86cd799439011"
+            },
+            "createdAt": {
+                "$date": "2024-10-01T10:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-25T15:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "title": "Sarah & John's Wedding",
+            "type": "wedding",
+            "status": "planning",
+            "startDate": {
+                "$date": "2025-06-20T15:00:00.000Z"
+            },
+            "startTime": "15:00",
+            "endDate": {
+                "$date": "2025-06-20T23:00:00.000Z"
+            },
+            "endTime": "23:00",
+            "location": "Seaside Resort & Spa, Miami Beach, FL",
+            "description": "An elegant beach wedding celebration with dinner reception and dancing under the stars.",
+            "coverImage": "https://images.unsplash.com/photo-1519741497674-611481863552?w=800",
+            "organizerId": {
+                "$oid": "507f1f77bcf86cd799439012"
+            },
+            "createdAt": {
+                "$date": "2024-09-15T14:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-28T11:20:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "607f1f77bcf86cd799439023"
+            },
+            "title": "Annual Charity Gala",
+            "type": "fundraiser",
+            "status": "planning",
+            "startDate": {
+                "$date": "2025-04-10T19:00:00.000Z"
+            },
+            "startTime": "19:00",
+            "endDate": {
+                "$date": "2025-04-10T23:30:00.000Z"
+            },
+            "endTime": "23:30",
+            "location": "Grand Ballroom, The Plaza Hotel, New York, NY",
+            "description": "Annual fundraising gala to support education initiatives for underprivileged children.",
+            "coverImage": "https://images.unsplash.com/photo-1511578314322-379afb476865?w=800",
+            "organizerId": {
+                "$oid": "507f1f77bcf86cd799439013"
+            },
+            "createdAt": {
+                "$date": "2024-11-01T09:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-29T13:45:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "607f1f77bcf86cd799439024"
+            },
+            "title": "Company Product Launch",
+            "type": "corporate",
+            "status": "active",
+            "startDate": {
+                "$date": "2025-02-05T10:00:00.000Z"
+            },
+            "startTime": "10:00",
+            "endDate": {
+                "$date": "2025-02-05T14:00:00.000Z"
+            },
+            "endTime": "14:00",
+            "location": "Innovation Hub, Austin, TX",
+            "description": "Official launch event for our new product line with live demonstrations and networking.",
+            "coverImage": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800",
+            "organizerId": {
+                "$oid": "507f1f77bcf86cd799439011"
+            },
+            "createdAt": {
+                "$date": "2024-10-20T12:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-30T08:15:00.000Z"
+            }
+        }
+    ],
+    "guests": [
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439031"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "firstName": "Robert",
+            "lastName": "Anderson",
+            "email": "robert.anderson@techcorp.com",
+            "phone": "+1-555-0101",
+            "group": "vip",
+            "status": "confirmed",
+            "dietary": "None",
+            "notes": "CEO of TechCorp, requires parking pass",
+            "createdAt": {
+                "$date": "2024-10-05T10:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-10T14:20:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439032"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "firstName": "Jennifer",
+            "lastName": "Martinez",
+            "email": "j.martinez@innovate.io",
+            "phone": "+1-555-0102",
+            "group": "speaker",
+            "status": "confirmed",
+            "dietary": "Vegetarian",
+            "notes": "Keynote speaker, needs presentation setup",
+            "createdAt": {
+                "$date": "2024-10-08T11:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-12T09:45:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439033"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "firstName": "Alex",
+            "lastName": "Thompson",
+            "email": "alex.t@startupventures.com",
+            "phone": "+1-555-0103",
+            "group": "general",
+            "status": "pending",
+            "dietary": "Gluten-free",
+            "notes": "",
+            "createdAt": {
+                "$date": "2024-10-15T15:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-15T15:00:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439034"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "firstName": "Mary",
+            "lastName": "Williams",
+            "email": "mary.williams@email.com",
+            "phone": "+1-555-0201",
+            "group": "family",
+            "status": "confirmed",
+            "dietary": "None",
+            "notes": "Bride's mother",
+            "createdAt": {
+                "$date": "2024-09-20T10:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-25T12:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439035"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "firstName": "James",
+            "lastName": "Davis",
+            "email": "james.davis@email.com",
+            "phone": "+1-555-0202",
+            "group": "friends",
+            "status": "confirmed",
+            "dietary": "Vegan",
+            "notes": "Best man, giving speech",
+            "createdAt": {
+                "$date": "2024-09-22T14:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-01T16:15:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439036"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "firstName": "Lisa",
+            "lastName": "Brown",
+            "email": "lisa.brown@email.com",
+            "phone": "+1-555-0203",
+            "group": "friends",
+            "status": "declined",
+            "dietary": "",
+            "notes": "Unable to attend due to prior commitment",
+            "createdAt": {
+                "$date": "2024-09-25T09:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-30T11:00:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439037"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439023"
+            },
+            "firstName": "Patricia",
+            "lastName": "Garcia",
+            "email": "patricia.garcia@foundation.org",
+            "phone": "+1-555-0301",
+            "group": "vip",
+            "status": "confirmed",
+            "dietary": "Pescatarian",
+            "notes": "Board member, table seating preference",
+            "createdAt": {
+                "$date": "2024-11-05T10:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-20T13:45:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "707f1f77bcf86cd799439038"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439024"
+            },
+            "firstName": "Christopher",
+            "lastName": "Wilson",
+            "email": "c.wilson@media.com",
+            "phone": "+1-555-0401",
+            "group": "press",
+            "status": "confirmed",
+            "dietary": "None",
+            "notes": "Tech journalist, needs press kit",
+            "createdAt": {
+                "$date": "2024-10-25T11:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-18T10:30:00.000Z"
+            }
+        }
+    ],
+    "tasks": [
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439041"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "title": "Confirm keynote speakers",
+            "description": "Reach out to all potential keynote speakers and confirm their availability and topics",
+            "assignee": "Michael Chen",
+            "dueDate": {
+                "$date": "2025-01-15T17:00:00.000Z"
+            },
+            "priority": "high",
+            "status": "done",
+            "createdAt": {
+                "$date": "2024-10-01T10:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-05T14:00:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439042"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "title": "Book audio-visual equipment",
+            "description": "Reserve projectors, microphones, and sound system for all conference rooms",
+            "assignee": "Sarah Johnson",
+            "dueDate": {
+                "$date": "2025-02-15T17:00:00.000Z"
+            },
+            "priority": "high",
+            "status": "in-progress",
+            "createdAt": {
+                "$date": "2024-10-10T09:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-22T11:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439043"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "title": "Design event swag bags",
+            "description": "Create and order branded merchandise for attendee gift bags",
+            "assignee": "Emily Rodriguez",
+            "dueDate": {
+                "$date": "2025-02-28T17:00:00.000Z"
+            },
+            "priority": "medium",
+            "status": "todo",
+            "createdAt": {
+                "$date": "2024-10-15T13:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-15T13:00:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439044"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "title": "Book photographer and videographer",
+            "description": "Hire professional photography and videography team for wedding coverage",
+            "assignee": "Sarah Johnson",
+            "dueDate": {
+                "$date": "2025-01-31T17:00:00.000Z"
+            },
+            "priority": "high",
+            "status": "in-progress",
+            "createdAt": {
+                "$date": "2024-09-20T10:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-15T15:20:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439045"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "title": "Arrange floral decorations",
+            "description": "Meet with florist to finalize bouquets, centerpieces, and ceremony arch flowers",
+            "assignee": "Emily Rodriguez",
+            "dueDate": {
+                "$date": "2025-05-15T17:00:00.000Z"
+            },
+            "priority": "high",
+            "status": "todo",
+            "createdAt": {
+                "$date": "2024-09-25T11:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-09-25T11:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439046"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "title": "Send wedding invitations",
+            "description": "Mail formal invitations to all guests with RSVP cards",
+            "assignee": "Michael Chen",
+            "dueDate": {
+                "$date": "2025-04-20T17:00:00.000Z"
+            },
+            "priority": "medium",
+            "status": "todo",
+            "createdAt": {
+                "$date": "2024-10-01T14:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-01T14:00:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439047"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439023"
+            },
+            "title": "Secure auction items",
+            "description": "Contact donors and businesses for silent auction item donations",
+            "assignee": "Emily Rodriguez",
+            "dueDate": {
+                "$date": "2025-03-01T17:00:00.000Z"
+            },
+            "priority": "high",
+            "status": "in-progress",
+            "createdAt": {
+                "$date": "2024-11-05T09:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-25T16:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439048"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439023"
+            },
+            "title": "Create event program booklet",
+            "description": "Design and print gala program with schedule, donor recognition, and mission statement",
+            "assignee": "Sarah Johnson",
+            "dueDate": {
+                "$date": "2025-03-20T17:00:00.000Z"
+            },
+            "priority": "medium",
+            "status": "todo",
+            "createdAt": {
+                "$date": "2024-11-10T10:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-10T10:30:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439049"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439024"
+            },
+            "title": "Prepare product demo stations",
+            "description": "Set up interactive demo areas with product samples and trained staff",
+            "assignee": "Michael Chen",
+            "dueDate": {
+                "$date": "2025-02-01T17:00:00.000Z"
+            },
+            "priority": "high",
+            "status": "in-progress",
+            "createdAt": {
+                "$date": "2024-10-25T11:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-28T13:15:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "807f1f77bcf86cd799439050"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439024"
+            },
+            "title": "Coordinate catering service",
+            "description": "Finalize menu selections and confirm headcount with catering company",
+            "assignee": "Sarah Johnson",
+            "dueDate": {
+                "$date": "2025-01-25T17:00:00.000Z"
+            },
+            "priority": "medium",
+            "status": "todo",
+            "createdAt": {
+                "$date": "2024-10-30T14:00:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-10-30T14:00:00.000Z"
+            }
+        }
+    ],
+    "budgets": [
+        {
+            "_id": {
+                "$oid": "907f1f77bcf86cd799439061"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439021"
+            },
+            "totalBudget": 250000,
+            "currency": "USD",
+            "categories": [
+                {
+                    "id": 1,
+                    "name": "Venue",
+                    "allocatedAmount": 80000,
+                    "spentAmount": 75000,
+                    "color": "#FF6B6B",
+                    "icon": "location_on"
+                },
+                {
+                    "id": 2,
+                    "name": "Catering",
+                    "allocatedAmount": 60000,
+                    "spentAmount": 45000,
+                    "color": "#4ECDC4",
+                    "icon": "restaurant"
+                },
+                {
+                    "id": 3,
+                    "name": "Technology",
+                    "allocatedAmount": 45000,
+                    "spentAmount": 38000,
+                    "color": "#95E1D3",
+                    "icon": "computer"
+                },
+                {
+                    "id": 4,
+                    "name": "Marketing",
+                    "allocatedAmount": 35000,
+                    "spentAmount": 28000,
+                    "color": "#FFD93D",
+                    "icon": "campaign"
+                },
+                {
+                    "id": 5,
+                    "name": "Staff",
+                    "allocatedAmount": 30000,
+                    "spentAmount": 15000,
+                    "color": "#A8E6CF",
+                    "icon": "people"
+                }
+            ],
+            "expenses": [
+                {
+                    "id": 1,
+                    "categoryId": 1,
+                    "categoryName": "Venue",
+                    "description": "Convention center rental - 3 days",
+                    "vendor": "SF Convention Center",
+                    "amount": 75000,
+                    "date": {
+                        "$date": "2024-11-01T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Includes setup and breakdown time"
+                },
+                {
+                    "id": 2,
+                    "categoryId": 2,
+                    "categoryName": "Catering",
+                    "description": "Breakfast service - Day 1-3",
+                    "vendor": "Gourmet Catering Co",
+                    "amount": 18000,
+                    "date": {
+                        "$date": "2024-11-10T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Continental breakfast for 500 attendees"
+                },
+                {
+                    "id": 3,
+                    "categoryId": 2,
+                    "categoryName": "Catering",
+                    "description": "Lunch buffet - Day 1-3",
+                    "vendor": "Gourmet Catering Co",
+                    "amount": 27000,
+                    "date": {
+                        "$date": "2024-11-10T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Three-course meals with dietary options"
+                },
+                {
+                    "id": 4,
+                    "categoryId": 3,
+                    "categoryName": "Technology",
+                    "description": "AV equipment rental",
+                    "vendor": "TechEvents Pro",
+                    "amount": 22000,
+                    "date": {
+                        "$date": "2024-11-15T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Projectors, screens, sound systems"
+                },
+                {
+                    "id": 5,
+                    "categoryId": 3,
+                    "categoryName": "Technology",
+                    "description": "Event app development",
+                    "vendor": "AppDev Solutions",
+                    "amount": 16000,
+                    "date": {
+                        "$date": "2024-10-20T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Custom mobile app for attendees"
+                },
+                {
+                    "id": 6,
+                    "categoryId": 4,
+                    "categoryName": "Marketing",
+                    "description": "Digital advertising campaign",
+                    "vendor": "Digital Marketing Pro",
+                    "amount": 15000,
+                    "date": {
+                        "$date": "2024-11-05T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Google Ads, social media, email"
+                },
+                {
+                    "id": 7,
+                    "categoryId": 4,
+                    "categoryName": "Marketing",
+                    "description": "Print materials",
+                    "vendor": "PrintWorks Inc",
+                    "amount": 8000,
+                    "date": {
+                        "$date": "2024-11-12T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Banners, brochures, signage"
+                },
+                {
+                    "id": 8,
+                    "categoryId": 5,
+                    "categoryName": "Staff",
+                    "description": "Event coordinators - deposit",
+                    "vendor": "EventStaff Solutions",
+                    "amount": 15000,
+                    "date": {
+                        "$date": "2024-10-15T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "50% deposit for 10 staff members"
+                }
+            ],
+            "createdAt": {
+                "$date": "2024-10-01T10:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-25T16:45:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "907f1f77bcf86cd799439062"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439022"
+            },
+            "totalBudget": 75000,
+            "currency": "USD",
+            "categories": [
+                {
+                    "id": 1,
+                    "name": "Venue",
+                    "allocatedAmount": 20000,
+                    "spentAmount": 18000,
+                    "color": "#FF6B6B",
+                    "icon": "location_on"
+                },
+                {
+                    "id": 2,
+                    "name": "Catering",
+                    "allocatedAmount": 25000,
+                    "spentAmount": 8000,
+                    "color": "#4ECDC4",
+                    "icon": "restaurant"
+                },
+                {
+                    "id": 3,
+                    "name": "Photography",
+                    "allocatedAmount": 8000,
+                    "spentAmount": 3000,
+                    "color": "#95E1D3",
+                    "icon": "camera_alt"
+                },
+                {
+                    "id": 4,
+                    "name": "Flowers",
+                    "allocatedAmount": 6000,
+                    "spentAmount": 0,
+                    "color": "#FFD93D",
+                    "icon": "local_florist"
+                },
+                {
+                    "id": 5,
+                    "name": "Music",
+                    "allocatedAmount": 7000,
+                    "spentAmount": 2000,
+                    "color": "#A8E6CF",
+                    "icon": "music_note"
+                },
+                {
+                    "id": 6,
+                    "name": "Attire",
+                    "allocatedAmount": 5000,
+                    "spentAmount": 4200,
+                    "color": "#FFDAC1",
+                    "icon": "checkroom"
+                },
+                {
+                    "id": 7,
+                    "name": "Invitations",
+                    "allocatedAmount": 2000,
+                    "spentAmount": 1500,
+                    "color": "#B4A7D6",
+                    "icon": "mail"
+                },
+                {
+                    "id": 8,
+                    "name": "Miscellaneous",
+                    "allocatedAmount": 2000,
+                    "spentAmount": 500,
+                    "color": "#D4A5A5",
+                    "icon": "more_horiz"
+                }
+            ],
+            "expenses": [
+                {
+                    "id": 1,
+                    "categoryId": 1,
+                    "categoryName": "Venue",
+                    "description": "Seaside Resort booking deposit",
+                    "vendor": "Seaside Resort & Spa",
+                    "amount": 18000,
+                    "date": {
+                        "$date": "2024-10-01T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Full venue rental with beach access"
+                },
+                {
+                    "id": 2,
+                    "categoryId": 2,
+                    "categoryName": "Catering",
+                    "description": "Menu tasting session",
+                    "vendor": "Elegant Events Catering",
+                    "amount": 500,
+                    "date": {
+                        "$date": "2024-10-15T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Tasting for 6 people"
+                },
+                {
+                    "id": 3,
+                    "categoryId": 2,
+                    "categoryName": "Catering",
+                    "description": "Catering deposit",
+                    "vendor": "Elegant Events Catering",
+                    "amount": 7500,
+                    "date": {
+                        "$date": "2024-11-01T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "30% deposit for 150 guests"
+                },
+                {
+                    "id": 4,
+                    "categoryId": 3,
+                    "categoryName": "Photography",
+                    "description": "Photographer booking deposit",
+                    "vendor": "Moments Photography",
+                    "amount": 3000,
+                    "date": {
+                        "$date": "2024-10-20T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "50% deposit, 8-hour coverage"
+                },
+                {
+                    "id": 5,
+                    "categoryId": 5,
+                    "categoryName": "Music",
+                    "description": "DJ booking deposit",
+                    "vendor": "Harmony Sound DJ",
+                    "amount": 2000,
+                    "date": {
+                        "$date": "2024-11-05T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Deposit for reception entertainment"
+                },
+                {
+                    "id": 6,
+                    "categoryId": 6,
+                    "categoryName": "Attire",
+                    "description": "Wedding dress",
+                    "vendor": "Bridal Boutique",
+                    "amount": 3200,
+                    "date": {
+                        "$date": "2024-09-25T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Custom alterations included"
+                },
+                {
+                    "id": 7,
+                    "categoryId": 6,
+                    "categoryName": "Attire",
+                    "description": "Groom's tuxedo rental",
+                    "vendor": "Men's Formal Wear",
+                    "amount": 800,
+                    "date": {
+                        "$date": "2024-10-10T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Includes accessories"
+                },
+                {
+                    "id": 8,
+                    "categoryId": 7,
+                    "categoryName": "Invitations",
+                    "description": "Wedding invitations printing",
+                    "vendor": "Classic Print Co",
+                    "amount": 1500,
+                    "date": {
+                        "$date": "2024-11-15T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "150 custom invitations with envelopes"
+                },
+                {
+                    "id": 9,
+                    "categoryId": 8,
+                    "categoryName": "Miscellaneous",
+                    "description": "Wedding favors",
+                    "vendor": "Favor Boutique",
+                    "amount": 500,
+                    "date": {
+                        "$date": "2024-11-20T00:00:00.000Z"
+                    },
+                    "status": "pending",
+                    "notes": "Personalized guest favors"
+                }
+            ],
+            "createdAt": {
+                "$date": "2024-09-15T14:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-28T10:15:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "907f1f77bcf86cd799439063"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439023"
+            },
+            "totalBudget": 150000,
+            "currency": "USD",
+            "categories": [
+                {
+                    "id": 1,
+                    "name": "Venue",
+                    "allocatedAmount": 45000,
+                    "spentAmount": 40000,
+                    "color": "#FF6B6B",
+                    "icon": "location_on"
+                },
+                {
+                    "id": 2,
+                    "name": "Catering",
+                    "allocatedAmount": 40000,
+                    "spentAmount": 12000,
+                    "color": "#4ECDC4",
+                    "icon": "restaurant"
+                },
+                {
+                    "id": 3,
+                    "name": "Entertainment",
+                    "allocatedAmount": 25000,
+                    "spentAmount": 10000,
+                    "color": "#95E1D3",
+                    "icon": "theater_comedy"
+                },
+                {
+                    "id": 4,
+                    "name": "Decorations",
+                    "allocatedAmount": 15000,
+                    "spentAmount": 5000,
+                    "color": "#FFD93D",
+                    "icon": "celebration"
+                },
+                {
+                    "id": 5,
+                    "name": "Marketing",
+                    "allocatedAmount": 12000,
+                    "spentAmount": 8000,
+                    "color": "#A8E6CF",
+                    "icon": "campaign"
+                },
+                {
+                    "id": 6,
+                    "name": "Auction Items",
+                    "allocatedAmount": 10000,
+                    "spentAmount": 6000,
+                    "color": "#FFDAC1",
+                    "icon": "gavel"
+                },
+                {
+                    "id": 7,
+                    "name": "Miscellaneous",
+                    "allocatedAmount": 3000,
+                    "spentAmount": 1200,
+                    "color": "#B4A7D6",
+                    "icon": "more_horiz"
+                }
+            ],
+            "expenses": [
+                {
+                    "id": 1,
+                    "categoryId": 1,
+                    "categoryName": "Venue",
+                    "description": "Grand Ballroom rental",
+                    "vendor": "The Plaza Hotel",
+                    "amount": 40000,
+                    "date": {
+                        "$date": "2024-11-08T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Includes tables, chairs, linens"
+                },
+                {
+                    "id": 2,
+                    "categoryId": 2,
+                    "categoryName": "Catering",
+                    "description": "Catering deposit",
+                    "vendor": "Premium Catering Services",
+                    "amount": 12000,
+                    "date": {
+                        "$date": "2024-11-15T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "30% deposit for 300 guests"
+                },
+                {
+                    "id": 3,
+                    "categoryId": 3,
+                    "categoryName": "Entertainment",
+                    "description": "Live band booking",
+                    "vendor": "Manhattan Jazz Ensemble",
+                    "amount": 10000,
+                    "date": {
+                        "$date": "2024-11-18T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "4-hour performance"
+                },
+                {
+                    "id": 4,
+                    "categoryId": 4,
+                    "categoryName": "Decorations",
+                    "description": "Floral arrangements deposit",
+                    "vendor": "Luxury Florals NYC",
+                    "amount": 5000,
+                    "date": {
+                        "$date": "2024-11-20T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Centerpieces and stage decor"
+                },
+                {
+                    "id": 5,
+                    "categoryId": 5,
+                    "categoryName": "Marketing",
+                    "description": "Invitation design and printing",
+                    "vendor": "Elite Invitations",
+                    "amount": 4000,
+                    "date": {
+                        "$date": "2024-11-10T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "300 premium invitations"
+                },
+                {
+                    "id": 6,
+                    "categoryId": 5,
+                    "categoryName": "Marketing",
+                    "description": "Digital marketing campaign",
+                    "vendor": "Social Impact Media",
+                    "amount": 4000,
+                    "date": {
+                        "$date": "2024-11-12T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Social media and email promotion"
+                },
+                {
+                    "id": 7,
+                    "categoryId": 6,
+                    "categoryName": "Auction Items",
+                    "description": "Purchased auction items",
+                    "vendor": "Various Vendors",
+                    "amount": 6000,
+                    "date": {
+                        "$date": "2024-11-22T00:00:00.000Z"
+                    },
+                    "status": "pending",
+                    "notes": "Gift certificates and experiences"
+                },
+                {
+                    "id": 8,
+                    "categoryId": 7,
+                    "categoryName": "Miscellaneous",
+                    "description": "Event insurance",
+                    "vendor": "Event Insurance Co",
+                    "amount": 1200,
+                    "date": {
+                        "$date": "2024-11-05T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Liability coverage"
+                }
+            ],
+            "createdAt": {
+                "$date": "2024-11-01T09:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-29T14:20:00.000Z"
+            }
+        },
+        {
+            "_id": {
+                "$oid": "907f1f77bcf86cd799439064"
+            },
+            "eventId": {
+                "$oid": "607f1f77bcf86cd799439024"
+            },
+            "totalBudget": 50000,
+            "currency": "USD",
+            "categories": [
+                {
+                    "id": 1,
+                    "name": "Venue",
+                    "allocatedAmount": 12000,
+                    "spentAmount": 12000,
+                    "color": "#FF6B6B",
+                    "icon": "location_on"
+                },
+                {
+                    "id": 2,
+                    "name": "Catering",
+                    "allocatedAmount": 15000,
+                    "spentAmount": 5000,
+                    "color": "#4ECDC4",
+                    "icon": "restaurant"
+                },
+                {
+                    "id": 3,
+                    "name": "Marketing",
+                    "allocatedAmount": 10000,
+                    "spentAmount": 8500,
+                    "color": "#95E1D3",
+                    "icon": "campaign"
+                },
+                {
+                    "id": 4,
+                    "name": "Product Demos",
+                    "allocatedAmount": 8000,
+                    "spentAmount": 6000,
+                    "color": "#FFD93D",
+                    "icon": "devices"
+                },
+                {
+                    "id": 5,
+                    "name": "Staff",
+                    "allocatedAmount": 5000,
+                    "spentAmount": 2500,
+                    "color": "#A8E6CF",
+                    "icon": "people"
+                }
+            ],
+            "expenses": [
+                {
+                    "id": 1,
+                    "categoryId": 1,
+                    "categoryName": "Venue",
+                    "description": "Innovation Hub rental",
+                    "vendor": "Innovation Hub Austin",
+                    "amount": 12000,
+                    "date": {
+                        "$date": "2024-11-01T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Full day event space"
+                },
+                {
+                    "id": 2,
+                    "categoryId": 2,
+                    "categoryName": "Catering",
+                    "description": "Catering deposit",
+                    "vendor": "Austin Gourmet Catering",
+                    "amount": 5000,
+                    "date": {
+                        "$date": "2024-11-20T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Lunch and refreshments for 200"
+                },
+                {
+                    "id": 3,
+                    "categoryId": 3,
+                    "categoryName": "Marketing",
+                    "description": "Press release distribution",
+                    "vendor": "PR Newswire",
+                    "amount": 3000,
+                    "date": {
+                        "$date": "2024-11-05T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "National distribution"
+                },
+                {
+                    "id": 4,
+                    "categoryId": 3,
+                    "categoryName": "Marketing",
+                    "description": "Event promotional materials",
+                    "vendor": "Creative Print Shop",
+                    "amount": 2500,
+                    "date": {
+                        "$date": "2024-11-15T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Banners, posters, brochures"
+                },
+                {
+                    "id": 5,
+                    "categoryId": 3,
+                    "categoryName": "Marketing",
+                    "description": "Social media advertising",
+                    "vendor": "Digital Ads Agency",
+                    "amount": 3000,
+                    "date": {
+                        "$date": "2024-11-10T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Two-week campaign"
+                },
+                {
+                    "id": 6,
+                    "categoryId": 4,
+                    "categoryName": "Product Demos",
+                    "description": "Demo station setup",
+                    "vendor": "Event Displays Inc",
+                    "amount": 4000,
+                    "date": {
+                        "$date": "2024-11-18T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "Interactive display booths"
+                },
+                {
+                    "id": 7,
+                    "categoryId": 4,
+                    "categoryName": "Product Demos",
+                    "description": "Product samples",
+                    "vendor": "Manufacturing Dept",
+                    "amount": 2000,
+                    "date": {
+                        "$date": "2024-11-25T00:00:00.000Z"
+                    },
+                    "status": "pending",
+                    "notes": "200 sample units"
+                },
+                {
+                    "id": 8,
+                    "categoryId": 5,
+                    "categoryName": "Staff",
+                    "description": "Event staff deposit",
+                    "vendor": "Professional Event Staff",
+                    "amount": 2500,
+                    "date": {
+                        "$date": "2024-11-12T00:00:00.000Z"
+                    },
+                    "status": "paid",
+                    "notes": "6 staff members for setup and assistance"
+                }
+            ],
+            "createdAt": {
+                "$date": "2024-10-20T12:30:00.000Z"
+            },
+            "updatedAt": {
+                "$date": "2024-11-30T09:45:00.000Z"
+            }
+        }
+    ]
+}

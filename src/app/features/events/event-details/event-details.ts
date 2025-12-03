@@ -13,7 +13,7 @@ import { Task } from '../../../core/models/task.model';
 
 import { EventService } from '../../../core/services/event.service';
 import { Event, TimelineItem, TeamMember, EventStats } from '../../../core/models/event.model';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-event-details',
@@ -38,42 +38,66 @@ export class EventDetailsComponent {
   // Fetch event details based on ID
   event = toSignal(
     this.privateroute.paramMap.pipe(
-      switchMap(params => this.eventService.getEvent(Number(params.get('id'))))
+      switchMap(params =>
+        this.eventService
+          .getEvent(Number(params.get('id')))
+          .pipe(map(response => response.data))
+      )
     )
   );
 
   // Fetch guests and tasks based on dynamic ID
   guestData = toSignal(
     this.privateroute.paramMap.pipe(
-      switchMap(params => this.guestService.getGuests(Number(params.get('id'))))
+      switchMap(params =>
+        this.guestService
+          .getGuests(Number(params.get('id')))
+          .pipe(map(response => response.data ?? []))
+      )
     ),
     { initialValue: [] as Guest[] }
   );
 
   taskData = toSignal(
     this.privateroute.paramMap.pipe(
-      switchMap(params => this.taskService.getTasks(Number(params.get('id'))))
+      switchMap(params =>
+        this.taskService
+          .getTasks(Number(params.get('id')))
+          .pipe(map(response => response.data ?? []))
+      )
     ),
     { initialValue: [] as Task[] }
   );
 
   timeline = toSignal(
     this.privateroute.paramMap.pipe(
-      switchMap(params => this.eventService.getEventTimeline(Number(params.get('id'))))
+      switchMap(params =>
+        this.eventService
+          .getEventTimeline(Number(params.get('id')))
+          .pipe(map(response => response.data ?? []))
+      )
     ),
     { initialValue: [] as TimelineItem[] }
   );
 
   team = toSignal(
     this.privateroute.paramMap.pipe(
-      switchMap(params => this.eventService.getEventTeam(Number(params.get('id'))))
+      switchMap(params =>
+        this.eventService
+          .getEventTeam(Number(params.get('id')))
+          .pipe(map(response => response.data ?? []))
+      )
     ),
     { initialValue: [] as TeamMember[] }
   );
 
   stats = toSignal(
     this.privateroute.paramMap.pipe(
-      switchMap(params => this.eventService.getEventStats(Number(params.get('id'))))
+      switchMap(params =>
+        this.eventService
+          .getEventStats(Number(params.get('id')))
+          .pipe(map(response => response.data))
+      )
     )
   );
 

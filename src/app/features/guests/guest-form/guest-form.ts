@@ -52,7 +52,8 @@ export class GuestFormComponent implements OnInit {
 
   loadGuest(id: number) {
     this.guestService.getGuestById(id).subscribe({
-      next: (guest) => {
+      next: (response) => {
+        const guest = response.data;
         if (guest) {
           this.guestForm.patchValue({
             eventId: guest.eventId,

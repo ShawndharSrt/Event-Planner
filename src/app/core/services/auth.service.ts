@@ -1,6 +1,9 @@
 import { Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, delay, tap } from 'rxjs';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { ApiService } from './api.service';
+import { ApiResponse } from '../models/api-response.model';
 
 export interface User {
     id: string;
@@ -12,26 +15,30 @@ export interface User {
     bio?: string;
 }
 
+export interface RegisterPayload extends Partial<User> {
+    password: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
     // Mock user data
-    private readonly MOCK_USER: User = {
-        id: '1',
-        username: 'admin',
-        email: 'admin@eventplanner.com',
-        fullName: 'Admin User',
-        role: 'admin',
-        avatarUrl: 'assets/avatars/default-avatar.png', // Placeholder
-        bio: 'Senior Event Planner with 10+ years of experience in corporate and wedding events.'
-    };
+    // private readonly MOCK_USER: User = {
+    //     id: '1',
+    //     username: 'admin',
+    //     email: 'admin@eventplanner.com',
+    //     fullName: 'Admin User',
+    //     role: 'admin',
+    //     avatarUrl: 'assets/avatars/default-avatar.png', // Placeholder
+    //     bio: 'Senior Event Planner with 10+ years of experience in corporate and wedding events.'
+    // };
 
     // State
     currentUser = signal<User | null>(null);
     isAuthenticated = signal<boolean>(false);
 
-    constructor(private router: Router) {
+    constructor(private router: Router, private api: ApiService) {
         // Check local storage for existing session (mock persistence)
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
@@ -40,41 +47,28 @@ export class AuthService {
         }
     }
 
-    login(username: string, password: string): Observable<boolean> {
-        // Mock login logic
-        // For demo purposes, accept any username/password if username is 'admin'
-        const isValid = username === 'admin' && password === 'password'; // Hardcoded for demo
-
-        return of(isValid).pipe(
-            delay(1000), // Simulate network delay
-            tap(success => {
-                if (success) {
-                    this.currentUser.set(this.MOCK_USER);
+    login(username: string, password: string): Observable<ApiResponse<User>> {
+        return this.api.post<ApiResponse<User>>('/auth/login', { username, password }).pipe(
+            tap(response => {
+                const user = response.data;
+                if (user) {
+                    this.currentUser.set(user);
                     this.isAuthenticated.set(true);
-                    localStorage.setItem('user', JSON.stringify(this.MOCK_USER));
+                    localStorage.setItem('user', JSON.stringify(user));
                 }
             })
         );
     }
 
-    register(user: Partial<User>): Observable<boolean> {
-        // Mock registration logic
-        return of(true).pipe(
-            delay(1000),
-            tap(() => {
-                // Automatically login after registration for better UX
-                const newUser: User = {
-                    id: Math.random().toString(36).substr(2, 9),
-                    username: user.username || '',
-                    email: user.email || '',
-                    fullName: user.fullName || '',
-                    role: 'user',
-                    avatarUrl: 'assets/avatars/default-avatar.png',
-                    bio: 'New member'
-                };
-                this.currentUser.set(newUser);
-                this.isAuthenticated.set(true);
-                localStorage.setItem('user', JSON.stringify(newUser));
+    register(user: RegisterPayload): Observable<ApiResponse<User>> {
+        return this.api.post<ApiResponse<User>>('/auth/register', user).pipe(
+            tap(response => {
+                const newUser = response.data;
+                if (newUser) {
+                    this.currentUser.set(newUser);
+                    this.isAuthenticated.set(true);
+                    localStorage.setItem('user', JSON.stringify(newUser));
+                }
             })
         );
     }
@@ -86,19 +80,19 @@ export class AuthService {
         this.router.navigate(['/login']);
     }
 
-    updateProfile(updatedUser: Partial<User>): Observable<User> {
+    updateProfile(updatedUser: Partial<User>): Observable<ApiResponse<User>> {
         const currentUser = this.currentUser();
         if (!currentUser) {
             throw new Error('No user logged in');
         }
 
-        const newUser = { ...currentUser, ...updatedUser };
-
-        return of(newUser).pipe(
-            delay(800),
-            tap(user => {
-                this.currentUser.set(user);
-                localStorage.setItem('user', JSON.stringify(user));
+        return this.api.patch<ApiResponse<User>>(`/users/${currentUser.id}`, updatedUser).pipe(
+            tap(response => {
+                const user = response.data;
+                if (user) {
+                    this.currentUser.set(user);
+                    localStorage.setItem('user', JSON.stringify(user));
+                }
             })
         );
     }

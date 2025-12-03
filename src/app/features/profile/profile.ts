@@ -5,6 +5,7 @@ import { AuthService, User } from '../../core/services/auth.service';
 import { UserService, UserStats } from '../../core/services/user.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs/operators';
 
 @Component({
     selector: 'app-profile',
@@ -19,7 +20,10 @@ export class ProfileComponent implements OnInit {
     isSaving = signal<boolean>(false);
 
     private userService = inject(UserService);
-    stats = toSignal(this.userService.getUserStats());
+    stats = toSignal(
+        this.userService.getUserStats().pipe(map(response => response.data)),
+        { initialValue: { eventsCreated: 0, tasksCompleted: 0, guestsManaged: 0 } as UserStats }
+    );
 
     profileForm: FormGroup;
 
@@ -73,7 +77,13 @@ export class ProfileComponent implements OnInit {
         const updatedData = this.profileForm.value;
 
         this.authService.updateProfile(updatedData).subscribe({
-            next: (updatedUser) => {
+            next: (response) => {
+                const updatedUser = response.data;
+                if (!updatedUser) {
+                    this.snackbarService.show('Failed to update profile', 'error');
+                    this.isSaving.set(false);
+                    return;
+                }
                 this.user.set(updatedUser);
                 this.isEditing.set(false);
                 this.isSaving.set(false);

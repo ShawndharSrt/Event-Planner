@@ -39,12 +39,12 @@ export class LoginComponent {
         const { username, password } = this.loginForm.value;
 
         this.authService.login(username, password).subscribe({
-            next: (success) => {
+            next: (response) => {
                 this.isLoading = false;
-                if (success) {
+                if (response.success && response.data) {
                     this.router.navigate(['/dashboard']);
                 } else {
-                    this.errorMessage = 'Invalid username or password';
+                    this.errorMessage = response.message || 'Invalid username or password';
                 }
             },
             error: () => {

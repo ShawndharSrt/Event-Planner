@@ -7,7 +7,7 @@
     <div class="stats-grid" *ngIf="stats()">
         <div class="stat-card">
             <div class="icon-container primary">
-                <span class="icon">📅</span>
+                <span class="material-icons">event</span>
             </div>
             <div class="stat-info">
                 <span class="value">{{ stats().upcomingEvents }}</span>
@@ -17,7 +17,7 @@
 
         <div class="stat-card">
             <div class="icon-container secondary">
-                <span class="icon">👥</span>
+                <span class="material-icons">group</span>
             </div>
             <div class="stat-info">
                 <span class="value">{{ stats().totalGuests }}</span>
@@ -27,7 +27,7 @@
 
         <div class="stat-card">
             <div class="icon-container warning">
-                <span class="icon">⏳</span>
+                <span class="material-icons">pending_actions</span>
             </div>
             <div class="stat-info">
                 <span class="value">{{ stats().pendingTasks }}</span>
@@ -37,7 +37,7 @@
 
         <div class="stat-card">
             <div class="icon-container success">
-                <span class="icon">✅</span>
+                <span class="material-icons">check_circle</span>
             </div>
             <div class="stat-info">
                 <span class="value">{{ stats().completedTasks }}</span>
