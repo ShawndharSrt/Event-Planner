@@ -1,7 +1,8 @@
-import { Component, Input, signal, computed, inject } from '@angular/core';
+import { Component, Input, signal, computed, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { BudgetService, Budget, BudgetCategory, Expense } from '../../../core/services/budget.service';
+import { BudgetService } from '../../../core/services/budget.service';
+import { BudgetWithDetails, BudgetCategory, Expense } from '../../../core/models/budget.model';
 
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 
@@ -13,14 +14,15 @@ import { SnackbarService } from '../../../shared/services/snackbar.service';
     styleUrl: './budget-tracker.component.scss'
 })
 export class BudgetTrackerComponent {
-    @Input() eventId!: number;
+    @Input() eventId!: string;
 
     budgetService = inject(BudgetService);
     snackbarService = inject(SnackbarService);
+    cdr = inject(ChangeDetectorRef);
     fb = inject(FormBuilder);
 
-    budget = signal<Budget | null>(null);
-    selectedCategory = signal<number | null>(null);
+    budget = signal<BudgetWithDetails | null>(null);
+    selectedCategory = signal<string | null>(null);
     selectedStatus = signal<string | null>(null);
     showExpenseForm = signal(false);
     editingExpense = signal<Expense | null>(null);
@@ -51,7 +53,10 @@ export class BudgetTrackerComponent {
     loadBudget() {
         if (this.eventId) {
             this.budgetService.getBudgetByEventId(this.eventId).subscribe({
-                next: (response) => this.budget.set(response.data ?? null),
+                next: (response) => {
+                    this.budget.set(response.data ?? null);
+                    this.cdr.markForCheck();
+                },
                 error: (err) => console.error('Failed to load budget', err)
             });
         }
@@ -59,7 +64,7 @@ export class BudgetTrackerComponent {
 
     totalSpent = computed(() => {
         const expenses = this.budget()?.expenses || [];
-        return expenses.reduce((sum, exp) => sum + exp.amount, 0);
+        return expenses.reduce((sum: number, exp: Expense) => sum + exp.amount, 0);
     });
 
     totalRemaining = computed(() => {
@@ -74,16 +79,29 @@ export class BudgetTrackerComponent {
 
     filteredExpenses = computed(() => {
         let expenses = this.budget()?.expenses || [];
+        const categories = this.budget()?.categories || [];
+
+        // Ensure categoryName is populated
+        expenses = expenses.map((expense: Expense) => {
+            if (!expense.categoryName) {
+                const category = categories.find((c: BudgetCategory) => c._id === expense.categoryId);
+                return {
+                    ...expense,
+                    categoryName: category?.name || 'Unknown'
+                };
+            }
+            return expense;
+        });
 
         if (this.selectedCategory()) {
-            expenses = expenses.filter(e => e.categoryId === this.selectedCategory());
+            expenses = expenses.filter((e: Expense) => e.categoryId === this.selectedCategory());
         }
 
         if (this.selectedStatus()) {
-            expenses = expenses.filter(e => e.status === this.selectedStatus());
+            expenses = expenses.filter((e: Expense) => e.status === this.selectedStatus());
         }
 
-        return expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        return expenses.sort((a: Expense, b: Expense) => new Date(b.date).getTime() - new Date(a.date).getTime());
     });
 
     getCategorySpentPercentage(category: BudgetCategory): number {
@@ -101,6 +119,27 @@ export class BudgetTrackerComponent {
             style: 'currency',
             currency: this.budget()?.currency || 'USD'
         }).format(amount);
+    }
+
+    formatDate(dateValue: string): string {
+        try {
+            // Try to parse the date
+            const date = new Date(dateValue);
+
+            // Check if date is valid
+            if (isNaN(date.getTime())) {
+                return dateValue; // Return original string if invalid
+            }
+
+            // Format as locale date
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        } catch {
+            return dateValue; // Return original string on error
+        }
     }
 
     getStatusClass(status: string): string {
@@ -149,11 +188,11 @@ export class BudgetTrackerComponent {
     saveExpense() {
         if (this.expenseForm.valid) {
             const formValue = this.expenseForm.value;
-            const category = this.budget()?.categories.find(c => c.id === formValue.categoryId);
+            const category = this.budget()?.categories.find((c: BudgetCategory) => c._id === formValue.categoryId);
 
             if (this.editingExpense()) {
                 // Update existing expense
-                this.budgetService.updateExpense(this.editingExpense()!.id, {
+                this.budgetService.updateExpense(this.editingExpense()!._id, {
                     categoryId: formValue.categoryId,
                     categoryName: category?.name || '',
                     description: formValue.description,
@@ -187,9 +226,9 @@ export class BudgetTrackerComponent {
                 }).subscribe({
                     next: (response) => {
                         if (response.data) {
-                        this.snackbarService.show('Expense added successfully', 'success');
-                        this.loadBudget();
-                        this.cancelExpenseForm();
+                            this.snackbarService.show('Expense added successfully', 'success');
+                            this.loadBudget();
+                            this.cancelExpenseForm();
                         }
                     },
                     error: () => this.snackbarService.show('Failed to add expense', 'error')
@@ -202,7 +241,7 @@ export class BudgetTrackerComponent {
 
     deleteExpense(expense: Expense) {
         if (confirm(`Are you sure you want to delete this expense: ${expense.description}?`)) {
-            this.budgetService.deleteExpense(expense.id).subscribe({
+            this.budgetService.deleteExpense(expense._id).subscribe({
                 next: () => {
                     this.snackbarService.show('Expense deleted successfully', 'success');
                     this.loadBudget();
@@ -212,7 +251,7 @@ export class BudgetTrackerComponent {
         }
     }
 
-    getCategoryName(categoryId: number): string {
-        return this.budget()?.categories.find(c => c.id === categoryId)?.name || '';
+    getCategoryName(categoryId: string): string {
+        return this.budget()?.categories.find((c: BudgetCategory) => c._id === categoryId)?.name || '';
     }
 }

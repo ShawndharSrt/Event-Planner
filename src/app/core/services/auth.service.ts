@@ -4,36 +4,16 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
-
-export interface User {
-    id: string;
-    username: string;
-    email: string;
-    fullName: string;
-    role: 'admin' | 'user';
-    avatarUrl?: string;
-    bio?: string;
-}
+import { User } from '../models/user.model';
 
 export interface RegisterPayload extends Partial<User> {
-    password: string;
+    password?: string;
 }
 
 @Injectable({
     providedIn: 'root'
 })
 export class AuthService {
-    // Mock user data
-    // private readonly MOCK_USER: User = {
-    //     id: '1',
-    //     username: 'admin',
-    //     email: 'admin@eventplanner.com',
-    //     fullName: 'Admin User',
-    //     role: 'admin',
-    //     avatarUrl: 'assets/avatars/default-avatar.png', // Placeholder
-    //     bio: 'Senior Event Planner with 10+ years of experience in corporate and wedding events.'
-    // };
-
     // State
     currentUser = signal<User | null>(null);
     isAuthenticated = signal<boolean>(false);
@@ -47,8 +27,8 @@ export class AuthService {
         }
     }
 
-    login(username: string, password: string): Observable<ApiResponse<User>> {
-        return this.api.post<ApiResponse<User>>('/auth/login', { username, password }).pipe(
+    login(email: string, password: string): Observable<ApiResponse<User>> {
+        return this.api.post<ApiResponse<User>>('/auth/login', { email, password }).pipe(
             tap(response => {
                 const user = response.data;
                 if (user) {
@@ -86,7 +66,7 @@ export class AuthService {
             throw new Error('No user logged in');
         }
 
-        return this.api.patch<ApiResponse<User>>(`/users/${currentUser.id}`, updatedUser).pipe(
+        return this.api.patch<ApiResponse<User>>(`/users/${currentUser._id}`, updatedUser).pipe(
             tap(response => {
                 const user = response.data;
                 if (user) {

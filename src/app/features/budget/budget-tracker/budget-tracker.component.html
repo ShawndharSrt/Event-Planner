@@ -79,10 +79,9 @@
             <h3 class="section-title">Expense Details</h3>
             <div class="filters">
                 <select [(ngModel)]="selectedCategory"
-                    (change)="selectedCategory.set($any($event.target).value ? +$any($event.target).value : null)"
-                    class="filter-select">
+                    (change)="selectedCategory.set($any($event.target).value || null)" class="filter-select">
                     <option [value]="null">All Categories</option>
-                    <option *ngFor="let category of budget()!.categories" [value]="category.id">
+                    <option *ngFor="let category of budget()!.categories" [value]="category._id">
                         {{ category.name }}
                     </option>
                 </select>
@@ -111,7 +110,7 @@
                     <label>Category *</label>
                     <select formControlName="categoryId">
                         <option value="">Select Category</option>
-                        <option *ngFor="let category of budget()!.categories" [value]="category.id">
+                        <option *ngFor="let category of budget()!.categories" [value]="category._id">
                             {{ category.name }}
                         </option>
                     </select>
@@ -169,7 +168,7 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let expense of filteredExpenses()">
-                        <td>{{ expense.date | date:'shortDate' }}</td>
+                        <td>{{ formatDate(expense.date) }}</td>
                         <td>{{ expense.categoryName }}</td>
                         <td>{{ expense.description }}</td>
                         <td>{{ expense.vendor }}</td>

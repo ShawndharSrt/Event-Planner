@@ -19,15 +19,15 @@ export class TaskService {
 
     constructor(private api: ApiService) { }
 
-    getTasks(eventId: number): Observable<ApiResponse<Task[]>> {
-        return this.api.get<ApiResponse<Task[]>>(`/events/${eventId}/tasks`);
+    getTasks(eventId: string): Observable<ApiResponse<Task[]>> {
+        return this.api.get<ApiResponse<Task[]>>(`/tasks`);
     }
 
-    addTask(task: Omit<Task, 'id'>): Observable<ApiResponse<Task>> {
+    addTask(task: Omit<Task, '_id'>): Observable<ApiResponse<Task>> {
         return this.api.post<ApiResponse<Task>>(`/events/${task.eventId}/tasks`, task);
     }
 
-    updateTask(id: number, changes: Partial<Task>): Observable<ApiResponse<Task>> {
+    updateTask(id: string, changes: Partial<Task>): Observable<ApiResponse<Task>> {
         return this.api.patch<ApiResponse<Task>>(`/tasks/${id}`, changes);
     }
 }

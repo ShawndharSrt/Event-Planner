@@ -21,7 +21,8 @@
     </div>
 
     <!-- Navigation Tabs -->
-    <app-event-tabs [activeTab]="activeTab()" [guestCount]="1200" [taskCount]="8" (tabChange)="onTabChange($event)">
+    <app-event-tabs [activeTab]="activeTab()" [guestCount]="stats()?.totalGuests || 0" [taskCount]="taskData().length"
+        (tabChange)="onTabChange($event)">
     </app-event-tabs>
 
     <!-- Tab Content (Overview) -->
@@ -76,17 +77,47 @@
                 </div>
 
                 <div class="section-card">
-                    <h3 class="card-title">Team</h3>
-                    <div class="team-list">
-                        <div class="team-member" *ngFor="let member of team()">
-                            <div class="avatar" [class.secondary]="member.isSecondary">{{ member.avatar }}</div>
-                            <div class="info">
-                                <span class="name">{{ member.name }}</span>
-                                <span class="role">{{ member.role }}</span>
+                    <h3 class="card-title">Budget Overview</h3>
+                    <div class="budget-overview">
+                        <div class="budget-comparison">
+                            <div class="budget-stat">
+                                <span class="budget-icon">💰</span>
+                                <div class="budget-info">
+                                    <span class="budget-label">Planned Budget</span>
+                                    <span class="budget-value primary">{{ budgetSummary()?.planned | currency }}</span>
+                                </div>
+                            </div>
+                            <div class="budget-stat">
+                                <span class="budget-icon">💳</span>
+                                <div class="budget-info">
+                                    <span class="budget-label">Actual Spent</span>
+                                    <span class="budget-value">{{ budgetSummary()?.actual | currency }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="budget-progress-container">
+                            <div class="budget-progress-bar" [style.width.%]="getBudgetPercentage()"
+                                [class.over-budget]="isOverBudget()">
+                            </div>
+                        </div>
+
+                        <div class="budget-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Variance</span>
+                                <span class="detail-value" [class.positive]="getVariance() >= 0"
+                                    [class.negative]="getVariance() < 0">
+                                    {{ getVariance() >= 0 ? '+' : '' }}{{ getVariance() | currency }}
+                                </span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Status</span>
+                                <span class="budget-status" [class]="getBudgetStatus()">
+                                    {{ getBudgetStatusText() }}
+                                </span>
                             </div>
                         </div>
                     </div>
-                    <button class="btn-text">+ Add Member</button>
                 </div>
             </div>
         </div>

@@ -15,10 +15,11 @@ export interface DashboardOverviewResponse {
     totalEvents: number;
     totalGuests: number;
     totalTasks: number;
+    completedTasks: number;
 }
 
 export interface RecentEvent {
-    id: number;
+    id: string;
     title: string;
     date: string;
     time: string;
@@ -29,7 +30,7 @@ export interface RecentEvent {
 }
 
 export interface DashboardTask {
-    id: number;
+    id: string;
     title: string;
     priority: 'high' | 'medium' | 'low';
     completed: boolean;

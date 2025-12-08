@@ -22,7 +22,7 @@ export class LoginComponent {
         private router: Router
     ) {
         this.loginForm = this.fb.group({
-            username: ['', [Validators.required]],
+            email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required]]
         });
     }
@@ -36,15 +36,15 @@ export class LoginComponent {
         this.isLoading = true;
         this.errorMessage = '';
 
-        const { username, password } = this.loginForm.value;
+        const { email, password } = this.loginForm.value;
 
-        this.authService.login(username, password).subscribe({
+        this.authService.login(email, password).subscribe({
             next: (response) => {
                 this.isLoading = false;
                 if (response.success && response.data) {
                     this.router.navigate(['/dashboard']);
                 } else {
-                    this.errorMessage = response.message || 'Invalid username or password';
+                    this.errorMessage = response.message || 'Invalid email or password';
                 }
             },
             error: () => {

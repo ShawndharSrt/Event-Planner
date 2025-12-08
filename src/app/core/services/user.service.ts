@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
-
-export interface UserProfile {
-    id: number;
-    username: string;
-    email: string;
-    fullName: string;
-    role: string;
-    bio?: string;
-    avatarUrl?: string;
-}
+import { User } from '../models/user.model';
 
 export interface UserStats {
     eventsCreated: number;
@@ -24,24 +15,14 @@ export interface UserStats {
 })
 export class UserService {
 
-    // private currentUser: UserProfile = {
-    //     id: 1,
-    //     username: 'johndoe',
-    //     email: 'john.doe@example.com',
-    //     fullName: 'John Doe',
-    //     role: 'admin',
-    //     bio: 'Event planning enthusiast with 5 years of experience.',
-    //     avatarUrl: ''
-    // };
-
     constructor(private api: ApiService) { }
 
-    getUser(): Observable<ApiResponse<UserProfile>> {
-        return this.api.get<ApiResponse<UserProfile>>('/users/me');
+    getUser(): Observable<ApiResponse<User>> {
+        return this.api.get<ApiResponse<User>>('/users/me');
     }
 
-    updateUser(changes: Partial<UserProfile>): Observable<ApiResponse<UserProfile>> {
-        return this.api.patch<ApiResponse<UserProfile>>('/users/me', changes);
+    updateUser(changes: Partial<User>): Observable<ApiResponse<User>> {
+        return this.api.patch<ApiResponse<User>>('/users/me', changes);
     }
 
     getUserStats(): Observable<ApiResponse<UserStats>> {

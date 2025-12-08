@@ -1,5 +1,5 @@
 export interface Event {
-    id: number;
+    id: string;
     title: string;
     type: 'conference' | 'wedding' | 'party' | 'meeting' | 'other';
     status: 'planning' | 'active' | 'draft' | 'completed';
@@ -10,7 +10,13 @@ export interface Event {
     location: string;
     description?: string;
     coverImage?: string;
+    organizerId: string;
+    capacity?: number;
+    stats?: EventStats;
+    createdAt?: string;
+    updatedAt?: string;
 }
+
 
 export interface TimelineItem {
     time: string;
@@ -18,12 +24,7 @@ export interface TimelineItem {
     location: string;
 }
 
-export interface TeamMember {
-    name: string;
-    role: string;
-    avatar: string; // Initials or URL
-    isSecondary?: boolean;
-}
+
 
 export interface EventStats {
     totalGuests: number;
@@ -31,3 +32,9 @@ export interface EventStats {
     pending: number;
     declined: number;
 }
+
+export interface BudgetSummary {
+    planned: number;
+    actual: number;
+}
+

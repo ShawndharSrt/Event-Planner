@@ -4,8 +4,8 @@
         <div class="profile-content">
             <div class="avatar-container">
                 <div class="avatar">
-                    <span class="material-icons" *ngIf="!user()?.avatarUrl">person</span>
-                    <img *ngIf="user()?.avatarUrl" [src]="user()?.avatarUrl" alt="User Avatar">
+                    <span class="material-icons" *ngIf="!user()?.avatar">person</span>
+                    <img *ngIf="user()?.avatar" [src]="user()?.avatar" alt="User Avatar">
                 </div>
                 <button class="btn-icon edit-avatar" *ngIf="isEditing()">
                     <span class="material-icons">camera_alt</span>
@@ -15,10 +15,10 @@
             <div class="user-info">
                 <div class="info-header">
                     <div>
-                        <h1 class="name">{{ user()?.fullName }}</h1>
+                        <h1 class="name">{{ user()?.name }}</h1>
                         <p class="role">
                             <span class="material-icons">verified_user</span>
-                            {{ user()?.role | titlecase }}
+                            {{ user()?.role?.join(', ') | titlecase }}
                         </p>
                     </div>
                     <button class="btn-primary" (click)="toggleEdit()" *ngIf="!isEditing()">
@@ -46,31 +46,23 @@
 
             <div class="card-body" *ngIf="!isEditing()">
                 <div class="info-row">
-                    <span class="label">Username</span>
-                    <span class="value">@{{ user()?.username }}</span>
-                </div>
-                <div class="info-row">
                     <span class="label">Email</span>
                     <span class="value">{{ user()?.email }}</span>
                 </div>
                 <div class="info-row">
-                    <span class="label">Bio</span>
-                    <p class="bio-text">{{ user()?.bio || 'No bio added yet.' }}</p>
+                    <span class="label">Role</span>
+                    <span class="value">{{ user()?.role?.join(', ') | titlecase }}</span>
                 </div>
             </div>
 
             <form [formGroup]="profileForm" class="edit-form" *ngIf="isEditing()">
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" formControlName="fullName">
+                    <input type="text" formControlName="name">
                 </div>
                 <div class="form-group">
                     <label>Email</label>
                     <input type="email" formControlName="email">
-                </div>
-                <div class="form-group">
-                    <label>Bio</label>
-                    <textarea formControlName="bio" rows="4"></textarea>
                 </div>
             </form>
         </div>

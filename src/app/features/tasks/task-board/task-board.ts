@@ -40,7 +40,7 @@ export class TaskBoardComponent {
   }
 
   loadTasks() {
-    this.taskService.getTasks(1).subscribe(response => {
+    this.taskService.getTasks('1').subscribe(response => {
       const tasks = response.data ?? [];
       this.tasks.set(tasks);
       this.updateColumnSignals();
@@ -76,7 +76,7 @@ export class TaskBoardComponent {
     if (this.taskForm.valid) {
       const formValue = this.taskForm.value;
       const newTask: any = {
-        eventId: 1,
+        eventId: '1',
         ...formValue,
         status: 'todo'
       };
@@ -106,14 +106,14 @@ export class TaskBoardComponent {
 
     const nextStatus = nextStatusMap[task.status];
 
-    this.taskService.updateTask(task.id, { status: nextStatus }).subscribe(response => {
+    this.taskService.updateTask(task._id, { status: nextStatus }).subscribe(response => {
       const updatedTask = response.data;
       if (!updatedTask) {
         this.snackbar.show('Failed to update task status', 'error');
         return;
       }
       this.tasks.update(tasks => tasks.map(t =>
-        t.id === updatedTask.id ? updatedTask : t
+        t._id === updatedTask._id ? updatedTask : t
       ));
       this.updateColumnSignals();
       this.snackbar.show(`Task moved to ${nextStatus.replace('-', ' ')}`, 'info');
@@ -152,12 +152,12 @@ export class TaskBoardComponent {
       // Update the main tasks signal with the new status
       this.tasks.update(tasks => {
         return tasks.map(t =>
-          t.id === task.id ? { ...t, status: newStatus } : t
+          t._id === task._id ? { ...t, status: newStatus } : t
         );
       });
 
       // Update task status via service
-      this.taskService.updateTask(task.id, { status: newStatus }).subscribe({
+      this.taskService.updateTask(task._id, { status: newStatus }).subscribe({
         next: (response) => {
           const updatedTask = response.data;
           if (!updatedTask) {
@@ -166,7 +166,7 @@ export class TaskBoardComponent {
           }
           // Ensure the task is properly updated with server response
           this.tasks.update(tasks => tasks.map(t =>
-            t.id === updatedTask.id ? updatedTask : t
+            t._id === updatedTask._id ? updatedTask : t
           ));
           // Re-sync column signals in case server returned different data
           this.updateColumnSignals();
@@ -175,7 +175,7 @@ export class TaskBoardComponent {
         error: () => {
           // Revert on error - restore old status and re-sync columns
           this.tasks.update(tasks => tasks.map(t =>
-            t.id === task.id ? { ...t, status: oldStatus } : t
+            t._id === task._id ? { ...t, status: oldStatus } : t
           ));
           this.updateColumnSignals();
           this.snackbar.show('Failed to move task', 'error');

@@ -21,4 +21,16 @@ export class EventListComponent {
     ),
     { initialValue: [] as Event[] }
   );
+
+  getRSVPPercentage(event: Event): number {
+    if (!event.stats) return 0;
+
+    const { totalGuests, confirmed, pending, declined } = event.stats;
+    const responded = confirmed + declined;
+
+    if (totalGuests === 0) return 0;
+
+    const percentage = (responded / totalGuests) * 100;
+    return Math.round(percentage);
+  }
 }

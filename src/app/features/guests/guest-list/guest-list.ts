@@ -20,7 +20,7 @@ export class GuestListComponent {
   private router = inject(Router);
   private snackbar = inject(SnackbarService);
   private refreshTrigger = new Subject<void>();
-  
+
   guests = toSignal(
     this.refreshTrigger.pipe(
       startWith(null),
@@ -34,12 +34,12 @@ export class GuestListComponent {
   );
 
   editGuest(guest: Guest) {
-    this.router.navigate(['/guests', guest.id, 'edit']);
+    this.router.navigate(['/guests', guest._id, 'edit']);
   }
 
   deleteGuest(guest: Guest) {
     if (confirm(`Are you sure you want to delete ${guest.firstName} ${guest.lastName}?`)) {
-      this.guestService.deleteGuest(guest.id).subscribe({
+      this.guestService.deleteGuest(guest._id).subscribe({
         next: () => {
           this.snackbar.show('Guest deleted successfully', 'success');
           this.refreshTrigger.next();

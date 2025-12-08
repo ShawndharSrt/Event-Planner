@@ -30,7 +30,7 @@ export class DashboardComponent {
             upcomingEvents: apiData.totalEvents,
             totalGuests: apiData.totalGuests,
             pendingTasks: apiData.totalTasks,
-            completedTasks: 0
+            completedTasks: apiData.completedTasks
           };
           console.log('DashboardComponent: Mapped stats data:', mappedStats);
           this.stats.set(mappedStats);

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
-import { Guest } from '../models/guest.model';
+import { Guest, EventGuest } from '../models/guest.model';
 
 @Injectable({
     providedIn: 'root'
@@ -25,27 +25,27 @@ export class GuestService {
 
     constructor(private api: ApiService) { }
 
-    getGuests(eventId: number): Observable<ApiResponse<Guest[]>> {
-        return this.api.get<ApiResponse<Guest[]>>(`/events/${eventId}/guests`);
+    getGuests(eventId: string): Observable<ApiResponse<EventGuest[]>> {
+        return this.api.get<ApiResponse<EventGuest[]>>(`/events/${eventId}/guests`);
     }
 
     getAllGuests(): Observable<ApiResponse<Guest[]>> {
         return this.api.get<ApiResponse<Guest[]>>('/guests');
     }
 
-    addGuest(guest: Omit<Guest, 'id'>): Observable<ApiResponse<Guest>> {
-        return this.api.post<ApiResponse<Guest>>(`/events/${guest.eventId}/guests`, guest);
+    addGuest(guest: Partial<EventGuest>): Observable<ApiResponse<EventGuest>> {
+        return this.api.post<ApiResponse<EventGuest>>(`/events/${guest.eventId}/guests`, guest);
     }
 
-    updateGuest(id: number, changes: Partial<Guest>): Observable<ApiResponse<Guest>> {
-        return this.api.patch<ApiResponse<Guest>>(`/guests/${id}`, changes);
+    updateGuest(id: string, changes: Partial<EventGuest>): Observable<ApiResponse<EventGuest>> {
+        return this.api.patch<ApiResponse<EventGuest>>(`/guests/${id}`, changes);
     }
 
-    deleteGuest(id: number): Observable<ApiResponse<void>> {
+    deleteGuest(id: string): Observable<ApiResponse<void>> {
         return this.api.delete<ApiResponse<void>>(`/guests/${id}`);
     }
 
-    getGuestById(id: number): Observable<ApiResponse<Guest>> {
-        return this.api.get<ApiResponse<Guest>>(`/guests/${id}`);
+    getGuestById(id: string): Observable<ApiResponse<EventGuest>> {
+        return this.api.get<ApiResponse<EventGuest>>(`/guests/${id}`);
     }
 }

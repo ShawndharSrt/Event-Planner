@@ -109,6 +109,12 @@
     display: flex;
     flex-direction: column;
 
+    .event-card-link {
+        display: contents;
+        text-decoration: none;
+        color: inherit;
+    }
+
     .card-image {
         height: 160px;
         background-size: cover;

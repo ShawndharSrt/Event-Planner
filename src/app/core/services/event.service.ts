@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
-import { Event, EventStats, TeamMember, TimelineItem } from '../models/event.model';
+import { Event, EventStats, TimelineItem, BudgetSummary } from '../models/event.model';
 
 @Injectable({
     providedIn: 'root'
@@ -39,7 +39,7 @@ export class EventService {
         return this.api.get<ApiResponse<Event[]>>('/events');
     }
 
-    getEvent(id: number): Observable<ApiResponse<Event>> {
+    getEvent(id: string): Observable<ApiResponse<Event>> {
         return this.api.get<ApiResponse<Event>>(`/events/${id}`);
     }
 
@@ -47,19 +47,20 @@ export class EventService {
         return this.api.post<ApiResponse<Event>>('/events', event);
     }
 
-    updateEvent(id: number, changes: Partial<Event>): Observable<ApiResponse<Event>> {
+    updateEvent(id: string, changes: Partial<Event>): Observable<ApiResponse<Event>> {
         return this.api.patch<ApiResponse<Event>>(`/events/${id}`, changes);
     }
 
-    getEventStats(id: number): Observable<ApiResponse<EventStats>> {
+    getEventStats(id: string): Observable<ApiResponse<EventStats>> {
         return this.api.get<ApiResponse<EventStats>>(`/events/${id}/stats`);
     }
 
-    getEventTimeline(id: number): Observable<ApiResponse<TimelineItem[]>> {
+    getEventTimeline(id: string): Observable<ApiResponse<TimelineItem[]>> {
         return this.api.get<ApiResponse<TimelineItem[]>>(`/events/${id}/timeline`);
     }
 
-    getEventTeam(id: number): Observable<ApiResponse<TeamMember[]>> {
-        return this.api.get<ApiResponse<TeamMember[]>>(`/events/${id}/team`);
+    getEventBudgetSummary(id: string): Observable<ApiResponse<BudgetSummary>> {
+        return this.api.get<ApiResponse<BudgetSummary>>(`/events/${id}/budget/summary`);
     }
+
 }

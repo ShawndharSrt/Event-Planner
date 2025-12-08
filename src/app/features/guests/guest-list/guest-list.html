@@ -30,7 +30,7 @@
     <div class="guests-grid">
         <div class="guest-card" *ngFor="let guest of guests()">
             <div class="card-header">
-                <div class="avatar-lg" [class.secondary]="guest.id % 2 === 0" [class.warning]="guest.id % 3 === 0">
+                <div class="avatar-lg">
                     {{ guest.firstName[0] }}{{ guest.lastName[0] }}
                 </div>
                 <div class="actions">
@@ -46,20 +46,9 @@
                 <h3 class="name">{{ guest.firstName }} {{ guest.lastName }}</h3>
                 <p class="email">{{ guest.email }}</p>
                 <p class="phone">{{ guest.phone || 'No phone' }}</p>
-                <div class="tags">
-                    <span class="tag" [ngClass]="guest.group">{{ guest.group | titlecase }}</span>
-                </div>
+
             </div>
-            <div class="card-footer">
-                <div class="stat">
-                    <span class="value">{{ (guest.id * 2) % 10 + 1 }}</span>
-                    <span class="label">Events</span>
-                </div>
-                <div class="stat">
-                    <span class="value">{{ (guest.id * 10) % 100 }}%</span>
-                    <span class="label">Attendance</span>
-                </div>
-            </div>
+
         </div>
 
         <div *ngIf="guests().length === 0" class="empty-state">No guests found.</div>

@@ -7,12 +7,12 @@ import { EventTabsComponent, EventTab } from '../components/event-tabs/event-tab
 import { DataTableComponent, TableColumn } from '../../../shared/components/data-table/data-table.component';
 import { BudgetTrackerComponent } from '../../../features/budget/budget-tracker/budget-tracker.component';
 import { GuestService } from '../../../core/services/guest.service';
-import { Guest } from '../../../core/models/guest.model';
+import { EventGuest } from '../../../core/models/guest.model';
 import { TaskService } from '../../../core/services/task.service';
 import { Task } from '../../../core/models/task.model';
 
 import { EventService } from '../../../core/services/event.service';
-import { Event, TimelineItem, TeamMember, EventStats } from '../../../core/models/event.model';
+import { Event, TimelineItem, EventStats } from '../../../core/models/event.model';
 import { switchMap, map } from 'rxjs/operators';
 
 @Component({
@@ -32,7 +32,7 @@ export class EventDetailsComponent {
 
   // Get event ID from route
   eventId = toSignal(this.privateroute.paramMap.pipe(
-    switchMap(params => [Number(params.get('id'))])
+    switchMap(params => [params.get('id') || ''])
   ));
 
   // Fetch event details based on ID
@@ -40,7 +40,7 @@ export class EventDetailsComponent {
     this.privateroute.paramMap.pipe(
       switchMap(params =>
         this.eventService
-          .getEvent(Number(params.get('id')))
+          .getEvent(params.get('id') || '')
           .pipe(map(response => response.data))
       )
     )
@@ -51,18 +51,18 @@ export class EventDetailsComponent {
     this.privateroute.paramMap.pipe(
       switchMap(params =>
         this.guestService
-          .getGuests(Number(params.get('id')))
+          .getGuests(params.get('id') || '')
           .pipe(map(response => response.data ?? []))
       )
     ),
-    { initialValue: [] as Guest[] }
+    { initialValue: [] as EventGuest[] }
   );
 
   taskData = toSignal(
     this.privateroute.paramMap.pipe(
       switchMap(params =>
         this.taskService
-          .getTasks(Number(params.get('id')))
+          .getTasks(params.get('id') || '')
           .pipe(map(response => response.data ?? []))
       )
     ),
@@ -73,29 +73,30 @@ export class EventDetailsComponent {
     this.privateroute.paramMap.pipe(
       switchMap(params =>
         this.eventService
-          .getEventTimeline(Number(params.get('id')))
+          .getEventTimeline(params.get('id') || '')
           .pipe(map(response => response.data ?? []))
       )
     ),
     { initialValue: [] as TimelineItem[] }
   );
 
-  team = toSignal(
-    this.privateroute.paramMap.pipe(
-      switchMap(params =>
-        this.eventService
-          .getEventTeam(Number(params.get('id')))
-          .pipe(map(response => response.data ?? []))
-      )
-    ),
-    { initialValue: [] as TeamMember[] }
-  );
+
 
   stats = toSignal(
     this.privateroute.paramMap.pipe(
       switchMap(params =>
         this.eventService
-          .getEventStats(Number(params.get('id')))
+          .getEventStats(params.get('id') || '')
+          .pipe(map(response => response.data))
+      )
+    )
+  );
+
+  budgetSummary = toSignal(
+    this.privateroute.paramMap.pipe(
+      switchMap(params =>
+        this.eventService
+          .getEventBudgetSummary(params.get('id') || '')
           .pipe(map(response => response.data))
       )
     )
@@ -111,5 +112,54 @@ export class EventDetailsComponent {
 
   onTabChange(tab: EventTab) {
     this.activeTab.set(tab);
+  }
+
+  getBudgetPercentage(): number {
+    const planned = this.budgetSummary()?.planned || 0;
+    const actual = this.budgetSummary()?.actual || 0;
+
+    if (planned === 0) return 0;
+
+    const percentage = (actual / planned) * 100;
+    return Math.min(Math.round(percentage), 100);
+  }
+
+  getVariance(): number {
+    const planned = this.budgetSummary()?.planned || 0;
+    const actual = this.budgetSummary()?.actual || 0;
+
+    return planned - actual;
+  }
+
+  isOverBudget(): boolean {
+    return this.getVariance() < 0;
+  }
+
+  getBudgetStatus(): string {
+    const variance = this.getVariance();
+    const planned = this.budgetSummary()?.planned || 0;
+
+    if (planned === 0) return 'unknown';
+
+    const percentageRemaining = (variance / planned) * 100;
+
+    if (variance < 0) return 'over-budget';
+    if (percentageRemaining < 10) return 'warning';
+    return 'on-track';
+  }
+
+  getBudgetStatusText(): string {
+    const status = this.getBudgetStatus();
+
+    switch (status) {
+      case 'over-budget':
+        return 'Over Budget';
+      case 'warning':
+        return 'Nearly Spent';
+      case 'on-track':
+        return 'On Track';
+      default:
+        return 'Unknown';
+    }
   }
 }

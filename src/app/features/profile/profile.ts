@@ -1,7 +1,8 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService, User } from '../../core/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
+import { User } from '../../core/models/user.model';
 import { UserService, UserStats } from '../../core/services/user.service';
 import { SnackbarService } from '../../shared/services/snackbar.service';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -33,9 +34,8 @@ export class ProfileComponent implements OnInit {
         private snackbarService: SnackbarService
     ) {
         this.profileForm = this.fb.group({
-            fullName: ['', [Validators.required]],
-            email: ['', [Validators.required, Validators.email]],
-            bio: ['']
+            name: ['', [Validators.required]],
+            email: ['', [Validators.required, Validators.email]]
         });
     }
 
@@ -43,9 +43,8 @@ export class ProfileComponent implements OnInit {
         this.user.set(this.authService.currentUser());
         if (this.user()) {
             this.profileForm.patchValue({
-                fullName: this.user()?.fullName,
-                email: this.user()?.email,
-                bio: this.user()?.bio
+                name: this.user()?.name,
+                email: this.user()?.email
             });
         }
     }
@@ -57,9 +56,8 @@ export class ProfileComponent implements OnInit {
             // Reset form
             if (this.user()) {
                 this.profileForm.patchValue({
-                    fullName: this.user()?.fullName,
-                    email: this.user()?.email,
-                    bio: this.user()?.bio
+                    name: this.user()?.name,
+                    email: this.user()?.email
                 });
             }
         } else {

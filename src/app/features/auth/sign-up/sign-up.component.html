@@ -20,32 +20,17 @@
 
             <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
                 <div class="form-group">
-                    <label for="fullName">Full Name</label>
+                    <label for="name">Full Name</label>
                     <div class="input-wrapper">
                         <span class="material-icons icon">badge</span>
-                        <input type="text" id="fullName" formControlName="fullName" placeholder="Enter your full name"
-                            [class.error]="signUpForm.get('fullName')?.invalid && signUpForm.get('fullName')?.touched">
+                        <input type="text" id="name" formControlName="name" placeholder="Enter your full name"
+                            [class.error]="signUpForm.get('name')?.invalid && signUpForm.get('name')?.touched">
                     </div>
-                    <div class="error-msg"
-                        *ngIf="signUpForm.get('fullName')?.invalid && signUpForm.get('fullName')?.touched">
+                    <div class="error-msg" *ngIf="signUpForm.get('name')?.invalid && signUpForm.get('name')?.touched">
                         Full Name is required
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="username">Username</label>
-                    <div class="input-wrapper">
-                        <span class="material-icons icon">person</span>
-                        <input type="text" id="username" formControlName="username" placeholder="Choose a username"
-                            [class.error]="signUpForm.get('username')?.invalid && signUpForm.get('username')?.touched">
-                    </div>
-                    <div class="error-msg"
-                        *ngIf="signUpForm.get('username')?.invalid && signUpForm.get('username')?.touched">
-                        <span *ngIf="signUpForm.get('username')?.errors?.['required']">Username is required</span>
-                        <span *ngIf="signUpForm.get('username')?.errors?.['minlength']">Username must be at least 3
-                            characters</span>
-                    </div>
-                </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>

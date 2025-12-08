@@ -20,7 +20,7 @@ export class GuestFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   isEditMode = false;
-  guestId: number | null = null;
+  guestId: string | null = null;
 
   guestForm: FormGroup = this.fb.group({
     eventId: [null], // Hidden field for linking
@@ -38,8 +38,8 @@ export class GuestFormComponent implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
       this.isEditMode = true;
-      this.guestId = +id;
-      this.loadGuest(+id);
+      this.guestId = id;
+      this.loadGuest(id);
     }
 
     // Handle query params for eventId
@@ -50,7 +50,7 @@ export class GuestFormComponent implements OnInit {
     });
   }
 
-  loadGuest(id: number) {
+  loadGuest(id: string) {
     this.guestService.getGuestById(id).subscribe({
       next: (response) => {
         const guest = response.data;
@@ -78,7 +78,7 @@ export class GuestFormComponent implements OnInit {
   saveGuest() {
     if (this.guestForm.valid) {
       const guestData = this.guestForm.value;
-      
+
       if (this.isEditMode && this.guestId) {
         // Update existing guest
         this.guestService.updateGuest(this.guestId, guestData).subscribe({
