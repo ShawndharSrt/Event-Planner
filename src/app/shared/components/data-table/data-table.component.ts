@@ -1,10 +1,27 @@
-import { Component, Input, OnChanges, SimpleChanges, signal, computed } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, signal, computed, TemplateRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+export interface TableConfig {
+    showPagination?: boolean;
+    showActions?: boolean;
+    pageSizeOptions?: number[];
+}
+
+export interface TableAction {
+    name: string;
+    label?: string;
+    icon?: string;
+    class?: string;
+    title?: string;
+}
 
 export interface TableColumn {
     key: string;
     label: string;
-    type?: 'text' | 'number' | 'date' | 'status' | 'actions';
+    type?: 'text' | 'number' | 'date' | 'status' | 'currency' | 'actions' | 'template';
+    template?: TemplateRef<any>;
+    format?: (value: any) => string;
+    sortable?: boolean;
 }
 
 @Component({
@@ -18,6 +35,18 @@ export class DataTableComponent implements OnChanges {
     @Input() data: any[] = [];
     @Input() columns: TableColumn[] = [];
     @Input() pageSize: number = 10;
+    @Input() config: TableConfig = { showPagination: true };
+    @Input() actions: TableAction[] = [];
+    @Input() selectable: boolean = false;
+
+    @Output() action = new EventEmitter<{ action: string, row: any }>();
+    @Output() selectionChange = new EventEmitter<any[]>();
+
+    selectedRows = signal<Set<any>>(new Set());
+    isAllSelected = computed(() => {
+        const pageData = this.pagedData();
+        return pageData.length > 0 && pageData.every(row => this.selectedRows().has(row));
+    });
 
     currentPage = signal(1);
     sortColumn = signal<string | null>(null);
@@ -26,13 +55,13 @@ export class DataTableComponent implements OnChanges {
     // Processed data (sorted)
     processedData = computed(() => {
         let processed = [...this.data];
-        const column = this.sortColumn();
+        const columnKey = this.sortColumn();
         const direction = this.sortDirection();
 
-        if (column) {
+        if (columnKey) {
             processed.sort((a, b) => {
-                const valA = a[column];
-                const valB = b[column];
+                const valA = a[columnKey];
+                const valB = b[columnKey];
 
                 if (valA < valB) return direction === 'asc' ? -1 : 1;
                 if (valA > valB) return direction === 'asc' ? 1 : -1;
@@ -45,6 +74,9 @@ export class DataTableComponent implements OnChanges {
 
     // Paged data
     pagedData = computed(() => {
+        if (!this.config.showPagination) {
+            return this.processedData();
+        }
         const start = (this.currentPage() - 1) * this.pageSize;
         const end = start + this.pageSize;
         return this.processedData().slice(start, end);
@@ -58,13 +90,63 @@ export class DataTableComponent implements OnChanges {
         }
     }
 
-    sort(columnKey: string) {
-        if (this.sortColumn() === columnKey) {
+    sort(column: TableColumn) {
+        if (column.sortable === false || column.type === 'actions') return;
+
+        if (this.sortColumn() === column.key) {
             this.sortDirection.update(d => d === 'asc' ? 'desc' : 'asc');
         } else {
-            this.sortColumn.set(columnKey);
+            this.sortColumn.set(column.key);
             this.sortDirection.set('asc');
         }
+    }
+
+    onActionClick(actionName: string, row: any) {
+        this.action.emit({ action: actionName, row });
+    }
+
+    toggleSelection(row: any) {
+        if (!this.selectable) return;
+
+        const current = new Set(this.selectedRows());
+        if (current.has(row)) {
+            current.delete(row);
+        } else {
+            current.add(row);
+        }
+        this.selectedRows.set(current);
+        this.emitSelection();
+    }
+
+    toggleSelectAll() {
+        if (!this.selectable) return;
+
+        const current = new Set(this.selectedRows());
+        const pageData = this.pagedData();
+
+        if (this.isAllSelected()) {
+            pageData.forEach(row => current.delete(row));
+        } else {
+            pageData.forEach(row => current.add(row));
+        }
+
+        this.selectedRows.set(current);
+        this.emitSelection();
+    }
+
+    private emitSelection() {
+        this.selectionChange.emit(Array.from(this.selectedRows()));
+    }
+
+
+    // Pagination Helpers
+    getPageStart(): number {
+        return (this.currentPage() - 1) * this.pageSize + 1;
+    }
+
+    getPageEnd(): number {
+        const end = this.currentPage() * this.pageSize;
+        return end > this.data.length ? this.data.length : end;
     }
 
     nextPage() {

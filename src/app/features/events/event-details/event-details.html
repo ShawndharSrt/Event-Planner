@@ -125,17 +125,41 @@
 
     <div class="tab-content" *ngIf="activeTab() === 'guests'">
         <div class="section-card">
-            <div class="card-header"
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 class="card-title" style="margin: 0;">Guest List</h3>
-                <div class="actions">
-                    <button class="btn-white" style="padding: 8px 16px; font-size: 14px; margin-right: 8px;"
-                        [routerLink]="['/guests/new']" [queryParams]="{ eventId: event()?.id }">+ Add Guest</button>
-                    <button class="btn-primary" style="padding: 8px 16px; font-size: 14px;">Export CSV</button>
+            <div class="card-header-with-actions">
+                <h3 class="card-title">Guest List</h3>
+                <div class="header-actions">
+                    <button type="button" class="btn-action btn-link-guest" (click)="openLinkGuestModal()">Link Existing
+                        Guest</button>
+                    <button class="btn-action btn-export">Export CSV</button>
                 </div>
             </div>
-            <app-data-table [data]="guestData()" [columns]="guestColumns" [pageSize]="5">
+            <app-data-table [data]="guestData()" [columns]="guestColumns" [config]="guestTableConfig"
+                [actions]="guestActions" [pageSize]="5" (action)="handleGuestAction($event)">
             </app-data-table>
+        </div>
+    </div>
+
+
+    <!-- Link Guest Modal -->
+    <div class="modal-overlay" *ngIf="isLinkGuestModalOpen()" (click)="closeLinkGuestModal()">
+        <div class="modal-container" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Link Existing Guest</h3>
+                <button class="close-btn" (click)="closeLinkGuestModal()">×</button>
+            </div>
+
+            <div class="modal-body">
+                <app-data-table [data]="commonGuests()" [columns]="linkGuestColumns"
+                    [config]="{ showPagination: true, pageSizeOptions: [5, 10] }" [pageSize]="5" [selectable]="true"
+                    (selectionChange)="updateGuestSelection($event)">
+                </app-data-table>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-secondary" (click)="closeLinkGuestModal()">Cancel</button>
+                <button class="btn-primary" (click)="linkSelectedGuests()"
+                    [disabled]="selectedGuestIds().size === 0">Link Selected</button>
+            </div>
         </div>
     </div>
 

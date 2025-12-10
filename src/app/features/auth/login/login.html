@@ -18,17 +18,17 @@
                 <p>Welcome back! Please enter your details.</p>
             </div>
 
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
                 <div class="form-group">
                     <label for="email">Email</label>
                     <div class="input-wrapper">
                         <span class="material-icons icon">email</span>
                         <input type="email" id="email" formControlName="email" placeholder="Enter your email"
-                            [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                            [class.error]="form.get('email')?.invalid && form.get('email')?.touched">
                     </div>
-                    <div class="error-msg" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
-                        <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
-                        <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+                    <div class="error-msg" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+                        <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+                        <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
                     </div>
                 </div>
 
@@ -38,10 +38,9 @@
                         <span class="material-icons icon">lock</span>
                         <input type="password" id="password" formControlName="password"
                             placeholder="Enter your password"
-                            [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                            [class.error]="form.get('password')?.invalid && form.get('password')?.touched">
                     </div>
-                    <div class="error-msg"
-                        *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                    <div class="error-msg" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
                         Password is required
                     </div>
                 </div>
@@ -55,7 +54,7 @@
                     {{ errorMessage }}
                 </div>
 
-                <button type="submit" class="btn-submit" [disabled]="loginForm.invalid || isLoading">
+                <button type="submit" class="btn-submit" [disabled]="form.invalid || isLoading">
                     <span *ngIf="!isLoading">Sign In</span>
                     <span *ngIf="isLoading" class="spinner"></span>
                 </button>

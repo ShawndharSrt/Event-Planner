@@ -1,49 +1,85 @@
 <div class="table-container">
-    <table class="data-table">
-        <thead>
-            <tr>
-                <th *ngFor="let col of columns" (click)="sort(col.key)" [class.sortable]="true"
-                    [class.sorted-asc]="sortColumn() === col.key && sortDirection() === 'asc'"
-                    [class.sorted-desc]="sortColumn() === col.key && sortDirection() === 'desc'">
-                    {{ col.label }}
-                    <span class="sort-icon" *ngIf="sortColumn() === col.key">
-                        {{ sortDirection() === 'asc' ? '↑' : '↓' }}
-                    </span>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let row of pagedData()">
-                <td *ngFor="let col of columns">
-                    <!-- Status Cell -->
-                    <span *ngIf="col.type === 'status'" class="status-badge" [ngClass]="row[col.key].toLowerCase()">
-                        {{ row[col.key] }}
-                    </span>
+    <div class="table-scroll">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th *ngIf="selectable" class="checkbox-col">
+                        <input type="checkbox" [checked]="isAllSelected()" (change)="toggleSelectAll()">
+                    </th>
+                    <th *ngFor="let col of columns" (click)="sort(col)"
+                        [class.sortable]="col.sortable !== false && col.type !== 'actions'"
+                        [class.sorted-asc]="sortColumn() === col.key && sortDirection() === 'asc'"
+                        [class.sorted-desc]="sortColumn() === col.key && sortDirection() === 'desc'"
+                        [class.actions-col]="col.type === 'actions'">
+                        {{ col.label }}
+                        <span class="sort-icon" *ngIf="sortColumn() === col.key">
+                            {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+                        </span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let row of pagedData()" [class.selected]="selectedRows().has(row)">
+                    <td *ngIf="selectable" class="checkbox-col">
+                        <input type="checkbox" [checked]="selectedRows().has(row)" (change)="toggleSelection(row)">
+                    </td>
+                    <td *ngFor="let col of columns">
+                        <!-- Template Cell -->
+                        <ng-container *ngIf="col.type === 'template' && col.template">
+                            <ng-container *ngTemplateOutlet="col.template; context: { $implicit: row }"></ng-container>
+                        </ng-container>
 
-                    <!-- Default Cell -->
-                    <span *ngIf="col.type !== 'status'">
-                        {{ row[col.key] }}
-                    </span>
-                </td>
-            </tr>
-            <tr *ngIf="data.length === 0">
-                <td [attr.colspan]="columns.length" class="no-data">
-                    No data available
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                        <!-- Status Cell -->
+                        <span *ngIf="col.type === 'status'" class="status-badge" [ngClass]="row[col.key].toLowerCase()">
+                            {{ col.format ? col.format(row[col.key]) : (row[col.key] | titlecase) }}
+                        </span>
 
-    <div class="pagination" *ngIf="totalPages() > 1">
+                        <!-- Currency Cell -->
+                        <span *ngIf="col.type === 'currency'">
+                            {{ col.format ? col.format(row[col.key]) : (row[col.key] | currency:'USD') }}
+                        </span>
+
+                        <!-- Date Cell -->
+                        <span *ngIf="col.type === 'date'">
+                            {{ col.format ? col.format(row[col.key]) : (row[col.key] | date:'mediumDate') }}
+                        </span>
+
+                        <!-- Actions Cell -->
+                        <div *ngIf="col.type === 'actions'" class="action-buttons">
+                            <button *ngFor="let action of actions" class="icon-btn" [ngClass]="action.class || ''"
+                                (click)="onActionClick(action.name, row)" [title]="action.title || action.label">
+                                <span class="material-icons" *ngIf="action.icon">{{ action.icon }}</span>
+                                <span *ngIf="!action.icon">{{ action.label }}</span>
+                            </button>
+                        </div>
+
+                        <!-- Default Cell -->
+                        <span *ngIf="!col.type || col.type === 'text' || col.type === 'number'">
+                            {{ col.format ? col.format(row[col.key]) : row[col.key] }}
+                        </span>
+                    </td>
+                </tr>
+                <tr *ngIf="data.length === 0">
+                    <td [attr.colspan]="columns.length + (selectable ? 1 : 0)" class="no-data">
+                        No data available
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="totalPages() > 1 && config.showPagination">
         <span class="page-info">
-            Page {{ currentPage() }} of {{ totalPages() }}
+            Showing {{ getPageStart() }}-{{ getPageEnd() }} of {{ data.length }}
         </span>
         <div class="page-controls">
             <button class="icon-btn" [disabled]="currentPage() === 1" (click)="prevPage()">
-                ←
+                <span class="material-icons">chevron_left</span>
             </button>
+            <span class="page-number">Page {{ currentPage() }}</span>
             <button class="icon-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()">
-                →
+                <span class="material-icons">chevron_right</span>
             </button>
         </div>
     </div>

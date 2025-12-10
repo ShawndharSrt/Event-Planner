@@ -17,12 +17,16 @@
         </div>
 
         <div class="filter-group">
-            <select class="filter-select">
+            <select class="filter-select" (change)="filterByGroup($event)">
                 <option value="all">All Groups</option>
                 <option value="vip">VIP</option>
                 <option value="family">Family</option>
                 <option value="friends">Friends</option>
                 <option value="colleagues">Colleagues</option>
+                <option value="speaker">Speaker</option>
+                <option value="sponsor">Sponsor</option>
+                <option value="media">Media</option>
+                <option value="attendee">Attendee</option>
             </select>
         </div>
     </div>

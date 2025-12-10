@@ -1,10 +1,14 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms'; // Updated imports
 import { SnackbarService } from '../../../shared/services/snackbar.service';
+import { ConfirmationDialogService } from '../../../shared/services/confirmation-dialog.service';
 import { TaskService } from '../../../core/services/task.service';
 import { Task } from '../../../core/models/task.model';
+import { EventService } from '../../../core/services/event.service';
+import { Event as AppEvent } from '../../../core/models/event.model';
+import { BaseFormComponent } from '../../../shared/components/base-form/base-form.component';
 
 @Component({
   selector: 'app-task-board',
@@ -13,34 +17,78 @@ import { Task } from '../../../core/models/task.model';
   templateUrl: './task-board.html',
   styleUrl: './task-board.scss',
 })
-export class TaskBoardComponent {
+export class TaskBoardComponent extends BaseFormComponent implements OnInit {
   private snackbar = inject(SnackbarService);
+  private confirmationDialog = inject(ConfirmationDialogService);
   private taskService = inject(TaskService);
-  private fb = inject(FormBuilder);
+  private eventService = inject(EventService);
 
   tasks = signal<Task[]>([]);
+  events = signal<AppEvent[]>([]);
+  selectedEventId = signal<string>('');
   showTaskForm = signal(false);
-  taskForm: FormGroup;
+  editingTask = signal<Task | null>(null);
 
   // Use writable signals for each column so CDK can mutate them
   todoTasks = signal<Task[]>([]);
   inProgressTasks = signal<Task[]>([]);
   doneTasks = signal<Task[]>([]);
 
-  constructor() {
-    this.taskForm = this.fb.group({
+  getFormConfig(): Record<string, any> {
+    return {
       title: ['', [Validators.required, Validators.minLength(3)]],
       description: ['', Validators.required],
       assignee: ['Me', Validators.required],
       dueDate: ['', Validators.required],
       priority: ['medium', Validators.required]
-    });
+    };
+  }
 
-    this.loadTasks();
+  override ngOnInit() {
+    super.ngOnInit(); // Initialize form
+    this.loadEvents();
+  }
+
+  loadEvents() {
+    this.eventService.getEvents().subscribe(response => {
+      const events = response.data ?? [];
+      this.events.set(events);
+
+      if (events.length > 0) {
+        console.log('Loaded events:', events);
+        // Select first event by default if no event is selected
+        if (!this.selectedEventId()) {
+          const firstEvent = events[0];
+          const id = firstEvent.id;
+          if (id) {
+            this.selectedEventId.set(id);
+          } else {
+            console.error('TaskBoard: First event has no _id or id property:', firstEvent);
+          }
+        }
+        this.loadTasks();
+      }
+    });
+  }
+
+  onEventChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const value = selectElement.value;
+    console.log('Selected Event ID:', value);
+    // Handle case where value might be string "undefined" due to bad binding
+    if (value && value !== 'undefined') {
+      this.selectedEventId.set(value);
+      this.loadTasks();
+    } else {
+      console.warn('TaskBoard: Invalid event ID selected:', value);
+    }
   }
 
   loadTasks() {
-    this.taskService.getTasks('1').subscribe(response => {
+    const eventId = this.selectedEventId();
+    if (!eventId) return;
+
+    this.taskService.getTasks(eventId).subscribe(response => {
       const tasks = response.data ?? [];
       this.tasks.set(tasks);
       this.updateColumnSignals();
@@ -58,7 +106,8 @@ export class TaskBoardComponent {
   }
 
   addTask() {
-    this.taskForm.reset({
+    this.editingTask.set(null);
+    this.form.reset({
       title: '',
       description: '',
       assignee: 'Me',
@@ -68,33 +117,100 @@ export class TaskBoardComponent {
     this.showTaskForm.set(true);
   }
 
+  editTask(task: Task) {
+    this.editingTask.set(task);
+    this.form.patchValue({
+      title: task.title,
+      description: task.description || '',
+      assignee: task.assignee || 'Me',
+      dueDate: task.dueDate || '',
+      priority: task.priority
+    });
+    this.showTaskForm.set(true);
+  }
+
   cancelTask() {
+    this.editingTask.set(null);
     this.showTaskForm.set(false);
   }
 
   saveTask() {
-    if (this.taskForm.valid) {
-      const formValue = this.taskForm.value;
-      const newTask: any = {
-        eventId: '1',
-        ...formValue,
-        status: 'todo'
-      };
+    if (this.isFormValid()) {
+      const formValue = this.form.value;
+      const editingTask = this.editingTask();
 
-      this.taskService.addTask(newTask).subscribe(response => {
-        const task = response.data;
-        if (!task) {
-          this.snackbar.show('Failed to add task', 'error');
-          return;
-        }
-        this.tasks.update(tasks => [...tasks, task]);
-        this.updateColumnSignals();
-        this.snackbar.show('New task added', 'success');
-        this.showTaskForm.set(false);
-      });
+      if (editingTask) {
+        // Update existing task
+        const updates: Partial<Task> = {
+          title: formValue.title!,
+          description: formValue.description || '',
+          assignee: formValue.assignee || 'Me',
+          dueDate: formValue.dueDate || '',
+          priority: formValue.priority as 'high' | 'medium' | 'low'
+        };
+
+        this.taskService.updateTask(editingTask._id, updates).subscribe(response => {
+          const updatedTask = response.data;
+          if (!updatedTask) {
+            this.snackbar.show('Failed to update task', 'error');
+            return;
+          }
+          this.tasks.update(tasks => tasks.map(t =>
+            t._id === updatedTask._id ? updatedTask : t
+          ));
+          this.updateColumnSignals();
+          this.snackbar.show('Task updated successfully', 'success');
+          this.editingTask.set(null);
+          this.showTaskForm.set(false);
+        });
+      } else {
+        // Create new task
+        const newTask: any = {
+          eventId: this.selectedEventId(),
+          ...formValue,
+          status: 'todo'
+        };
+
+        this.taskService.addTask(newTask).subscribe(response => {
+          const task = response.data;
+          if (!task) {
+            this.snackbar.show('Failed to add task', 'error');
+            return;
+          }
+          this.tasks.update(tasks => [...tasks, task]);
+          this.updateColumnSignals();
+          this.snackbar.show('New task added', 'success');
+          this.showTaskForm.set(false);
+        });
+      }
     } else {
-      this.taskForm.markAllAsTouched();
+      this.markAllAsTouched();
     }
+  }
+
+  deleteTask(task: Task) {
+    this.confirmationDialog
+      .confirm(
+        `Are you sure you want to delete "${task.title}"?`,
+        'Delete Task',
+        'danger',
+        'Delete',
+        'Cancel'
+      )
+      .subscribe((confirmed) => {
+        if (confirmed) {
+          this.taskService.deleteTask(task._id).subscribe({
+            next: () => {
+              this.tasks.update(tasks => tasks.filter(t => t._id !== task._id));
+              this.updateColumnSignals();
+              this.snackbar.show('Task deleted successfully', 'success');
+            },
+            error: () => {
+              this.snackbar.show('Failed to delete task', 'error');
+            }
+          });
+        }
+      });
   }
 
   moveTask(task: Task) {

@@ -15,8 +15,7 @@ erDiagram
     BUDGET ||--o{ BUDGET_CATEGORY : contains
     BUDGET_CATEGORY ||--o{ EXPENSE : categorizes
 
-    GUEST ||--o{ GUEST_EVENT : attends
-    EVENT ||--o{ GUEST_EVENT : includesGuest
+    GUEST }|--o{ EVENT : attends
 
     USER {
         ObjectId _id PK
@@ -43,6 +42,7 @@ erDiagram
         string location
         string description
         string coverImage
+        object[] guests "Array of guest objects with event-specific details"
         string organizerId FK "links to USER.userId"
         datetime createdAt
         datetime updatedAt
@@ -68,18 +68,6 @@ erDiagram
         string lastName
         string email
         string phone
-        datetime createdAt
-        datetime updatedAt
-    }
-
-    GUEST_EVENT {
-        ObjectId _id PK
-        string guestId FK "links to GUEST.guestId"
-        ObjectId eventId FK
-        string group "vip, family, friends, colleagues, speaker, sponsor, media, attendee, none"
-        string status "confirmed, pending, declined"
-        string dietary
-        string notes
         datetime createdAt
         datetime updatedAt
     }
@@ -152,21 +140,13 @@ erDiagram
   - `organizerId`: Links to the user who created the event (USER.userId)
   - `coverImage`: Visual representation for the event
   - `startTime`/`endTime`: Specific time details
+  - `guests`: Array of guest objects containing event-specific details (status, group, dietary, notes) linked to the master GUEST collection via guestId
 
 ### Guests Collection
 - **Purpose**: Store unique guest profiles independent of events
 - **Key Fields**:
   - `guestId`: UUID used for linking to events
   - `email`: Contact information
-
-### Guest Events Collection
-- **Purpose**: Link guests to specific events with event-specific details
-- **Key Fields**:
-  - `guestId`: Link to Guest profile
-  - `eventId`: Link to Event
-  - `group`: Categorization within the event
-  - `status`: RSVP status
-  - `dietary`: Event-specific dietary needs
 
 ### Tasks Collection
 - **Purpose**: Project management and task tracking per event
@@ -225,11 +205,6 @@ db.events.createIndex({ startDate: 1 })
 // Guests
 db.guests.createIndex({ guestId: 1 }, { unique: true })
 db.guests.createIndex({ email: 1 })
-
-// Guest Events
-db.guest_events.createIndex({ eventId: 1 })
-db.guest_events.createIndex({ guestId: 1 })
-db.guest_events.createIndex({ eventId: 1, guestId: 1 }, { unique: true })
 
 // Tasks
 db.tasks.createIndex({ eventId: 1 })

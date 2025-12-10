@@ -4,6 +4,11 @@
             <h1 class="page-title">Task Board</h1>
             <p class="page-subtitle">Track progress and manage event tasks</p>
         </div>
+        <div class="event-selector">
+            <select [ngModel]="selectedEventId()" (change)="onEventChange($event)">
+                <option *ngFor="let event of events()" [value]="event.id">{{ event.title }}</option>
+            </select>
+        </div>
         <button class="create-btn" (click)="addTask()">
             <span class="icon">+</span>
             Add Task
@@ -23,6 +28,14 @@
                     <div class="task-header">
                         <span class="priority" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
                         <div class="header-actions">
+                            <button class="icon-btn edit-btn" (click)="editTask(task); $event.stopPropagation()"
+                                title="Edit task">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button class="icon-btn delete-btn" (click)="deleteTask(task); $event.stopPropagation()"
+                                title="Delete task">
+                                <span class="material-icons">delete</span>
+                            </button>
                             <span class="drag-handle" cdkDragHandle>
                                 <span class="material-icons">drag_handle</span>
                             </span>
@@ -53,6 +66,14 @@
                     <div class="task-header">
                         <span class="priority" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
                         <div class="header-actions">
+                            <button class="icon-btn edit-btn" (click)="editTask(task); $event.stopPropagation()"
+                                title="Edit task">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button class="icon-btn delete-btn" (click)="deleteTask(task); $event.stopPropagation()"
+                                title="Delete task">
+                                <span class="material-icons">delete</span>
+                            </button>
                             <span class="drag-handle" cdkDragHandle>
                                 <span class="material-icons">drag_handle</span>
                             </span>
@@ -81,6 +102,14 @@
                     <div class="task-header">
                         <span class="priority" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
                         <div class="header-actions">
+                            <button class="icon-btn edit-btn" (click)="editTask(task); $event.stopPropagation()"
+                                title="Edit task">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button class="icon-btn delete-btn" (click)="deleteTask(task); $event.stopPropagation()"
+                                title="Delete task">
+                                <span class="material-icons">delete</span>
+                            </button>
                             <span class="drag-handle" cdkDragHandle>
                                 <span class="material-icons">drag_handle</span>
                             </span>
@@ -103,10 +132,10 @@
 <div class="modal-overlay" *ngIf="showTaskForm()">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>Add New Task</h2>
+            <h2>{{ editingTask() ? 'Edit Task' : 'Add New Task' }}</h2>
             <button class="close-btn" (click)="cancelTask()">×</button>
         </div>
-        <form [formGroup]="taskForm" (ngSubmit)="saveTask()">
+        <form [formGroup]="form" (ngSubmit)="saveTask()">
             <div class="form-group">
                 <label>Title</label>
                 <input type="text" formControlName="title" placeholder="Task title">
@@ -148,7 +177,8 @@
             </div>
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" (click)="cancelTask()">Cancel</button>
-                <button type="submit" class="btn-save" [disabled]="taskForm.invalid">Add Task</button>
+                <button type="submit" class="btn-save" [disabled]="form.invalid">{{ editingTask() ? 'Save Changes' :
+                    'Add Task' }}</button>
             </div>
         </form>
     </div>

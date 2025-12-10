@@ -1,24 +1,25 @@
 <div class="page-container">
     <div class="page-header">
         <div class="header-content">
-            <h1 class="page-title">Create New Event</h1>
-            <p class="page-subtitle">Fill in the details to organize your next big event</p>
+            <h1 class="page-title">{{ isEditMode ? 'Edit Event' : 'Create New Event' }}</h1>
+            <p class="page-subtitle">{{ isEditMode ? 'Update the details of your event' : 'Fill in the details to
+                organize your next big event' }}</p>
         </div>
         <div class="actions">
             <button class="btn-secondary" routerLink="/events">Cancel</button>
-            <button class="btn-primary" (click)="saveEvent()">Save Event</button>
+            <button class="btn-primary" (click)="saveEvent()">{{ isEditMode ? 'Update Event' : 'Save Event' }}</button>
         </div>
     </div>
 
-    <div class="form-container" [formGroup]="eventForm">
+    <div class="form-container" [formGroup]="form">
         <div class="form-section">
             <h2 class="section-title">Basic Information</h2>
 
             <div class="form-group">
                 <label for="title">Event Title *</label>
                 <input type="text" id="title" formControlName="title" placeholder="e.g. Annual Tech Conference"
-                    [class.error]="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" />
-                <span class="error-msg" *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched">Title
+                    [class.error]="form.get('title')?.invalid && form.get('title')?.touched" />
+                <span class="error-msg" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">Title
                     is required</span>
             </div>
 
@@ -56,9 +57,9 @@
                 <div class="form-group">
                     <label for="start-date">Start Date *</label>
                     <input type="date" id="start-date" formControlName="startDate"
-                        [class.error]="eventForm.get('startDate')?.invalid && eventForm.get('startDate')?.touched" />
+                        [class.error]="form.get('startDate')?.invalid && form.get('startDate')?.touched" />
                     <span class="error-msg"
-                        *ngIf="eventForm.get('startDate')?.invalid && eventForm.get('startDate')?.touched">Start date is
+                        *ngIf="form.get('startDate')?.invalid && form.get('startDate')?.touched">Start date is
                         required</span>
                 </div>
                 <div class="form-group">
@@ -82,9 +83,9 @@
                 <label for="location">Location / Venue *</label>
                 <input type="text" id="location" formControlName="location"
                     placeholder="e.g. Moscone Center, San Francisco"
-                    [class.error]="eventForm.get('location')?.invalid && eventForm.get('location')?.touched" />
-                <span class="error-msg"
-                    *ngIf="eventForm.get('location')?.invalid && eventForm.get('location')?.touched">Location is
+                    [class.error]="form.get('location')?.invalid && form.get('location')?.touched" />
+                <span class="error-msg" *ngIf="form.get('location')?.invalid && form.get('location')?.touched">Location
+                    is
                     required</span>
             </div>
         </div>

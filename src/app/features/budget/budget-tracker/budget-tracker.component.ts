@@ -1,45 +1,37 @@
-import { Component, Input, signal, computed, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, signal, computed, inject, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, TemplateRef, AfterViewInit, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { BudgetService } from '../../../core/services/budget.service';
 import { BudgetWithDetails, BudgetCategory, Expense } from '../../../core/models/budget.model';
 
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 
+import { DataTableComponent, TableColumn, TableAction, TableConfig } from '../../../shared/components/data-table/data-table.component';
+import { BaseFormComponent } from '../../../shared/components/base-form/base-form.component';
+
 @Component({
     selector: 'app-budget-tracker',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent],
     templateUrl: './budget-tracker.component.html',
     styleUrl: './budget-tracker.component.scss'
 })
-export class BudgetTrackerComponent {
+export class BudgetTrackerComponent extends BaseFormComponent implements AfterViewInit, OnInit {
     @Input() eventId!: string;
 
     budgetService = inject(BudgetService);
     snackbarService = inject(SnackbarService);
     cdr = inject(ChangeDetectorRef);
-    fb = inject(FormBuilder);
 
-    budget = signal<BudgetWithDetails | null>(null);
+    budget = signal<BudgetWithDetails>(this.getEmptyBudget());
     selectedCategory = signal<string | null>(null);
     selectedStatus = signal<string | null>(null);
     showExpenseForm = signal(false);
     editingExpense = signal<Expense | null>(null);
 
-    expenseForm!: FormGroup;
-
-
-
-    ngOnInit() {
-        this.initExpenseForm();
-        if (this.eventId) {
-            this.loadBudget();
-        }
-    }
-
-    initExpenseForm() {
-        this.expenseForm = this.fb.group({
+    // Initial form config for BaseFormComponent
+    getFormConfig(): Record<string, any> {
+        return {
             categoryId: ['', Validators.required],
             description: ['', [Validators.required, Validators.minLength(3)]],
             vendor: ['', Validators.required],
@@ -47,19 +39,40 @@ export class BudgetTrackerComponent {
             date: [new Date().toISOString().split('T')[0], Validators.required],
             status: ['pending', Validators.required],
             notes: ['']
-        });
+        };
+    }
+
+    override ngOnInit() {
+        super.ngOnInit(); // Initialize form
+        if (this.eventId) {
+            this.loadBudget();
+        }
     }
 
     loadBudget() {
         if (this.eventId) {
             this.budgetService.getBudgetByEventId(this.eventId).subscribe({
                 next: (response) => {
-                    this.budget.set(response.data ?? null);
+                    this.budget.set(response.data || this.getEmptyBudget());
                     this.cdr.markForCheck();
                 },
-                error: (err) => console.error('Failed to load budget', err)
+                error: (err) => {
+                    console.error('Failed to load budget', err);
+                    this.budget.set(this.getEmptyBudget());
+                }
             });
         }
+    }
+
+    private getEmptyBudget(): BudgetWithDetails {
+        return {
+            _id: '',
+            eventId: this.eventId || '',
+            totalBudget: 0,
+            currency: 'USD',
+            categories: [],
+            expenses: []
+        };
     }
 
     totalSpent = computed(() => {
@@ -142,6 +155,12 @@ export class BudgetTrackerComponent {
         }
     }
 
+    parseDate(dateString: any): Date | null {
+        if (!dateString) return null;
+        const date = new Date(dateString);
+        return isNaN(date.getTime()) ? null : date;
+    }
+
     getStatusClass(status: string): string {
         const statusMap: Record<string, string> = {
             'paid': 'success',
@@ -153,7 +172,7 @@ export class BudgetTrackerComponent {
 
     openAddExpenseForm() {
         this.editingExpense.set(null);
-        this.expenseForm.reset({
+        this.form.reset({
             categoryId: '',
             description: '',
             vendor: '',
@@ -167,7 +186,7 @@ export class BudgetTrackerComponent {
 
     openEditExpenseForm(expense: Expense) {
         this.editingExpense.set(expense);
-        this.expenseForm.patchValue({
+        this.form.patchValue({
             categoryId: expense.categoryId,
             description: expense.description,
             vendor: expense.vendor,
@@ -182,12 +201,12 @@ export class BudgetTrackerComponent {
     cancelExpenseForm() {
         this.showExpenseForm.set(false);
         this.editingExpense.set(null);
-        this.expenseForm.reset();
+        this.form.reset();
     }
 
     saveExpense() {
-        if (this.expenseForm.valid) {
-            const formValue = this.expenseForm.value;
+        if (this.isFormValid()) {
+            const formValue = this.form.value;
             const category = this.budget()?.categories.find((c: BudgetCategory) => c._id === formValue.categoryId);
 
             if (this.editingExpense()) {
@@ -235,6 +254,7 @@ export class BudgetTrackerComponent {
                 });
             }
         } else {
+            this.markAllAsTouched();
             this.snackbarService.show('Please fill in all required fields', 'error');
         }
     }
@@ -247,6 +267,95 @@ export class BudgetTrackerComponent {
                     this.loadBudget();
                 },
                 error: () => this.snackbarService.show('Failed to delete expense', 'error')
+            });
+        }
+    }
+
+    @ViewChild('dateTemplate', { static: true }) dateTemplate!: TemplateRef<any>;
+
+    // Table Configuration
+    tableConfig: TableConfig = {
+        showPagination: true,
+        showActions: true,
+        pageSizeOptions: [5, 10, 20]
+    };
+
+    tableColumns: TableColumn[] = [];
+
+    ngAfterViewInit() {
+        console.log('ngAfterViewInit - dateTemplate:', this.dateTemplate);
+        console.log('parseDate test:', this.parseDate('Wed Nov 20 05:30:00 IST 2024'));
+
+        // Initialize columns after view init to ensure template is available
+        this.tableColumns = [
+            { key: 'date', label: 'Date', type: 'template', template: this.dateTemplate },
+            { key: 'categoryName', label: 'Category', type: 'text' },
+            { key: 'description', label: 'Description', type: 'text' },
+            { key: 'vendor', label: 'Vendor', type: 'text' },
+            { key: 'amount', label: 'Amount', type: 'currency', format: (val) => this.formatCurrency(val) },
+            { key: 'status', label: 'Status', type: 'status' },
+            { key: 'actions', label: 'Actions', type: 'actions' }
+        ];
+        // Trigger CD since we updated columns
+        this.cdr.detectChanges();
+    }
+
+    tableActions: TableAction[] = [
+        { name: 'edit', label: 'Edit', icon: 'edit' },
+        { name: 'delete', label: 'Delete', icon: 'delete', class: 'danger' }
+    ];
+
+    handleTableAction(event: { action: string, row: any }) {
+        if (event.action === 'edit') {
+            this.openEditExpenseForm(event.row);
+        } else if (event.action === 'delete') {
+            this.deleteExpense(event.row);
+        }
+    }
+
+
+    isEditingBudget = signal(false);
+
+    toggleEditBudget() {
+        this.isEditingBudget.set(!this.isEditingBudget());
+    }
+
+    saveTotalBudget(amountString: string) {
+        const amount = parseFloat(amountString);
+        if (isNaN(amount) || amount < 0) {
+            this.snackbarService.show('Please enter a valid amount', 'error');
+            return;
+        }
+
+        const budgetId = this.budget()?._id;
+
+        if (budgetId) {
+            // Update existing budget
+            this.budgetService.updateBudget(budgetId, { totalBudget: amount }).subscribe({
+                next: (response) => {
+                    if (response.data) {
+                        this.snackbarService.show('Budget updated successfully', 'success');
+                        this.loadBudget();
+                        this.isEditingBudget.set(false);
+                    }
+                },
+                error: () => this.snackbarService.show('Failed to update budget', 'error')
+            });
+        } else {
+            // Create new budget
+            this.budgetService.createBudget({
+                eventId: this.eventId,
+                totalBudget: amount,
+                currency: 'USD'
+            }).subscribe({
+                next: (response) => {
+                    if (response.data) {
+                        this.snackbarService.show('Budget created successfully', 'success');
+                        this.loadBudget();
+                        this.isEditingBudget.set(false);
+                    }
+                },
+                error: () => this.snackbarService.show('Failed to create budget', 'error')
             });
         }
     }

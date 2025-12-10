@@ -9,6 +9,17 @@
     gap: $spacing-lg;
     max-width: 600px;
     margin: 0 auto;
+
+    &.modal-view {
+        max-width: 100%;
+        gap: 0;
+
+        .form-container {
+            box-shadow: none;
+            padding: 0;
+            border: none;
+        }
+    }
 }
 
 .page-header {
@@ -124,5 +135,44 @@
 
     @media (max-width: map.get($breakpoints, 'sm')) {
         grid-template-columns: 1fr;
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $spacing-md;
+    margin-top: $spacing-xl;
+    padding-top: $spacing-lg;
+    border-top: 1px solid var(--border-color-subtle);
+
+    button {
+        padding: $spacing-sm $spacing-lg;
+        border-radius: $border-radius-md;
+        font-weight: $font-weight-medium;
+        transition: $transition-base;
+    }
+
+    .btn-secondary {
+        background-color: transparent;
+        border: 1px solid #9ca3af;
+        color: #6b7280;
+
+        &:hover {
+            border-color: #6b7280;
+            color: #1a1a1a;
+        }
+    }
+
+    .btn-primary {
+        background-color: $primary-color;
+        color: white;
+        box-shadow: $shadow-sm;
+        border: none;
+
+        &:hover {
+            background-color: $primary-dark;
+            box-shadow: $shadow-md;
+        }
     }
 }

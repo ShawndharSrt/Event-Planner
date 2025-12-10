@@ -59,6 +59,64 @@
             font-family: $font-family-heading;
         }
 
+        .value-container {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-container {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.25rem;
+
+            .budget-input {
+                width: 100px;
+                padding: 0.25rem 0.5rem;
+                border: 1px solid var(--border-color);
+                border-radius: $border-radius-sm;
+                font-size: 1rem;
+                background-color: var(--background-alt);
+                color: var(--text-primary);
+
+                &:focus {
+                    outline: none;
+                    border-color: var(--primary-color);
+                }
+            }
+        }
+
+        .btn-icon-small {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-radius: $border-radius-full;
+            transition: $transition-base;
+
+            &:hover {
+                background-color: var(--background-alt);
+                color: var(--primary-color);
+            }
+
+            .material-icons {
+                font-size: 18px;
+            }
+
+            &.success:hover {
+                color: var(--success-color);
+            }
+
+            &.danger:hover {
+                color: var(--danger-color);
+            }
+        }
+
         .percentage {
             font-size: $font-size-xs;
             color: var(--text-secondary);

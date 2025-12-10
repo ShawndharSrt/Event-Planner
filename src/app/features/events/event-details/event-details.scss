@@ -172,6 +172,77 @@
     }
 }
 
+// Card header with actions (for buttons on the right)
+.card-header-with-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+
+    .card-title {
+        margin: 0;
+        font-size: $font-size-xl;
+        font-weight: $font-weight-bold;
+        color: $text-primary;
+    }
+
+    .header-actions {
+        display: flex;
+        gap: $spacing-sm;
+        align-items: center;
+    }
+}
+
+// Action buttons styling
+.btn-action {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    border-radius: $border-radius-md;
+    border: none;
+    cursor: pointer;
+    transition: all $transition-base;
+    white-space: nowrap;
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &.btn-link-guest {
+        background-color: $surface-color;
+        color: $primary-color;
+        border: 1px solid $primary-color;
+
+        &:hover:not(:disabled) {
+            background-color: var(--primary-light-bg);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba($primary-color, 0.2);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+    }
+
+    &.btn-export {
+        background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+        color: white;
+        box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+
+        &:hover:not(:disabled) {
+            background: linear-gradient(135deg, $primary-dark 0%, #2F1F6E 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+        }
+    }
+}
+
 .timeline {
     display: flex;
     flex-direction: column;
@@ -504,5 +575,211 @@
         text-align: center;
         padding: 40px;
         color: $text-light;
+    }
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-container {
+    background-color: $surface-color;
+    border-radius: $border-radius-lg;
+    padding: $spacing-xl;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: $shadow-xl;
+    animation: modalSlideIn 0.3s ease-out;
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: $spacing-lg;
+
+        h3 {
+            margin: 0;
+            font-size: $font-size-xl;
+            color: $text-primary;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: $font-size-2xl;
+            color: $text-secondary;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+
+            &:hover {
+                color: $text-primary;
+            }
+        }
+    }
+
+    .modal-body {
+        margin-bottom: $spacing-lg;
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: $spacing-md;
+        }
+
+        .form-group {
+            margin-bottom: $spacing-md;
+
+            label {
+                display: block;
+                margin-bottom: $spacing-xs;
+                color: $text-secondary;
+                font-size: $font-size-sm;
+                font-weight: $font-weight-medium;
+            }
+
+            input,
+            select,
+            textarea {
+                width: 100%;
+                padding: $spacing-sm;
+                border: 1px solid var(--border-color);
+                border-radius: $border-radius-md;
+                background-color: var(--input-bg);
+                color: $text-primary;
+                transition: $transition-base;
+
+                &:focus {
+                    outline: none;
+                    border-color: $primary-color;
+                    box-shadow: 0 0 0 2px var(--primary-light-bg);
+                }
+
+                &.error {
+                    border-color: $danger-color;
+                }
+            }
+        }
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: $spacing-md;
+
+        button {
+            padding: $spacing-sm $spacing-lg;
+            border-radius: $border-radius-md;
+            font-weight: $font-weight-medium;
+            transition: $transition-base;
+        }
+
+        .btn-secondary {
+            background-color: var(--text-light-bg);
+            color: $text-primary;
+
+            &:hover {
+                background-color: #E5E7EB; // 5% darker than #f3f4f6
+            }
+        }
+
+        .btn-primary {
+            background-color: $primary-color;
+            color: white;
+
+            &:hover {
+                background-color: $primary-dark;
+            }
+        }
+    }
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.guest-selection-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: $spacing-md;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: $spacing-xs;
+
+    .guest-item {
+        label {
+            display: flex;
+            align-items: flex-start;
+            gap: $spacing-sm;
+            padding: $spacing-md;
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius-md;
+            cursor: pointer;
+            transition: all 0.2s;
+            height: 100%;
+            background-color: var(--card-bg);
+
+            &:hover {
+                background-color: var(--text-light-bg);
+                border-color: $primary-color;
+            }
+
+            input[type="checkbox"] {
+                width: 16px;
+                height: 16px;
+                accent-color: $primary-color;
+                margin-top: 3px;
+                flex-shrink: 0;
+            }
+
+            .guest-info {
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+                overflow: hidden;
+
+                span {
+                    font-weight: $font-weight-medium;
+                    color: $text-primary;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
+                .guest-email {
+                    color: $text-secondary;
+                    font-size: $font-size-sm;
+                    font-weight: normal;
+                }
+            }
+        }
+    }
+
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: $spacing-xl;
+        color: $text-secondary;
     }
 }

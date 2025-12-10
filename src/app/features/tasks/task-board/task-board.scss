@@ -25,6 +25,31 @@
         }
     }
 
+    .event-selector {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 0 $spacing-xl;
+
+        select {
+            padding: $spacing-sm $spacing-md;
+            border: 1px solid var(--border-color);
+            border-radius: $border-radius-md;
+            background-color: $surface-color;
+            color: $text-primary;
+            font-size: $font-size-sm;
+            min-width: 250px;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+
+            &:focus {
+                border-color: $primary-color;
+                box-shadow: 0 0 0 2px var(--primary-lightest-bg);
+            }
+        }
+    }
+
     .create-btn {
         background-color: $primary-color;
         color: $surface-color;
@@ -169,6 +194,38 @@
             display: flex;
             align-items: center;
             gap: $spacing-xs;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            color: $text-light;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: $border-radius-sm;
+            transition: $transition-base;
+
+            .material-icons {
+                font-size: 18px;
+            }
+
+            &:hover {
+                background-color: var(--background-alt);
+                color: $text-primary;
+            }
+
+            &.edit-btn:hover {
+                color: $primary-color;
+                background-color: var(--primary-lightest-bg);
+            }
+
+            &.delete-btn:hover {
+                color: $danger-color;
+                background-color: var(--danger-subtle);
+            }
         }
 
         .drag-handle {

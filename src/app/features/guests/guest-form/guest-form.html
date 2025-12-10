@@ -1,8 +1,9 @@
-<div class="page-container">
-    <div class="page-header">
+<div class="page-container" [class.modal-view]="isModal">
+    <div class="page-header" *ngIf="!isModal">
         <div class="header-content">
             <h1 class="page-title">{{ isEditMode ? 'Edit Guest' : 'Add New Guest' }}</h1>
-            <p class="page-subtitle">{{ isEditMode ? 'Update guest information' : 'Add a new contact to your guest list' }}</p>
+            <p class="page-subtitle">{{ isEditMode ? 'Update guest information' : 'Add a new contact to your guest list'
+                }}</p>
         </div>
         <div class="actions">
             <button class="btn-secondary" routerLink="/guests">Cancel</button>
@@ -10,25 +11,25 @@
         </div>
     </div>
 
-    <div class="form-container" [formGroup]="guestForm">
+    <div class="form-container" [formGroup]="form">
         <div class="form-section">
-            <h2 class="section-title">Personal Information</h2>
+            <h2 class="section-title" *ngIf="!isModal">Personal Information</h2>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="first-name">First Name *</label>
                     <input type="text" id="first-name" formControlName="firstName" placeholder="e.g. John"
-                        [class.error]="guestForm.get('firstName')?.invalid && guestForm.get('firstName')?.touched" />
+                        [class.error]="form.get('firstName')?.invalid && form.get('firstName')?.touched" />
                     <span class="error-msg"
-                        *ngIf="guestForm.get('firstName')?.invalid && guestForm.get('firstName')?.touched">First name is
+                        *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">First name is
                         required</span>
                 </div>
                 <div class="form-group">
                     <label for="last-name">Last Name *</label>
                     <input type="text" id="last-name" formControlName="lastName" placeholder="e.g. Doe"
-                        [class.error]="guestForm.get('lastName')?.invalid && guestForm.get('lastName')?.touched" />
-                    <span class="error-msg"
-                        *ngIf="guestForm.get('lastName')?.invalid && guestForm.get('lastName')?.touched">Last name is
+                        [class.error]="form.get('lastName')?.invalid && form.get('lastName')?.touched" />
+                    <span class="error-msg" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">Last
+                        name is
                         required</span>
                 </div>
             </div>
@@ -36,8 +37,8 @@
             <div class="form-group">
                 <label for="email">Email Address *</label>
                 <input type="email" id="email" formControlName="email" placeholder="e.g. john.doe@example.com"
-                    [class.error]="guestForm.get('email')?.invalid && guestForm.get('email')?.touched" />
-                <span class="error-msg" *ngIf="guestForm.get('email')?.invalid && guestForm.get('email')?.touched">Valid
+                    [class.error]="form.get('email')?.invalid && form.get('email')?.touched" />
+                <span class="error-msg" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">Valid
                     email is required</span>
             </div>
 
@@ -48,7 +49,7 @@
         </div>
 
         <div class="form-section">
-            <h2 class="section-title">Preferences & Group</h2>
+            <h2 class="section-title" *ngIf="!isModal">Preferences & Group</h2>
 
             <div class="form-group">
                 <label for="group">Group</label>
@@ -72,6 +73,12 @@
                 <textarea id="notes" formControlName="notes" rows="3"
                     placeholder="Any other important information..."></textarea>
             </div>
+        </div>
+
+        <div class="form-actions" *ngIf="isModal">
+            <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
+            <button type="button" class="btn-primary" (click)="saveGuest()">{{ isEditMode ? 'Update Guest' : 'Save
+                Guest' }}</button>
         </div>
     </div>
 </div>

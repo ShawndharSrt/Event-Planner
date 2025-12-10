@@ -27,8 +27,7 @@
                     </button>
                     <div class="edit-actions" *ngIf="isEditing()">
                         <button class="btn-secondary" (click)="toggleEdit()" [disabled]="isSaving()">Cancel</button>
-                        <button class="btn-primary" (click)="saveProfile()"
-                            [disabled]="profileForm.invalid || isSaving()">
+                        <button class="btn-primary" (click)="saveProfile()" [disabled]="form.invalid || isSaving()">
                             <span *ngIf="!isSaving()">Save Changes</span>
                             <span *ngIf="isSaving()" class="spinner"></span>
                         </button>
@@ -55,7 +54,7 @@
                 </div>
             </div>
 
-            <form [formGroup]="profileForm" class="edit-form" *ngIf="isEditing()">
+            <form [formGroup]="form" class="edit-form" *ngIf="isEditing()">
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" formControlName="name">

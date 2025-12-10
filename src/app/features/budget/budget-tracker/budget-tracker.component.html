@@ -1,4 +1,9 @@
-<div class="budget-tracker" *ngIf="budget()">
+<!-- Custom Templates -->
+<ng-template #dateTemplate let-row>
+    {{ parseDate(row?.date) | date:'MM/dd/yyyy' }}
+</ng-template>
+
+<div class="budget-tracker">
     <!-- Budget Summary Cards -->
     <div class="summary-cards">
         <div class="summary-card total">
@@ -7,7 +12,21 @@
             </div>
             <div class="card-content">
                 <span class="label">Total Budget</span>
-                <span class="value">{{ formatCurrency(budget()!.totalBudget) }}</span>
+                <div class="value-container" *ngIf="!isEditingBudget()">
+                    <span class="value">{{ formatCurrency(budget().totalBudget) }}</span>
+                    <button class="btn-icon-small" (click)="toggleEditBudget()">
+                        <span class="material-icons">edit</span>
+                    </button>
+                </div>
+                <div class="edit-container" *ngIf="isEditingBudget()">
+                    <input type="number" #budgetInput [value]="budget().totalBudget" class="budget-input">
+                    <button class="btn-icon-small success" (click)="saveTotalBudget(budgetInput.value)">
+                        <span class="material-icons">check</span>
+                    </button>
+                    <button class="btn-icon-small danger" (click)="toggleEditBudget()">
+                        <span class="material-icons">close</span>
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -52,7 +71,7 @@
     <div class="category-section">
         <h3 class="section-title">Budget by Category</h3>
         <div class="category-grid">
-            <div class="category-card" *ngFor="let category of budget()!.categories">
+            <div class="category-card" *ngFor="let category of budget().categories">
                 <div class="category-header">
                     <div class="category-info">
                         <span class="material-icons" [style.color]="category.color">{{ category.icon }}</span>
@@ -81,7 +100,7 @@
                 <select [(ngModel)]="selectedCategory"
                     (change)="selectedCategory.set($any($event.target).value || null)" class="filter-select">
                     <option [value]="null">All Categories</option>
-                    <option *ngFor="let category of budget()!.categories" [value]="category._id">
+                    <option *ngFor="let category of budget().categories" [value]="category._id">
                         {{ category.name }}
                     </option>
                 </select>
@@ -95,22 +114,23 @@
                 <button class="btn-clear" (click)="clearFilters()" *ngIf="selectedCategory() || selectedStatus()">
                     Clear Filters
                 </button>
-                <button class="btn-add" (click)="openAddExpenseForm()">
-                    <span class="material-icons">add</span>
-                    Add Expense
-                </button>
+            </div>
+            <div class="actions">
+                <button class="btn-primary" (click)="openAddExpenseForm()">+ Add Expense</button>
             </div>
         </div>
 
+
+
         <!-- Expense Form -->
-        <div class="expense-form" *ngIf="showExpenseForm()" [formGroup]="expenseForm">
+        <div class="expense-form" *ngIf="showExpenseForm()" [formGroup]="form">
             <h4>{{ editingExpense() ? 'Edit Expense' : 'Add New Expense' }}</h4>
             <div class="form-grid">
                 <div class="form-group">
                     <label>Category *</label>
                     <select formControlName="categoryId">
                         <option value="">Select Category</option>
-                        <option *ngFor="let category of budget()!.categories" [value]="category._id">
+                        <option *ngFor="let category of budget().categories" [value]="category._id">
                             {{ category.name }}
                         </option>
                     </select>
@@ -154,46 +174,9 @@
 
         <!-- Expenses Table with Actions -->
         <div class="expenses-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Vendor</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let expense of filteredExpenses()">
-                        <td>{{ formatDate(expense.date) }}</td>
-                        <td>{{ expense.categoryName }}</td>
-                        <td>{{ expense.description }}</td>
-                        <td>{{ expense.vendor }}</td>
-                        <td>{{ formatCurrency(expense.amount) }}</td>
-                        <td>
-                            <span class="status-badge" [class]="getStatusClass(expense.status)">
-                                {{ expense.status | titlecase }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="btn-icon" (click)="openEditExpenseForm(expense)" title="Edit">
-                                    <span class="material-icons">edit</span>
-                                </button>
-                                <button class="btn-icon danger" (click)="deleteExpense(expense)" title="Delete">
-                                    <span class="material-icons">delete</span>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr *ngIf="filteredExpenses().length === 0">
-                        <td colspan="7" class="no-data">No expenses found</td>
-                    </tr>
-                </tbody>
-            </table>
+            <app-data-table [data]="filteredExpenses()" [columns]="tableColumns" [config]="tableConfig"
+                [actions]="tableActions" (action)="handleTableAction($event)">
+            </app-data-table>
         </div>
     </div>
 </div>

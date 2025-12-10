@@ -40,6 +40,18 @@
                 }
             }
 
+            &.checkbox-col {
+                width: 40px;
+                padding-right: 0;
+
+                input[type="checkbox"] {
+                    width: 16px;
+                    height: 16px;
+                    cursor: pointer;
+                    accent-color: $primary-color;
+                }
+            }
+
             .sort-icon {
                 display: inline-block;
                 margin-left: $spacing-xs;
@@ -66,6 +78,18 @@
                 font-size: $font-size-sm;
                 color: $text-primary;
                 vertical-align: middle;
+
+                &.checkbox-col {
+                    width: 40px;
+                    padding-right: 0;
+
+                    input[type="checkbox"] {
+                        width: 16px;
+                        height: 16px;
+                        cursor: pointer;
+                        accent-color: $primary-color;
+                    }
+                }
             }
         }
 

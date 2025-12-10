@@ -89,6 +89,32 @@
             "organizerId": {
                 "$oid": "507f1f77bcf86cd799439011"
             },
+            "guests": [
+                {
+                    "guestId": "707f1f77bcf86cd799439031",
+                    "status": "confirmed",
+                    "group": "vip",
+                    "dietary": "None",
+                    "notes": "CEO of TechCorp, requires parking pass",
+                    "name": "Robert Anderson"
+                },
+                {
+                    "guestId": "707f1f77bcf86cd799439032",
+                    "status": "confirmed",
+                    "group": "speaker",
+                    "dietary": "Vegetarian",
+                    "notes": "Keynote speaker, needs presentation setup",
+                    "name": "Jennifer Martinez"
+                },
+                {
+                    "guestId": "707f1f77bcf86cd799439033",
+                    "status": "pending",
+                    "group": "attendee",
+                    "dietary": "Gluten-free",
+                    "notes": "",
+                    "name": "Alex Thompson"
+                }
+            ],
             "createdAt": {
                 "$date": "2024-10-01T10:00:00.000Z"
             },
@@ -117,6 +143,32 @@
             "organizerId": {
                 "$oid": "507f1f77bcf86cd799439012"
             },
+            "guests": [
+                {
+                    "guestId": "707f1f77bcf86cd799439034",
+                    "status": "confirmed",
+                    "group": "family",
+                    "dietary": "None",
+                    "notes": "Bride's mother",
+                    "name": "Mary Williams"
+                },
+                {
+                    "guestId": "707f1f77bcf86cd799439035",
+                    "status": "confirmed",
+                    "group": "friends",
+                    "dietary": "Vegan",
+                    "notes": "Best man, giving speech",
+                    "name": "James Davis"
+                },
+                {
+                    "guestId": "707f1f77bcf86cd799439036",
+                    "status": "declined",
+                    "group": "friends",
+                    "dietary": "",
+                    "notes": "Unable to attend due to prior commitment",
+                    "name": "Lisa Brown"
+                }
+            ],
             "createdAt": {
                 "$date": "2024-09-15T14:00:00.000Z"
             },
@@ -145,6 +197,16 @@
             "organizerId": {
                 "$oid": "507f1f77bcf86cd799439013"
             },
+            "guests": [
+                {
+                    "guestId": "707f1f77bcf86cd799439037",
+                    "status": "confirmed",
+                    "group": "vip",
+                    "dietary": "Pescatarian",
+                    "notes": "Board member, table seating preference",
+                    "name": "Patricia Garcia"
+                }
+            ],
             "createdAt": {
                 "$date": "2024-11-01T09:00:00.000Z"
             },
@@ -173,6 +235,16 @@
             "organizerId": {
                 "$oid": "507f1f77bcf86cd799439011"
             },
+            "guests": [
+                {
+                    "guestId": "707f1f77bcf86cd799439038",
+                    "status": "confirmed",
+                    "group": "media",
+                    "dietary": "None",
+                    "notes": "Tech journalist, needs press kit",
+                    "name": "Christopher Wilson"
+                }
+            ],
             "createdAt": {
                 "$date": "2024-10-20T12:00:00.000Z"
             },
@@ -186,17 +258,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439031"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439021"
-            },
             "firstName": "Robert",
             "lastName": "Anderson",
             "email": "robert.anderson@techcorp.com",
             "phone": "+1-555-0101",
-            "group": "vip",
-            "status": "confirmed",
-            "dietary": "None",
-            "notes": "CEO of TechCorp, requires parking pass",
             "createdAt": {
                 "$date": "2024-10-05T10:00:00.000Z"
             },
@@ -208,17 +273,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439032"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439021"
-            },
             "firstName": "Jennifer",
             "lastName": "Martinez",
             "email": "j.martinez@innovate.io",
             "phone": "+1-555-0102",
-            "group": "speaker",
-            "status": "confirmed",
-            "dietary": "Vegetarian",
-            "notes": "Keynote speaker, needs presentation setup",
             "createdAt": {
                 "$date": "2024-10-08T11:30:00.000Z"
             },
@@ -230,17 +288,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439033"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439021"
-            },
             "firstName": "Alex",
             "lastName": "Thompson",
             "email": "alex.t@startupventures.com",
             "phone": "+1-555-0103",
-            "group": "general",
-            "status": "pending",
-            "dietary": "Gluten-free",
-            "notes": "",
             "createdAt": {
                 "$date": "2024-10-15T15:00:00.000Z"
             },
@@ -252,17 +303,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439034"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439022"
-            },
             "firstName": "Mary",
             "lastName": "Williams",
             "email": "mary.williams@email.com",
             "phone": "+1-555-0201",
-            "group": "family",
-            "status": "confirmed",
-            "dietary": "None",
-            "notes": "Bride's mother",
             "createdAt": {
                 "$date": "2024-09-20T10:00:00.000Z"
             },
@@ -274,17 +318,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439035"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439022"
-            },
             "firstName": "James",
             "lastName": "Davis",
             "email": "james.davis@email.com",
             "phone": "+1-555-0202",
-            "group": "friends",
-            "status": "confirmed",
-            "dietary": "Vegan",
-            "notes": "Best man, giving speech",
             "createdAt": {
                 "$date": "2024-09-22T14:00:00.000Z"
             },
@@ -296,17 +333,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439036"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439022"
-            },
             "firstName": "Lisa",
             "lastName": "Brown",
             "email": "lisa.brown@email.com",
             "phone": "+1-555-0203",
-            "group": "friends",
-            "status": "declined",
-            "dietary": "",
-            "notes": "Unable to attend due to prior commitment",
             "createdAt": {
                 "$date": "2024-09-25T09:30:00.000Z"
             },
@@ -318,17 +348,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439037"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439023"
-            },
             "firstName": "Patricia",
             "lastName": "Garcia",
             "email": "patricia.garcia@foundation.org",
             "phone": "+1-555-0301",
-            "group": "vip",
-            "status": "confirmed",
-            "dietary": "Pescatarian",
-            "notes": "Board member, table seating preference",
             "createdAt": {
                 "$date": "2024-11-05T10:00:00.000Z"
             },
@@ -340,17 +363,10 @@
             "_id": {
                 "$oid": "707f1f77bcf86cd799439038"
             },
-            "eventId": {
-                "$oid": "607f1f77bcf86cd799439024"
-            },
             "firstName": "Christopher",
             "lastName": "Wilson",
             "email": "c.wilson@media.com",
             "phone": "+1-555-0401",
-            "group": "press",
-            "status": "confirmed",
-            "dietary": "None",
-            "notes": "Tech journalist, needs press kit",
             "createdAt": {
                 "$date": "2024-10-25T11:00:00.000Z"
             },

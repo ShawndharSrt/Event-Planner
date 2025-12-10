@@ -5,14 +5,14 @@
             <p class="page-subtitle">Manage all your upcoming and past events</p>
         </div>
         <button class="create-btn" routerLink="/events/new">
-            <span class="icon">+</span>
+            <mat-icon>add</mat-icon>
             Create Event
         </button>
     </div>
 
     <div class="filters-bar">
         <div class="search-input">
-            <span class="icon">🔍</span>
+            <mat-icon class="search-icon">search</mat-icon>
             <input type="text" placeholder="Search events..." />
         </div>
 
@@ -40,12 +40,12 @@
                 </div>
                 <div class="card-content">
                     <div class="date">
-                        <span class="icon">📅</span>
+                        <mat-icon class="icon-small">calendar_today</mat-icon>
                         {{ event.startDate | date:'mediumDate' }} • {{ event.startTime }}
                     </div>
                     <h3 class="title">{{ event.title }}</h3>
                     <p class="location">
-                        <span class="icon">📍</span>
+                        <mat-icon class="icon-small">location_on</mat-icon>
                         {{ event.location }}
                     </p>
                     <div class="stats">
@@ -64,7 +64,7 @@
                         <div class="avatar">JD</div>
                         <span>John Doe</span>
                     </div>
-                    <span class="arrow">→</span>
+                    <mat-icon class="arrow-icon">arrow_forward</mat-icon>
                 </div>
             </a>
         </div>

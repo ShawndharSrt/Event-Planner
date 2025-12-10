@@ -1,5 +1,5 @@
 export interface Event {
-    id: string;
+    id?: string;
     title: string;
     type: 'conference' | 'wedding' | 'party' | 'meeting' | 'other';
     status: 'planning' | 'active' | 'draft' | 'completed';
@@ -13,8 +13,18 @@ export interface Event {
     organizerId: string;
     capacity?: number;
     stats?: EventStats;
+    guests?: EventGuestList[];
     createdAt?: string;
     updatedAt?: string;
+}
+
+export interface EventGuestList {
+    guestId: string;
+    name: string;
+    status: 'confirmed' | 'pending' | 'declined';
+    group: 'vip' | 'family' | 'friends' | 'colleagues' | 'speaker' | 'sponsor' | 'media' | 'attendee' | 'none';
+    dietary?: string;
+    notes?: string;
 }
 
 

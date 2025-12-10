@@ -1,0 +1,50 @@
+@if ((confirmationService.isVisible$ | async)) {
+<div class="confirmation-overlay" (click)="onBackdropClick()" role="dialog" aria-modal="true"
+    aria-labelledby="dialog-title" aria-describedby="dialog-message">
+    <div class="confirmation-dialog" [class.danger]="confirmationService.dialogData.type === 'danger'"
+        [class.warning]="confirmationService.dialogData.type === 'warning'"
+        [class.info]="confirmationService.dialogData.type === 'info'" (click)="onDialogClick($event)">
+
+        <!-- Icon -->
+        <div class="dialog-icon">
+            @if (confirmationService.dialogData.type === 'danger') {
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 9V13M12 17H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0377 2.66667 10.2679 4L3.33975 16C2.56995 17.3333 3.53223 19 5.07183 19Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            } @else if (confirmationService.dialogData.type === 'info') {
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            } @else {
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M12 9V13M12 17H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0377 2.66667 10.2679 4L3.33975 16C2.56995 17.3333 3.53223 19 5.07183 19Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            }
+        </div>
+
+        <!-- Title -->
+        <h2 id="dialog-title" class="dialog-title">{{ confirmationService.dialogData.title }}</h2>
+
+        <!-- Message -->
+        <p id="dialog-message" class="dialog-message">{{ confirmationService.dialogData.message }}</p>
+
+        <!-- Actions -->
+        <div class="dialog-actions">
+            <button type="button" class="btn-cancel" (click)="cancel()" aria-label="Cancel action">
+                {{ confirmationService.dialogData.cancelText }}
+            </button>
+            <button type="button" class="btn-confirm"
+                [class.btn-danger]="confirmationService.dialogData.type === 'danger'" (click)="confirm()"
+                aria-label="Confirm action">
+                {{ confirmationService.dialogData.confirmText }}
+            </button>
+        </div>
+    </div>
+</div>
+}
