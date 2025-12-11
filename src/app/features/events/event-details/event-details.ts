@@ -11,6 +11,7 @@ import { Guest, EventGuest } from '../../../core/models/guest.model';
 import { TaskService } from '../../../core/services/task.service';
 import { Task } from '../../../core/models/task.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
+import { ConfirmationDialogService } from '../../../shared/services/confirmation-dialog.service';
 
 
 import { EventService } from '../../../core/services/event.service';
@@ -30,6 +31,7 @@ export class EventDetailsComponent {
   private taskService = inject(TaskService);
   private eventService = inject(EventService);
   private snackbar = inject(SnackbarService);
+  private confirmationService = inject(ConfirmationDialogService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
@@ -198,7 +200,7 @@ export class EventDetailsComponent {
         // Map current guests to simple IDs to check existence
         const currentGuestIds = new Set(currentGuests.map(g => g.guestId));
 
-        const availableGuests = allGuests.filter(g => !currentGuestIds.has(g._id || g.guestId));
+        const availableGuests = allGuests.filter(g => !currentGuestIds.has(g._id || g.guestId || g.id || ''));
 
         this.commonGuests.set(availableGuests);
         this.isLinkGuestModalOpen.set(true);
@@ -231,7 +233,10 @@ export class EventDetailsComponent {
   ];
 
   updateGuestSelection(selectedGuests: Guest[]) {
-    this.selectedGuestIds.set(new Set(selectedGuests.map(g => g._id || g.guestId)));
+    const ids = selectedGuests
+      .map(g => g._id || g.guestId || g.id)
+      .filter((id): id is string => !!id);
+    this.selectedGuestIds.set(new Set(ids));
   }
 
   linkSelectedGuests() {
@@ -259,26 +264,34 @@ export class EventDetailsComponent {
 
   deleteGuestFromEvent(guest: any) {
     const guestName = guest.name || 'this guest';
-    if (confirm(`Are you sure you want to remove ${guestName} from this event?`)) {
-      // Use guestId from EventGuestList object
-      const guestId = guest.guestId;
+    this.confirmationService.confirm(
+      `Are you sure you want to remove ${guestName} from this event?`,
+      'Remove Guest',
+      'danger',
+      'Remove',
+      'Cancel'
+    ).subscribe((confirmed) => {
+      if (confirmed) {
+        // Use guestId from EventGuestList object
+        const guestId = guest.guestId;
 
-      if (!guestId) {
-        this.snackbar.show('Invalid guest ID', 'error');
-        console.error('Guest object missing guestId:', guest);
-        return;
-      }
-
-      this.guestService.deleteGuest(guestId).subscribe({
-        next: () => {
-          this.snackbar.show('Guest removed from event successfully', 'success');
-          this.refreshGuests$.next();
-        },
-        error: (err) => {
-          console.error('Failed to remove guest from event', err);
-          this.snackbar.show('Failed to remove guest from event', 'error');
+        if (!guestId) {
+          this.snackbar.show('Invalid guest ID', 'error');
+          console.error('Guest object missing guestId:', guest);
+          return;
         }
-      });
-    }
+
+        this.guestService.deleteGuest(guestId).subscribe({
+          next: () => {
+            this.snackbar.show('Guest removed from event successfully', 'success');
+            this.refreshGuests$.next();
+          },
+          error: (err) => {
+            console.error('Failed to remove guest from event', err);
+            this.snackbar.show('Failed to remove guest from event', 'error');
+          }
+        });
+      }
+    });
   }
 }

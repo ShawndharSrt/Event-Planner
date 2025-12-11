@@ -1,5 +1,5 @@
 export interface Task {
-    _id: string;
+    id: string;
     eventId: string;
     title: string;
     description?: string;

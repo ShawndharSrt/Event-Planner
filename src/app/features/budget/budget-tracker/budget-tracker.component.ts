@@ -8,6 +8,7 @@ import { SnackbarService } from '../../../shared/services/snackbar.service';
 
 import { DataTableComponent, TableColumn, TableAction, TableConfig } from '../../../shared/components/data-table/data-table.component';
 import { BaseFormComponent } from '../../../shared/components/base-form/base-form.component';
+import { ConfirmationDialogService } from '../../../shared/services/confirmation-dialog.service';
 
 @Component({
     selector: 'app-budget-tracker',
@@ -21,6 +22,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
 
     budgetService = inject(BudgetService);
     snackbarService = inject(SnackbarService);
+    confirmationService = inject(ConfirmationDialogService);
     cdr = inject(ChangeDetectorRef);
 
     budget = signal<BudgetWithDetails>(this.getEmptyBudget());
@@ -260,15 +262,23 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
     }
 
     deleteExpense(expense: Expense) {
-        if (confirm(`Are you sure you want to delete this expense: ${expense.description}?`)) {
-            this.budgetService.deleteExpense(expense._id).subscribe({
-                next: () => {
-                    this.snackbarService.show('Expense deleted successfully', 'success');
-                    this.loadBudget();
-                },
-                error: () => this.snackbarService.show('Failed to delete expense', 'error')
-            });
-        }
+        this.confirmationService.confirm(
+            `Are you sure you want to delete this expense: ${expense.description}?`,
+            'Delete Expense',
+            'danger',
+            'Delete',
+            'Cancel'
+        ).subscribe((confirmed) => {
+            if (confirmed) {
+                this.budgetService.deleteExpense(expense._id).subscribe({
+                    next: () => {
+                        this.snackbarService.show('Expense deleted successfully', 'success');
+                        this.loadBudget();
+                    },
+                    error: () => this.snackbarService.show('Failed to delete expense', 'error')
+                });
+            }
+        });
     }
 
     @ViewChild('dateTemplate', { static: true }) dateTemplate!: TemplateRef<any>;

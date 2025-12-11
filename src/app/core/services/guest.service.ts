@@ -91,7 +91,7 @@ export class GuestService {
     }
 
     linkGuestsToEvent(eventId: string, guestIds: string[]): Observable<ApiResponse<void>> {
-        return this.api.post<ApiResponse<void>>(`/events/${eventId}/guests/link`, { guestIds });
+        return this.api.post<ApiResponse<void>>(`/events/${eventId}/guests`, { guestIds });
     }
 
     updateGuest(id: string, changes: Partial<EventGuest>): Observable<ApiResponse<EventGuest>> {

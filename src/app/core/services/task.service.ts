@@ -23,7 +23,7 @@ export class TaskService {
         return this.api.get<ApiResponse<Task[]>>(`/tasks?eventId=${eventId}`);
     }
 
-    addTask(task: Omit<Task, '_id'>): Observable<ApiResponse<Task>> {
+    addTask(task: Omit<Task, 'id'>): Observable<ApiResponse<Task>> {
         return this.api.post<ApiResponse<Task>>(`/tasks`, task);
     }
 

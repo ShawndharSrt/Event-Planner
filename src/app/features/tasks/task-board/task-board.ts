@@ -142,21 +142,24 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
       if (editingTask) {
         // Update existing task
         const updates: Partial<Task> = {
+          id: editingTask.id,
+          eventId: editingTask.eventId,
           title: formValue.title!,
           description: formValue.description || '',
           assignee: formValue.assignee || 'Me',
           dueDate: formValue.dueDate || '',
-          priority: formValue.priority as 'high' | 'medium' | 'low'
+          priority: formValue.priority as 'high' | 'medium' | 'low',
+          status: editingTask.status
         };
 
-        this.taskService.updateTask(editingTask._id, updates).subscribe(response => {
+        this.taskService.updateTask(editingTask.id, updates).subscribe(response => {
           const updatedTask = response.data;
           if (!updatedTask) {
             this.snackbar.show('Failed to update task', 'error');
             return;
           }
           this.tasks.update(tasks => tasks.map(t =>
-            t._id === updatedTask._id ? updatedTask : t
+            t.id === updatedTask.id ? updatedTask : t
           ));
           this.updateColumnSignals();
           this.snackbar.show('Task updated successfully', 'success');
@@ -199,9 +202,9 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
       )
       .subscribe((confirmed) => {
         if (confirmed) {
-          this.taskService.deleteTask(task._id).subscribe({
+          this.taskService.deleteTask(task.id).subscribe({
             next: () => {
-              this.tasks.update(tasks => tasks.filter(t => t._id !== task._id));
+              this.tasks.update(tasks => tasks.filter(t => t.id !== task.id));
               this.updateColumnSignals();
               this.snackbar.show('Task deleted successfully', 'success');
             },
@@ -222,14 +225,14 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
 
     const nextStatus = nextStatusMap[task.status];
 
-    this.taskService.updateTask(task._id, { status: nextStatus }).subscribe(response => {
+    this.taskService.updateTask(task.id, { status: nextStatus }).subscribe(response => {
       const updatedTask = response.data;
       if (!updatedTask) {
         this.snackbar.show('Failed to update task status', 'error');
         return;
       }
       this.tasks.update(tasks => tasks.map(t =>
-        t._id === updatedTask._id ? updatedTask : t
+        t.id === updatedTask.id ? updatedTask : t
       ));
       this.updateColumnSignals();
       this.snackbar.show(`Task moved to ${nextStatus.replace('-', ' ')}`, 'info');
@@ -268,12 +271,12 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
       // Update the main tasks signal with the new status
       this.tasks.update(tasks => {
         return tasks.map(t =>
-          t._id === task._id ? { ...t, status: newStatus } : t
+          t.id === task.id ? { ...t, status: newStatus } : t
         );
       });
 
       // Update task status via service
-      this.taskService.updateTask(task._id, { status: newStatus }).subscribe({
+      this.taskService.updateTask(task.id, { status: newStatus }).subscribe({
         next: (response) => {
           const updatedTask = response.data;
           if (!updatedTask) {
@@ -282,7 +285,7 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
           }
           // Ensure the task is properly updated with server response
           this.tasks.update(tasks => tasks.map(t =>
-            t._id === updatedTask._id ? updatedTask : t
+            t.id === updatedTask.id ? updatedTask : t
           ));
           // Re-sync column signals in case server returned different data
           this.updateColumnSignals();
@@ -291,7 +294,7 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
         error: () => {
           // Revert on error - restore old status and re-sync columns
           this.tasks.update(tasks => tasks.map(t =>
-            t._id === task._id ? { ...t, status: oldStatus } : t
+            t.id === task.id ? { ...t, status: oldStatus } : t
           ));
           this.updateColumnSignals();
           this.snackbar.show('Failed to move task', 'error');
