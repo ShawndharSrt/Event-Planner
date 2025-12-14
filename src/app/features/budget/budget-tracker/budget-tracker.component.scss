@@ -376,17 +376,91 @@
     }
 }
 
-.expense-form {
-    background-color: var(--background-alt);
-    padding: $spacing-lg;
-    border-radius: $border-radius-lg;
-    margin-bottom: $spacing-lg;
-    border: 1px solid var(--border-color);
+// Modal Styles
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    @include flex-center;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease-out;
+}
 
+.modal-container {
+    background-color: var(--surface-color);
+    border-radius: $border-radius-xl;
+    box-shadow: $shadow-xl;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+    .modal-header {
+        padding: $spacing-lg;
+        border-bottom: 1px solid var(--border-color);
+        @include flex-between;
+
+        h4 {
+            margin: 0;
+            font-size: $font-size-xl;
+            color: var(--text-primary);
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: $spacing-xs;
+            border-radius: $border-radius-full;
+            @include flex-center;
+            transition: $transition-base;
+
+            &:hover {
+                background-color: var(--background-alt);
+                color: var(--danger-color);
+            }
+        }
+    }
+
+    .modal-body {
+        padding: $spacing-lg;
+        overflow-y: auto;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+// Modified Expense Form for Modal
+.expense-form-content {
     h4 {
-        margin: 0 0 $spacing-lg 0;
-        font-size: $font-size-lg;
-        color: var(--text-primary);
+        display: none; // Title is in modal header now
     }
 
     .form-grid {
@@ -440,6 +514,9 @@
         display: flex;
         justify-content: flex-end;
         gap: $spacing-md;
+        padding-top: $spacing-lg;
+        border-top: 1px solid var(--border-color);
+        margin-top: $spacing-lg;
 
         button {
             padding: $spacing-sm $spacing-xl;

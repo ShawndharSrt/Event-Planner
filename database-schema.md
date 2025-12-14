@@ -110,6 +110,7 @@ erDiagram
         string userId FK "links to USER.userId"
         string message
         boolean read
+        string code "Unique code for notification type"
         datetime createdAt
     }
 
