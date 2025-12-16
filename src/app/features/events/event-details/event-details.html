@@ -38,45 +38,6 @@
                 </div>
 
                 <div class="section-card">
-                    <h3 class="card-title">Timeline</h3>
-                    <div class="timeline">
-                        <div class="timeline-item" *ngFor="let item of timeline()">
-                            <div class="time">{{ item.time }}</div>
-                            <div class="content">
-                                <h4>{{ item.title }}</h4>
-                                <p>{{ item.location }}</p>
-                            </div>
-                        </div>
-                        <div *ngIf="timeline().length === 0" class="empty-state">No timeline available.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column -->
-            <div class="side-column">
-                <div class="section-card">
-                    <h3 class="card-title">Quick Stats</h3>
-                    <div class="stats-list" *ngIf="stats()">
-                        <div class="stat-row">
-                            <span class="label">Total Guests</span>
-                            <span class="value">{{ stats()?.totalGuests }}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="label">Confirmed</span>
-                            <span class="value success">{{ stats()?.confirmed }}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="label">Pending</span>
-                            <span class="value warning">{{ stats()?.pending }}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="label">Declined</span>
-                            <span class="value danger">{{ stats()?.declined }}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="section-card">
                     <h3 class="card-title">Budget Overview</h3>
                     <div class="budget-overview">
                         <div class="budget-comparison">
@@ -117,6 +78,45 @@
                                 </span>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="side-column">
+                <div class="section-card">
+                    <h3 class="card-title">Quick Stats</h3>
+                    <div class="stats-list" *ngIf="stats()">
+                        <div class="stat-row">
+                            <span class="label">Total Guests</span>
+                            <span class="value">{{ stats()?.totalGuests }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="label">Confirmed</span>
+                            <span class="value success">{{ stats()?.confirmed }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="label">Pending</span>
+                            <span class="value warning">{{ stats()?.pending }}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="label">Declined</span>
+                            <span class="value danger">{{ stats()?.declined }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h3 class="card-title">Timeline</h3>
+                    <div class="timeline">
+                        <div class="timeline-item" *ngFor="let item of timeline()">
+                            <div class="time">{{ item.time }}</div>
+                            <div class="content">
+                                <h4>{{ item.title }}</h4>
+                                <p>{{ item.location }}</p>
+                            </div>
+                        </div>
+                        <div *ngIf="timeline().length === 0" class="empty-state">No timeline available.</div>
                     </div>
                 </div>
             </div>

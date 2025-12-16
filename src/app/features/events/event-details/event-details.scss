@@ -347,8 +347,12 @@
 
     .budget-comparison {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         gap: $spacing-md;
+
+        @media (max-width: map.get($breakpoints, 'md')) {
+            flex-direction: column;
+        }
 
         .budget-stat {
             display: flex;
@@ -358,6 +362,7 @@
             background: linear-gradient(135deg, var(--primary-light-bg) 0%, var(--secondary-light-bg) 100%);
             border-radius: $border-radius-md;
             transition: transform 0.2s ease;
+            flex: 1;
 
             &:hover {
                 transform: translateY(-2px);

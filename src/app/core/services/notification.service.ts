@@ -1,6 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 import { Notification } from '../models/notification.model';
-import { delay, of, tap } from 'rxjs';
+import { tap } from 'rxjs';
+import { ApiService } from './api.service';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
     providedIn: 'root'
@@ -10,61 +12,25 @@ export class NotificationService {
     private notifications = signal<Notification[]>([]);
     readonly notifications$ = this.notifications.asReadonly();
 
-    constructor() {
+    constructor(private api: ApiService) {
         this.loadNotifications();
     }
 
     loadNotifications() {
-        // Mock data for now as per requirements to not hardcode in UI but service should provider
-        // In a real app, this would be an API call.
-        const mockNotifications: Notification[] = [
-            {
-                _id: '1',
-                userId: 'u1',
-                code: 'EVT_REQ',
-                severity: 'INFO',
-                triggerType: 'ONLINE',
-                message: 'New Event Request from John Doe',
-                read: false,
-                createdAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(), // 10 min ago
-            },
-            {
-                _id: '2',
-                userId: 'u1',
-                code: 'TASK_DUE',
-                severity: 'WARNING',
-                triggerType: 'OFFLINE',
-                message: 'Catering arrangement task is due tomorrow',
-                read: false,
-                createdAt: new Date(Date.now() - 1000 * 60 * 60).toISOString(), // 1 hour ago
-            },
-            {
-                _id: '3',
-                userId: 'u1',
-                code: 'SYS_ERR',
-                severity: 'CRITICAL',
-                triggerType: 'ONLINE',
-                message: 'Database connection unstable',
-                read: false,
-                createdAt: new Date(Date.now() - 1000 * 30).toISOString(), // 30 sec ago
-            },
-            {
-                _id: '4',
-                userId: 'u1',
-                code: 'PAY_DUE',
-                severity: 'WARNING',
-                triggerType: 'OFFLINE',
-                message: 'Payment for Venue is pending',
-                read: true,
-                createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+        // Call the getAllNotification API
+        this.api.get<ApiResponse<Notification[]>>('/notifications').pipe(
+            tap(response => {
+                if (response.success && response.data) {
+                    this.updateNotifications(response.data);
+                }
+            })
+        ).subscribe({
+            error: (error) => {
+                console.error('Failed to load notifications:', error);
+                // Optionally set empty array or handle error state
+                this.updateNotifications([]);
             }
-        ];
-
-        // Simulate API delay
-        of(mockNotifications).pipe(
-            delay(500),
-            tap(data => this.updateNotifications(data))
-        ).subscribe();
+        });
     }
 
     private updateNotifications(newNotifications: Notification[]) {
@@ -91,16 +57,40 @@ export class NotificationService {
     }
 
     markAsRead(id: string) {
+        // Optimistically update the UI
         this.notifications.update(current =>
             current.map(n => n._id === id ? { ...n, read: true } : n)
         );
-        // Call backend API here
+
+        // Call backend API
+        this.api.patch<ApiResponse<Notification>>(`/notifications/${id}`, { read: true }).subscribe({
+            error: (error) => {
+                console.error('Failed to mark notification as read:', error);
+                // Revert on error
+                this.notifications.update(current =>
+                    current.map(n => n._id === id ? { ...n, read: false } : n)
+                );
+            }
+        });
     }
 
     markAllAsRead() {
+        // Store previous state for potential rollback
+        const previousNotifications = this.notifications();
+
+        // Optimistically update the UI
         this.notifications.update(current =>
             current.map(n => ({ ...n, read: true }))
         );
-        // Call backend API here
+
+        // Call backend API
+        this.api.patch<ApiResponse<void>>('/notifications/mark-all-read', {}).subscribe({
+            error: (error) => {
+                console.error('Failed to mark all notifications as read:', error);
+                // Revert on error
+                this.notifications.set(previousNotifications);
+            }
+        });
     }
+
 }
