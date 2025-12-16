@@ -53,7 +53,7 @@
             </div>
         </div>
     </div>
-
+    <br>
     <!-- Budget Progress Bar -->
     <div class="progress-section">
         <div class="progress-header">
@@ -69,22 +69,48 @@
 
     <!-- Category Breakdown -->
     <div class="category-section">
-        <h3 class="section-title">Budget by Category</h3>
-        <div class="category-grid">
+        <div class="section-header">
+            <h3 class="section-title">Budget by Category</h3>
+            <button class="btn-manage" (click)="openAddCategoryForm()">
+                <span class="material-icons">add</span>
+                Manage Categories
+            </button>
+        </div>
+
+        <!-- Empty state when no categories -->
+        <div class="empty-state" *ngIf="!hasCategories()">
+            <span class="material-icons">category</span>
+            <p>No categories added yet</p>
+            <p class="empty-subtitle">Create categories to organize your budget</p>
+            <button class="btn-primary" (click)="openAddCategoryForm()">
+                <span class="material-icons">add</span>
+                Add Your First Category
+            </button>
+        </div>
+
+        <!-- Category cards -->
+        <div class="category-grid" *ngIf="hasCategories()">
             <div class="category-card" *ngFor="let category of budget().categories">
                 <div class="category-header">
                     <div class="category-info">
                         <span class="material-icons" [style.color]="category.color">{{ category.icon }}</span>
                         <span class="category-name">{{ category.name }}</span>
                     </div>
-                    <span class="category-percentage">{{ getCategorySpentPercentage(category) }}%</span>
+                    <div class="category-actions">
+                        <button class="btn-icon-sm" (click)="openEditCategoryForm(category)" title="Edit category">
+                            <span class="material-icons">edit</span>
+                        </button>
+                        <button class="btn-icon-sm danger" (click)="deleteCategory(category)" title="Delete category">
+                            <span class="material-icons">delete</span>
+                        </button>
+                    </div>
                 </div>
                 <div class="category-amounts">
-                    <span class="spent">{{ formatCurrency(category.spentAmount) }}</span>
+                    <span class="spent">{{ formatCurrency(getCategorySpent(category._id)) }}</span>
                     <span class="allocated">of {{ formatCurrency(category.allocatedAmount) }}</span>
                 </div>
                 <div class="category-progress">
-                    <div class="category-progress-fill" [style.width.%]="getCategorySpentPercentage(category)"
+                    <div class="category-progress-fill" [style.width.%]="getCategorySpentPercentage(category._id)"
                         [style.background-color]="category.color">
                     </div>
                 </div>
@@ -116,7 +142,8 @@
                 </button>
             </div>
             <div class="actions">
-                <button class="btn-add" (click)="openAddExpenseForm()">
+                <button class="btn-add" (click)="openAddExpenseForm()" [disabled]="!hasCategories()"
+                    [title]="!hasCategories() ? 'Please add categories first' : 'Add a new expense'">
                     <span class="material-icons">add</span>
                     Add Expense
                 </button>
@@ -196,4 +223,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Category Form Modal -->
+    <app-category-form *ngIf="showCategoryForm()" [budgetId]="budget()._id" [category]="editingCategory()"
+        (saved)="handleCategorySaved()" (cancelled)="closeCategoryForm()">
+    </app-category-form>
 </div>

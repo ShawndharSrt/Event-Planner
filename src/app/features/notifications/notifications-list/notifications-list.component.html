@@ -9,10 +9,6 @@
                 <span class="material-icons">done_all</span>
                 Mark All as Read
             </button>
-            <button class="btn-danger" (click)="clearAll()">
-                <span class="material-icons">delete_sweep</span>
-                Clear All
-            </button>
         </div>
     </div>
 
@@ -29,25 +25,17 @@
 
     <div class="notifications-list" *ngIf="notifications().length > 0; else noNotifications">
         <div class="notification-item" *ngFor="let notification of notifications()" [class.unread]="!notification.read"
-            (click)="markAsRead(notification.id)">
-            <div class="notification-icon" [ngClass]="notification.type">
-                <span class="material-icons" *ngIf="notification.type === 'info'">info</span>
-                <span class="material-icons" *ngIf="notification.type === 'warning'">warning</span>
-                <span class="material-icons" *ngIf="notification.type === 'success'">check_circle</span>
-                <span class="material-icons" *ngIf="notification.type === 'error'">error</span>
+            (click)="markAsRead(notification._id, $event)">
+            <div class="notification-icon" [ngClass]="notification.severity.toLowerCase()">
+                <span class="material-icons" *ngIf="notification.severity === 'INFO'">info</span>
+                <span class="material-icons" *ngIf="notification.severity === 'WARNING'">warning</span>
+                <span class="material-icons" *ngIf="notification.severity === 'CRITICAL'">error</span>
             </div>
             <div class="notification-content">
                 <div class="notification-header">
-                    <h3 class="notification-title">{{ notification.title }}</h3>
-                    <span class="notification-time">{{ notification.time }}</span>
+                    <span class="notification-time">{{ notification.createdAt | date:'medium' }}</span>
                 </div>
                 <p class="notification-message">{{ notification.message }}</p>
-            </div>
-            <div class="notification-actions">
-                <button class="btn-icon" (click)="deleteNotification(notification.id); $event.stopPropagation()"
-                    title="Delete notification">
-                    <span class="material-icons">delete</span>
-                </button>
             </div>
             <div class="notification-status" *ngIf="!notification.read">
                 <span class="unread-dot"></span>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
     selector: 'app-notification',
@@ -10,49 +11,19 @@ import { RouterLink } from '@angular/router';
     styleUrl: './notification.component.scss'
 })
 export class NotificationComponent {
-    notifications = [
-        {
-            id: 1,
-            title: 'New Event Request',
-            message: 'John Doe requested a new event "Summer Party"',
-            time: '10 min ago',
-            read: false,
-            type: 'info'
-        },
-        {
-            id: 2,
-            title: 'Task Deadline',
-            message: 'Catering arrangement task is due tomorrow',
-            time: '1 hour ago',
-            read: false,
-            type: 'warning'
-        },
-        {
-            id: 3,
-            title: 'Guest List Updated',
-            message: 'Sarah Smith added 5 new guests',
-            time: '2 hours ago',
-            read: true,
-            type: 'success'
-        },
-        {
-            id: 4,
-            title: 'System Update',
-            message: 'System maintenance scheduled for tonight',
-            time: '5 hours ago',
-            read: true,
-            type: 'error'
-        }
-    ];
+    private notificationService = inject(NotificationService);
 
-    markAsRead(id: number) {
-        const notification = this.notifications.find(n => n.id === id);
-        if (notification) {
-            notification.read = true;
-        }
+    // Show only first 5 in dropdown usually, but requirements didn't say. 
+    // Let's just show standard list properly sorted.
+    notifications = this.notificationService.notifications$;
+
+    markAsRead(id: string, event: MouseEvent) {
+        event.stopPropagation();
+        this.notificationService.markAsRead(id);
     }
 
-    clearAll() {
-        this.notifications = [];
+    markAllAsRead() {
+        this.notificationService.markAllAsRead();
     }
 }
+

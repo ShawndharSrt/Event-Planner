@@ -153,11 +153,7 @@
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
         }
 
-        &.success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        &.error {
+        &.critical {
             background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
         }
     }
@@ -168,18 +164,11 @@
 
         .notification-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
+            /* Time to the right */
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             gap: 16px;
-
-            .notification-title {
-                margin: 0;
-                font-size: 16px;
-                font-weight: 600;
-                color: $text-primary;
-                flex: 1;
-            }
 
             .notification-time {
                 font-size: 12px;
@@ -193,34 +182,7 @@
             font-size: 14px;
             color: $text-secondary;
             line-height: 1.5;
-        }
-    }
-
-    .notification-actions {
-        display: flex;
-        align-items: center;
-
-        .btn-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            border: none;
-            background: transparent;
-            color: $text-light;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-
-            &:hover {
-                background: var(--text-light-bg);
-                color: $danger-color;
-            }
-
-            .material-icons {
-                font-size: 20px;
-            }
+            font-weight: 500;
         }
     }
 
@@ -229,6 +191,7 @@
         top: 20px;
         right: 20px;
 
+        /* Adjust for no actions button */
         .unread-dot {
             width: 10px;
             height: 10px;

@@ -1,0 +1,71 @@
+<div class="modal-overlay" (click)="cancel()">
+    <div class="modal-container" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+            <h4>{{ category ? 'Edit Category' : 'Add New Category' }}</h4>
+            <button class="btn-close" (click)="cancel()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+
+        <div class="modal-body" [formGroup]="form">
+            <div class="category-form-content">
+                <div class="form-group">
+                    <label>Category Name *</label>
+                    <input type="text" formControlName="name" placeholder="e.g., Catering, Venue, etc."
+                        [class.error]="hasError('name', 'required') || hasError('name', 'minlength')">
+                    <span class="error-message" *ngIf="hasError('name', 'required')">
+                        Category name is required
+                    </span>
+                    <span class="error-message" *ngIf="hasError('name', 'minlength')">
+                        Category name must be at least 2 characters
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label>Allocated Amount *</label>
+                    <input type="number" formControlName="allocatedAmount" placeholder="0.00" step="0.01" min="0.01"
+                        [class.error]="hasError('allocatedAmount', 'required') || hasError('allocatedAmount', 'min')">
+                    <span class="error-message" *ngIf="hasError('allocatedAmount', 'required')">
+                        Allocated amount is required
+                    </span>
+                    <span class="error-message" *ngIf="hasError('allocatedAmount', 'min')">
+                        Amount must be greater than 0
+                    </span>
+                </div>
+
+                <div class="form-group">
+                    <label>Color *</label>
+                    <div class="color-picker">
+                        <div *ngFor="let color of colorPalette" class="color-option"
+                            [class.selected]="form.get('color')?.value === color.value"
+                            [style.background-color]="color.value" [title]="color.name"
+                            (click)="form.patchValue({ color: color.value })">
+                            <span class="material-icons" *ngIf="form.get('color')?.value === color.value">check</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Icon *</label>
+                    <div class="icon-selector">
+                        <div *ngFor="let icon of iconOptions" class="icon-option"
+                            [class.selected]="form.get('icon')?.value === icon.value" [title]="icon.name"
+                            (click)="form.patchValue({ icon: icon.value })">
+                            <span class="material-icons">{{ icon.value }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" (click)="cancel()" [disabled]="isLoading()">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn-save" (click)="saveCategory()" [disabled]="isLoading()">
+                        <span *ngIf="!isLoading()">{{ category ? 'Update' : 'Create' }} Category</span>
+                        <span *ngIf="isLoading()">Saving...</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

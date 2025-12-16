@@ -214,6 +214,94 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     border: 1px solid var(--border-color);
 
+    .section-header {
+        @include flex-between;
+        margin-bottom: $spacing-lg;
+
+        .section-title {
+            font-size: $font-size-xl;
+            color: $text-primary;
+            margin: 0;
+        }
+
+        .btn-manage {
+            background-color: $primary-color;
+            color: #fff;
+            border: none;
+            padding: $spacing-sm $spacing-lg;
+            border-radius: $border-radius-md;
+            font-weight: $font-weight-medium;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: $spacing-xs;
+            transition: $transition-base;
+            box-shadow: $shadow-sm;
+
+            &:hover {
+                background-color: $primary-dark;
+                box-shadow: $shadow-md;
+                transform: translateY(-2px);
+            }
+
+            .material-icons {
+                font-size: 20px;
+            }
+        }
+    }
+
+    .empty-state {
+        @include flex-center;
+        flex-direction: column;
+        padding: $spacing-xl * 2;
+        text-align: center;
+        color: var(--text-secondary);
+
+        .material-icons {
+            font-size: 64px;
+            color: var(--text-light);
+            margin-bottom: $spacing-lg;
+        }
+
+        p {
+            margin: $spacing-xs 0;
+            font-size: $font-size-base;
+            color: var(--text-primary);
+
+            &.empty-subtitle {
+                font-size: $font-size-sm;
+                color: var(--text-secondary);
+                margin-bottom: $spacing-lg;
+            }
+        }
+
+        .btn-primary {
+            background-color: $primary-color;
+            color: #fff;
+            border: none;
+            padding: $spacing-md $spacing-xl;
+            border-radius: $border-radius-md;
+            font-weight: $font-weight-medium;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: $spacing-sm;
+            transition: $transition-base;
+            box-shadow: $shadow-sm;
+
+            &:hover {
+                background-color: $primary-dark;
+                box-shadow: $shadow-md;
+                transform: translateY(-2px);
+            }
+
+            .material-icons {
+                font-size: 20px;
+                margin: 0;
+            }
+        }
+    }
+
     .section-title {
         font-size: $font-size-xl;
         color: $text-primary;
@@ -261,6 +349,40 @@
             .category-name {
                 font-weight: $font-weight-medium;
                 color: var(--text-primary);
+            }
+        }
+
+        .category-actions {
+            display: flex;
+            gap: $spacing-xs;
+            opacity: 1; // Changed from 0 to make buttons always visible
+            transition: opacity 0.2s;
+
+            .btn-icon-sm {
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: $spacing-xs;
+                border-radius: $border-radius-sm;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: $transition-base;
+                color: var(--text-secondary);
+
+                &:hover {
+                    background-color: var(--background-alt);
+                    color: $primary-color;
+                }
+
+                &.danger:hover {
+                    color: $danger-color;
+                    background-color: var(--danger-subtle);
+                }
+
+                .material-icons {
+                    font-size: 18px;
+                }
             }
         }
 
@@ -366,9 +488,15 @@
     transition: $transition-base;
     box-shadow: $shadow-sm;
 
-    &:hover {
+    &:hover:not(:disabled) {
         background-color: $primary-dark;
         box-shadow: $shadow-md;
+    }
+
+    &:disabled {
+        background-color: var(--text-light);
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 
     .material-icons {

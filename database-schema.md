@@ -86,7 +86,7 @@ erDiagram
         ObjectId budgetId FK
         string name
         number allocatedAmount
-        number spentAmount
+        number spentAmount "Calculated by backend from expenses"
         string color
         string icon
     }
@@ -168,7 +168,7 @@ erDiagram
 - **Key Fields**:
   - `budgetId`: Link to parent budget
   - `allocatedAmount`: Planned spending
-  - `spentAmount`: Actual spending
+  - `spentAmount`: Actual spending (calculated dynamically by backend from Expenses collection)
 
 ### Expenses
 - **Purpose**: Track individual transactions and payments

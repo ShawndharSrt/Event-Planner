@@ -110,19 +110,15 @@
             }
 
             &.info {
-                background-color: #3b82f6;
-            }
-
-            &.success {
-                background-color: #10b981;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             }
 
             &.warning {
-                background-color: #f59e0b;
+                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             }
 
-            &.error {
-                background-color: #ef4444;
+            &.critical {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
             }
         }
 

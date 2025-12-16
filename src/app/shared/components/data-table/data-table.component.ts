@@ -52,9 +52,12 @@ export class DataTableComponent implements OnChanges {
     sortColumn = signal<string | null>(null);
     sortDirection = signal<'asc' | 'desc'>('asc');
 
+    // Internal signal for data to trigger computed updates
+    private dataSignal = signal<any[]>([]);
+
     // Processed data (sorted)
     processedData = computed(() => {
-        let processed = [...this.data];
+        let processed = [...this.dataSignal()];
         const columnKey = this.sortColumn();
         const direction = this.sortDirection();
 
@@ -82,10 +85,11 @@ export class DataTableComponent implements OnChanges {
         return this.processedData().slice(start, end);
     });
 
-    totalPages = computed(() => Math.ceil(this.data.length / this.pageSize));
+    totalPages = computed(() => Math.ceil(this.dataSignal().length / this.pageSize));
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes['data']) {
+            this.dataSignal.set(this.data || []);
             this.currentPage.set(1);
         }
     }
