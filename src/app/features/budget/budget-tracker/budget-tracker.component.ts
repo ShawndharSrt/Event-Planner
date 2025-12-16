@@ -11,10 +11,13 @@ import { CategoryFormComponent } from '../category-form/category-form.component'
 import { ConfirmationDialogService } from '../../../shared/services/confirmation-dialog.service';
 import { forkJoin } from 'rxjs';
 
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BudgetChartComponent } from '../../../shared/components/budget-chart/budget-chart.component';
+
 @Component({
     selector: 'app-budget-tracker',
     standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent, CategoryFormComponent],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, DataTableComponent, CategoryFormComponent, BudgetChartComponent],
     templateUrl: './budget-tracker.component.html',
     styleUrl: './budget-tracker.component.scss'
 })
@@ -214,6 +217,182 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
         const category = this.budget()?.categories.find((c: BudgetCategory) => c._id === categoryId);
         return category?.spentAmount || 0;
     }
+
+    // Chart Configuration and Data
+    doughnutOptions: ChartConfiguration<'doughnut'>['options'] = {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '75%',
+        plugins: {
+            legend: { display: false }, // Hide default legend
+            tooltip: {
+                backgroundColor: 'rgba(30, 41, 59, 0.95)', // surface-card-high
+                titleColor: '#f8fafc',
+                bodyColor: '#e2e8f0',
+                padding: 12,
+                cornerRadius: 8,
+                displayColors: true,
+                callbacks: {
+                    label: (context) => {
+                        const value = context.raw as number;
+                        const total = ((context.chart as any)._metasets[context.datasetIndex].total as number);
+                        const percentage = Math.round((value / total) * 100) + '%';
+                        return ` ${context.label}: ${this.formatCurrency(value)} (${percentage})`;
+                    }
+                }
+            }
+        },
+        animation: {
+            duration: 800
+        }
+    };
+
+    barOptions: ChartConfiguration['options'] = {
+        responsive: true,
+        plugins: {
+            legend: { position: 'top', labels: { color: '#9ca3af' } },
+            tooltip: {
+                callbacks: {
+                    label: (context) => ` ${context.dataset.label}: ${this.formatCurrency(context.raw as number)}`
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: { color: '#9ca3af' }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#9ca3af' }
+            }
+        }
+    };
+
+    lineOptions: ChartConfiguration['options'] = {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: (context) => ` Spent: ${this.formatCurrency(context.raw as number)}`
+                }
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: { color: '#9ca3af' }
+            },
+            x: {
+                grid: { display: false },
+                ticks: { color: '#9ca3af' }
+            }
+        },
+        elements: {
+            line: { tension: 0.4 }, // Smooth curves
+            point: { radius: 3, hoverRadius: 5 }
+        }
+    };
+
+    // 1. Doughnut Chart Data: Spending Breakdown
+    spendingChartData = computed<ChartData<'doughnut'>>(() => {
+        const categories = this.budget()?.categories || [];
+
+        // Modern, harmonious color palette
+        const palette = [
+            '#3b82f6', // Blue
+            '#10b981', // Emerald
+            '#8b5cf6', // Violet
+            '#f59e0b', // Amber
+            '#ec4899', // Pink
+            '#06b6d4', // Cyan
+            '#f43f5e', // Rose
+            '#6366f1', // Indigo
+            '#84cc16', // Lime
+            '#14b8a6'  // Teal
+        ];
+
+        const backgroundColors = categories.map((c, i) => c.color || palette[i % palette.length]);
+
+        return {
+            labels: categories.map(c => c.name),
+            datasets: [{
+                data: categories.map(c => c.spentAmount),
+                backgroundColor: backgroundColors,
+                hoverOffset: 4,
+                borderWidth: 0
+            }]
+        };
+    });
+
+    // 2. Bar Chart Data: Allocated vs Spent
+    budgetComparisonData = computed<ChartData<'bar'>>(() => {
+        const categories = this.budget()?.categories || [];
+        return {
+            labels: categories.map(c => c.name),
+            datasets: [
+                {
+                    label: 'Allocated',
+                    data: categories.map(c => c.allocatedAmount),
+                    backgroundColor: 'rgba(59, 130, 246, 0.7)', // Blue
+                    borderRadius: 4,
+                    barPercentage: 0.6
+                },
+                {
+                    label: 'Spent',
+                    data: categories.map(c => c.spentAmount),
+                    backgroundColor: categories.map(c => {
+                        // Red if over budget, else Green/Teal
+                        return c.spentAmount > c.allocatedAmount ? 'rgba(239, 68, 68, 0.8)' : 'rgba(16, 185, 129, 0.8)';
+                    }),
+                    borderRadius: 4,
+                    barPercentage: 0.6
+                }
+            ]
+        };
+    });
+
+    // 3. Line Chart Data: Spending Trend
+    spendingTrendData = computed<ChartData<'line'>>(() => {
+        const expenses = this.expenses() || [];
+        // Sort expenses by date
+        const sorted = [...expenses].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+        // Group by Date for cleaner line chart
+        const groupedByDate = new Map<string, number>();
+        sorted.forEach(e => {
+            const date = this.toDisplayDate(e.date);
+            const current = groupedByDate.get(date) || 0;
+            groupedByDate.set(date, current + e.amount);
+        });
+
+        // Convert Map to Arrays
+        const labels = Array.from(groupedByDate.keys());
+        const data = Array.from(groupedByDate.values());
+
+        // Calculate Cumulative? Or just Daily? "Trend" implies Cumulative usually in finance charts (Burnup).
+        // Let's do Cumulative for a smoother "Trend" line.
+        let cumulative = 0;
+        const cumulativeData = data.map(val => {
+            cumulative += val;
+            return cumulative;
+        });
+
+        return {
+            labels: labels,
+            datasets: [{
+                label: 'Cumulative Spending',
+                data: cumulativeData,
+                borderColor: '#8b5cf6', // Violet
+                backgroundColor: 'rgba(139, 92, 246, 0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        };
+    });
 
     clearFilters() {
         this.selectedCategory.set(null);

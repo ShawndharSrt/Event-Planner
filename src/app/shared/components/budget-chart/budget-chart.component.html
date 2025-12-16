@@ -1,0 +1,30 @@
+<div class="chart-container" [style.height]="height">
+    <div class="chart-header" *ngIf="title">
+        <h3>{{ title }}</h3>
+    </div>
+
+    <div class="chart-content">
+        <div class="canvas-wrapper">
+            <canvas baseChart [data]="data" [options]="options" [type]="type">
+            </canvas>
+
+            <!-- Center Text for Doughnut Charts -->
+            <div class="center-text" *ngIf="type === 'doughnut' && (centerLabel || centerValue)">
+                <div class="center-value">{{ centerValue }}</div>
+                <div class="center-label">{{ centerLabel }}</div>
+            </div>
+        </div>
+
+        <!-- Custom Legend -->
+        <div class="custom-legend" *ngIf="showCustomLegend && data.datasets[0]">
+            <div class="legend-item" *ngFor="let label of data.labels; let i = index" (click)="toggleDataset(i)"
+                [class.hidden]="isDatasetHidden(i)">
+                <span class="legend-color" [style.background-color]="getBackgroundColor(i)"></span>
+                <span class="legend-label">{{ label }}</span>
+                <span class="legend-value">
+                    {{ getDataValue(i) }}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

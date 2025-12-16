@@ -161,6 +161,25 @@
             </app-data-table>
         </div>
     </div>
+    <br>
+    <!-- Budget Analysis Charts -->
+    <div class="charts-section" *ngIf="hasCategories()">
+        <h3 class="section-title">Budget Analysis</h3>
+        <div class="charts-grid">
+            <app-budget-chart title="Spending Breakdown" type="doughnut" [data]="spendingChartData()"
+                [options]="doughnutOptions" [centerLabel]="'Total Spent'" [centerValue]="formatCurrency(totalSpent())"
+                [showCustomLegend]="true">
+            </app-budget-chart>
+
+            <app-budget-chart title="Allocated vs Spent" type="bar" [data]="budgetComparisonData()"
+                [options]="barOptions">
+            </app-budget-chart>
+
+            <app-budget-chart *ngIf="expenses().length > 0" title="Spending Trend" type="line"
+                [data]="spendingTrendData()" [options]="lineOptions">
+            </app-budget-chart>
+        </div>
+    </div>
 
     <!-- Expense Form Modal -->
     <div class="modal-overlay" *ngIf="showExpenseForm()" (click)="cancelExpenseForm()">
