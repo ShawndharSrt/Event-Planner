@@ -30,7 +30,8 @@
                         </ng-container>
 
                         <!-- Status Cell -->
-                        <span *ngIf="col.type === 'status'" class="status-badge" [ngClass]="row[col.key].toLowerCase()">
+                        <span *ngIf="col.type === 'status'" class="status-badge"
+                            [ngClass]="(row[col.key] || '').toLowerCase()">
                             {{ col.format ? col.format(row[col.key]) : (row[col.key] | titlecase) }}
                         </span>
 

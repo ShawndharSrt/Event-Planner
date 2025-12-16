@@ -2,158 +2,282 @@
 @use 'styles/variables' as *;
 @use 'styles/mixins' as *;
 
+@use '../../../../styles/variables' as *;
+
 .page-container {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: $spacing-lg;
+    gap: 1.5rem;
+    height: 100vh;
+    overflow: hidden; // Important for scrolling internal content
 }
 
 .page-header {
-    @include flex-between;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-shrink: 0;
 
     .header-content {
         .page-title {
-            font-size: $font-size-2xl;
-            color: $text-primary;
-            margin-bottom: $spacing-xs;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin: 0 0 0.5rem;
         }
 
         .page-subtitle {
-            color: $text-secondary;
-            font-size: $font-size-sm;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin: 0;
         }
     }
 
     .create-btn {
-        background-color: $primary-color;
-        color: $surface-color;
-        padding: $spacing-sm $spacing-lg;
-        border-radius: $border-radius-md;
-        font-weight: $font-weight-medium;
         display: flex;
         align-items: center;
-        gap: $spacing-sm;
-        transition: $transition-base;
-        box-shadow: $shadow-sm;
+        gap: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
 
         &:hover {
-            background-color: $primary-dark;
-            box-shadow: $shadow-md;
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
     }
+}
+
+.filters-bar-wrapper {
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
 }
 
 .filters-bar {
     display: flex;
-    gap: $spacing-md;
-    background-color: $surface-color;
-    padding: $spacing-md;
-    border-radius: $border-radius-lg;
-    box-shadow: $shadow-sm;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--surface-card);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    flex-wrap: wrap;
+    align-items: center;
 
     .search-input {
         flex: 1;
-        min-width: 250px;
+        min-width: 200px;
         display: flex;
         align-items: center;
-        background-color: $background-color;
-        padding: $spacing-sm $spacing-md;
-        border-radius: $border-radius-md;
-
-        .icon {
-            color: $text-light;
-            margin-right: $spacing-sm;
-        }
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: var(--background);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
 
         input {
+            width: 100%;
             border: none;
             background: transparent;
-            outline: none;
-            width: 100%;
-            color: $text-primary;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+
+            &:focus {
+                outline: none;
+            }
         }
     }
 
-    .filter-select {
-        padding: $spacing-sm $spacing-lg;
-        border: 1px solid var(--border-color);
-        border-radius: $border-radius-md;
-        background-color: $surface-color;
-        color: $text-primary;
-        outline: none;
-        cursor: pointer;
+    .filter-group {
+        display: flex;
+        gap: 0.75rem;
 
-        &:focus {
-            border-color: $primary-color;
+        .filter-select {
+            padding: 0.5rem 2rem 0.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--background);
+            color: var(--text-primary);
+            cursor: pointer;
+            min-width: 140px;
+
+            &:focus {
+                outline: none;
+                border-color: var(--primary-color);
+            }
+        }
+    }
+
+    .view-toggles {
+        display: flex;
+        background: var(--background);
+        border-radius: 8px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+
+        .icon-btn {
+            border: none;
+            background: transparent;
+            padding: 0.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            border-radius: 0;
+
+            &.active {
+                background: var(--surface-hover);
+                color: var(--primary-color);
+            }
+
+            &:hover:not(.active) {
+                background: var(--surface-hover);
+            }
         }
     }
 }
 
+.bulk-actions-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--primary-color);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    color: white;
+    animation: slideDown 0.2s ease-out;
+
+    .selection-count {
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+
+    .actions {
+        display: flex;
+        gap: 1rem;
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.3);
+            }
+
+            &.danger {
+                background: crimson;
+
+                &:hover {
+                    background: darkred;
+                }
+            }
+        }
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.content-area {
+    flex: 1;
+    overflow-y: auto; // Enables internal scrolling for content
+    min-height: 0; // Fix flex scrolling issue
+    padding-bottom: 2rem;
+}
+
+// Card View Styles
 .guests-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: $spacing-lg;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
 }
 
 .guest-card {
-    @include card-style;
-    display: flex;
-    flex-direction: column;
-    gap: $spacing-md;
-    padding: $spacing-xl;
+    background: var(--surface-card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid var(--border-color);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
 
     .card-header {
-        @include flex-between;
+        display: flex;
+        justify-content: space-between;
         align-items: flex-start;
+        margin-bottom: 1.5rem;
 
         .avatar-lg {
-            width: 64px;
-            height: 64px;
-            background-color: $primary-light;
-            color: $surface-color;
-            border-radius: $border-radius-full;
-            @include flex-center;
-            font-size: $font-size-xl;
-            font-weight: $font-weight-bold;
-
-            &.secondary {
-                background-color: $secondary-light;
-            }
-
-            &.warning {
-                background-color: var(--warning-dark);
-            }
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 600;
         }
 
         .actions {
             display: flex;
-            gap: $spacing-xs;
+            gap: 0.5rem;
 
             .icon-btn {
-                background: none;
-                color: $text-light;
-                padding: $spacing-xs;
-                border-radius: $border-radius-sm;
-                transition: $transition-base;
-                @include flex-center;
+                background: transparent;
                 border: none;
+                color: var(--text-secondary);
                 cursor: pointer;
-
-                .material-icons {
-                    font-size: 18px;
-                }
+                padding: 0.25rem;
+                opacity: 0;
+                transition: opacity 0.2s;
 
                 &:hover {
-                    background-color: var(--text-light-bg);
-                    color: $text-secondary;
+                    color: var(--primary-color);
                 }
 
                 &.danger:hover {
-                    color: $danger-color;
-                    background-color: var(--danger-subtle);
+                    color: #dc3545;
                 }
             }
         }
+    }
+
+    &:hover .actions .icon-btn {
+        opacity: 1;
     }
 
     .card-body {

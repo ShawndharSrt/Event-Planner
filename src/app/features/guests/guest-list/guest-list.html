@@ -10,51 +10,116 @@
         </button>
     </div>
 
-    <div class="filters-bar">
-        <div class="search-input">
-            <span class="icon">🔍</span>
-            <input type="text" placeholder="Search guests by name or email..." />
+    <!-- Sticky Filter Bar -->
+    <div class="filters-bar-wrapper">
+        <div class="filters-bar">
+            <div class="search-input">
+                <span class="icon">🔍</span>
+                <input type="text" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)"
+                    placeholder="Search by name or email..." />
+            </div>
+
+            <div class="filter-group">
+                <select [ngModel]="selectedGroup()" (ngModelChange)="selectedGroup.set($event)" class="filter-select">
+                    <option value="all">All Groups</option>
+                    <option value="vip">VIP</option>
+                    <option value="family">Family</option>
+                    <option value="friends">Friends</option>
+                    <option value="colleagues">Colleagues</option>
+                    <option value="speaker">Speaker</option>
+                    <option value="sponsor">Sponsor</option>
+                    <option value="media">Media</option>
+                    <option value="attendee">Attendee</option>
+                </select>
+
+                <select [ngModel]="selectedStatus()" (ngModelChange)="selectedStatus.set($event)" class="filter-select">
+                    <option value="all">All Statuses</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="pending">Pending</option>
+                    <option value="declined">Declined</option>
+                </select>
+            </div>
+
+            <div class="view-toggles">
+                <button class="icon-btn" [class.active]="viewMode() === 'table'" (click)="toggleView('table')"
+                    title="Table View">
+                    <span class="material-icons">table_chart</span>
+                </button>
+                <button class="icon-btn" [class.active]="viewMode() === 'card'" (click)="toggleView('card')"
+                    title="Card View">
+                    <span class="material-icons">grid_view</span>
+                </button>
+            </div>
         </div>
 
-        <div class="filter-group">
-            <select class="filter-select" (change)="filterByGroup($event)">
-                <option value="all">All Groups</option>
-                <option value="vip">VIP</option>
-                <option value="family">Family</option>
-                <option value="friends">Friends</option>
-                <option value="colleagues">Colleagues</option>
-                <option value="speaker">Speaker</option>
-                <option value="sponsor">Sponsor</option>
-                <option value="media">Media</option>
-                <option value="attendee">Attendee</option>
-            </select>
+        <!-- Bulk Actions Bar -->
+        <div class="bulk-actions-bar" *ngIf="selectedGuests().size > 0">
+            <span class="selection-count">{{ selectedGuests().size }} selected</span>
+            <div class="actions">
+                <button class="action-btn danger" (click)="deleteSelected()">
+                    <span class="material-icons">delete</span> Delete
+                </button>
+                <button class="action-btn" (click)="selectedGuests().clear()">
+                    Cancel
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="guests-grid">
-        <div class="guest-card" *ngFor="let guest of guests()">
-            <div class="card-header">
-                <div class="avatar-lg">
-                    {{ guest.firstName[0] }}{{ guest.lastName[0] }}
+    <!-- Table View -->
+    <div class="content-area" *ngIf="viewMode() === 'table'">
+        <app-data-table [data]="filteredGuests()" [columns]="tableColumns" [actions]="tableActions" [selectable]="true"
+            [pageSize]="pageSize()" (action)="handleTableAction($event)"
+            (selectionChange)="handleSelectionChange($event)">
+        </app-data-table>
+    </div>
+
+    <!-- Card View -->
+    <div class="content-area" *ngIf="viewMode() === 'card'">
+        <div class="guests-grid">
+            <div class="guest-card" *ngFor="let guest of paginatedCardGuests()">
+                <div class="card-header">
+                    <div class="avatar-lg">
+                        {{ guest.firstName[0] }}{{ guest.lastName[0] }}
+                    </div>
+                    <div class="actions">
+                        <button class="icon-btn" (click)="editGuest(guest)" title="Edit guest">
+                            <span class="material-icons">edit</span>
+                        </button>
+                        <button class="icon-btn danger" (click)="deleteGuest(guest)" title="Delete guest">
+                            <span class="material-icons">delete</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="actions">
-                    <button class="icon-btn" (click)="editGuest(guest)" title="Edit guest">
-                        <span class="material-icons">edit</span>
-                    </button>
-                    <button class="icon-btn danger" (click)="deleteGuest(guest)" title="Delete guest">
-                        <span class="material-icons">delete</span>
-                    </button>
+                <div class="card-body">
+                    <h3 class="name">{{ guest.firstName }} {{ guest.lastName }}</h3>
+                    <p class="email">{{ guest.email }}</p>
+                    <p class="phone">{{ guest.phone || 'No phone' }}</p>
+                    <div class="badges">
+                        <span class="badge group">{{ guest.group }}</span>
+                        <span class="badge status" [class]="guest.status">{{ guest.status }}</span>
+                    </div>
                 </div>
             </div>
-            <div class="card-body">
-                <h3 class="name">{{ guest.firstName }} {{ guest.lastName }}</h3>
-                <p class="email">{{ guest.email }}</p>
-                <p class="phone">{{ guest.phone || 'No phone' }}</p>
 
-            </div>
-
+            <div *ngIf="filteredGuests().length === 0" class="empty-state">No guests match your filters.</div>
         </div>
 
-        <div *ngIf="guests().length === 0" class="empty-state">No guests found.</div>
+        <!-- Card View Pagination -->
+        <div class="pagination" *ngIf="totalPages() > 1">
+            <span class="page-info">
+                Showing {{ (currentPage() - 1) * pageSize() + 1 }}-{{ Math.min(currentPage() * pageSize(), totalItems())
+                }} of {{ totalItems() }}
+            </span>
+            <div class="page-controls">
+                <button class="icon-btn" [disabled]="currentPage() === 1" (click)="prevPage()">
+                    <span class="material-icons">chevron_left</span>
+                </button>
+                <span class="page-number">Page {{ currentPage() }}</span>
+                <button class="icon-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
