@@ -35,8 +35,6 @@ export class SettingsComponent extends BaseFormComponent implements OnInit {
     }
 
     saveSettings(): void {
-        console.log('Settings saved:', this.form.value);
-        // In a real app, this would call a service to save settings
         this.snackbarService.show('Settings saved successfully!', 'success');
     }
 }

@@ -55,7 +55,6 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
       this.events.set(events);
 
       if (events.length > 0) {
-        console.log('Loaded events:', events);
         // Select first event by default if no event is selected
         if (!this.selectedEventId()) {
           const firstEvent = events[0];
@@ -74,7 +73,6 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
   onEventChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const value = selectElement.value;
-    console.log('Selected Event ID:', value);
     // Handle case where value might be string "undefined" due to bad binding
     if (value && value !== 'undefined') {
       this.selectedEventId.set(value);

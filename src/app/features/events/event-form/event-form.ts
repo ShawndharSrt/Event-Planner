@@ -85,24 +85,20 @@ export class EventFormComponent extends BaseFormComponent {
       if (this.isEditMode && this.eventId) {
         this.eventService.updateEvent(this.eventId, eventData).subscribe({
           next: (response: any) => {
-            console.log('Event Updated:', response);
             this.snackbar.show('Event updated successfully', 'success');
             this.router.navigate(['/events']);
           },
           error: (error: any) => {
-            console.error('Error updating event:', error);
             this.snackbar.show('Failed to update event', 'error');
           }
         });
       } else {
         this.eventService.createEvent(eventData).subscribe({
           next: (response: any) => {
-            console.log('Event Saved:', response);
             this.snackbar.show('Event created successfully', 'success');
             this.router.navigate(['/events']);
           },
           error: (error: any) => {
-            console.error('Error creating event:', error);
             this.snackbar.show('Failed to create event', 'error');
           }
         });

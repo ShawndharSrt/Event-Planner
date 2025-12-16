@@ -41,7 +41,6 @@ export class GuestListComponent {
       switchMap(() =>
         this.guestService.getAllGuests().pipe(
           map(response => {
-            console.log('API Response:', response);
             return response.data ?? [];
           }),
           catchError(err => {
@@ -112,9 +111,8 @@ export class GuestListComponent {
   // Debug Effect
   constructor() {
     effect(() => {
-      const guests = this.filteredGuests();
-      const paginated = this.paginatedCardGuests();
-      console.log(`[GuestList] Total: ${this.allGuestsResource()?.length}, Filtered: ${guests.length}, Paginated (Card): ${paginated.length}, View: ${this.viewMode()}`);
+      this.filteredGuests();
+      this.paginatedCardGuests();
     });
 
     // Reset selection when filters change

@@ -24,7 +24,6 @@ export class DashboardComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          console.log('DashboardComponent: Raw stats response:', response);
           const apiData = response.data;
           const mappedStats: DashboardStats = {
             upcomingEvents: apiData.totalEvents,
@@ -32,7 +31,6 @@ export class DashboardComponent {
             pendingTasks: apiData.totalTasks,
             completedTasks: apiData.completedTasks
           };
-          console.log('DashboardComponent: Mapped stats data:', mappedStats);
           this.stats.set(mappedStats);
         },
         error: (error) => {
@@ -48,10 +46,8 @@ export class DashboardComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          console.log('DashboardComponent: Raw recent events response:', response);
           const events = response.data ?? [];
           this.recentEvents.set(events);
-          console.log('DashboardComponent: Parsed recent events:', events);
         },
         error: (error) => {
           console.error('DashboardComponent: Error getting recent events:', error);
@@ -63,10 +59,8 @@ export class DashboardComponent {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (response) => {
-          console.log('DashboardComponent: Raw tasks response:', response);
           const tasks = response.data ?? [];
           this.tasks.set(tasks);
-          console.log('DashboardComponent: Parsed tasks:', tasks);
         },
         error: (error) => {
           console.error('DashboardComponent: Error getting tasks:', error);
@@ -76,19 +70,16 @@ export class DashboardComponent {
     // Log API response when stats are received
     effect(() => {
       const statsValue = this.stats();
-      console.log('Dashboard Stats Signal Value:', statsValue);
     });
 
     // Log recent events when received
     effect(() => {
       const eventsValue = this.recentEvents();
-      console.log('Recent Events API Response:', eventsValue);
     });
 
     // Log tasks when received
     effect(() => {
       const tasksValue = this.tasks();
-      console.log('Tasks API Response:', tasksValue);
     });
   }
 }
