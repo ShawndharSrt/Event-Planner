@@ -8,7 +8,6 @@ import { ApiResponse } from '../models/api-response.model';
     providedIn: 'root'
 })
 export class NotificationService {
-    // Signal to hold the current list of notifications
     private notifications = signal<Notification[]>([]);
     readonly notifications$ = this.notifications.asReadonly();
 
@@ -17,7 +16,6 @@ export class NotificationService {
     }
 
     loadNotifications() {
-        // Call the getAllNotification API
         this.api.get<ApiResponse<Notification[]>>('/notifications').pipe(
             tap(response => {
                 if (response.success && response.data) {
@@ -34,11 +32,6 @@ export class NotificationService {
     }
 
     private updateNotifications(newNotifications: Notification[]) {
-        // Merge or set notifications
-        // Apply sorting rules:
-        // 1. CRITICAL -> WARNING -> INFO
-        // 2. CreatedAt (Latest first)
-
         const sorted = [...newNotifications].sort((a, b) => {
             const severityOrder = { 'CRITICAL': 0, 'WARNING': 1, 'INFO': 2 };
 
@@ -57,16 +50,12 @@ export class NotificationService {
     }
 
     markAsRead(id: string) {
-        // Optimistically update the UI
         this.notifications.update(current =>
             current.map(n => n._id === id ? { ...n, read: true } : n)
         );
-
-        // Call backend API
         this.api.patch<ApiResponse<Notification>>(`/notifications/${id}`, { read: true }).subscribe({
             error: (error) => {
                 console.error('Failed to mark notification as read:', error);
-                // Revert on error
                 this.notifications.update(current =>
                     current.map(n => n._id === id ? { ...n, read: false } : n)
                 );

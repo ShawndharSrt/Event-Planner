@@ -50,7 +50,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
             description: ['', [Validators.required, Validators.minLength(3)]],
             vendor: ['', Validators.required],
             amount: ['', [Validators.required, Validators.min(0.01)]],
-            date: [new Date().toISOString().split('T')[0], Validators.required],
+            date: [this.getCurrentDateFormatted(), Validators.required],
             status: ['pending', Validators.required],
             notes: ['']
         };
@@ -266,7 +266,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
             description: '',
             vendor: '',
             amount: '',
-            date: new Date().toISOString().split('T')[0],
+            date: this.getCurrentDateFormatted(),
             status: 'pending',
             notes: ''
         });
@@ -275,12 +275,19 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
 
     openEditExpenseForm(expense: Expense) {
         this.editingExpense.set(expense);
+
+        // Format date to MM/DD/YYYY for input[type="text"]
+        let formattedDate = '';
+        if (expense.date) {
+            formattedDate = this.toDisplayDate(expense.date);
+        }
+
         this.form.patchValue({
             categoryId: expense.categoryId,
             description: expense.description,
             vendor: expense.vendor,
             amount: expense.amount,
-            date: expense.date,
+            date: formattedDate,
             status: expense.status,
             notes: expense.notes || ''
         });
@@ -296,6 +303,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
     saveExpense() {
         if (this.isFormValid()) {
             const formValue = this.form.value;
+            const isoDate = this.toISODate(formValue.date);
 
             const editingExpense = this.editingExpense();
             if (editingExpense) {
@@ -312,7 +320,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
                     description: formValue.description,
                     vendor: formValue.vendor,
                     amount: parseFloat(formValue.amount),
-                    date: formValue.date,
+                    date: isoDate,
                     status: formValue.status,
                     notes: formValue.notes || undefined
                 }).subscribe({
@@ -333,7 +341,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
                     description: formValue.description,
                     vendor: formValue.vendor,
                     amount: parseFloat(formValue.amount),
-                    date: formValue.date,
+                    date: isoDate,
                     status: formValue.status,
                     notes: formValue.notes || undefined
                 }).subscribe({
@@ -520,4 +528,40 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
     hasCategories = computed(() => {
         return this.budget().categories.length > 0;
     });
+    // Date Helper Methods
+    getCurrentDateFormatted(): string {
+        const today = new Date();
+        const month = (today.getMonth() + 1).toString().padStart(2, '0');
+        const day = today.getDate().toString().padStart(2, '0');
+        const year = today.getFullYear();
+        return `${month}/${day}/${year}`;
+    }
+
+    private toDisplayDate(dateVal: string | Date): string {
+        if (!dateVal) return '';
+        let dateStr = typeof dateVal === 'string' ? dateVal : dateVal.toISOString();
+
+        // Handle ISO string
+        if (dateStr.includes('T')) {
+            dateStr = dateStr.split('T')[0];
+        }
+
+        // If it looks like ISO YYYY-MM-DD
+        if (dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const [year, month, day] = dateStr.split('-');
+            return `${month}/${day}/${year}`;
+        }
+
+        return dateStr;
+    }
+
+    private toISODate(dateStr: string): string {
+        if (!dateStr) return '';
+        // Check for MM/DD/YYYY
+        if (dateStr.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+            const [month, day, year] = dateStr.split('/');
+            return `${year}-${month}-${day}`;
+        }
+        return dateStr;
+    }
 }
