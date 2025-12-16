@@ -40,6 +40,6 @@ export class NotificationCardComponent {
 
   onMarkCheck(event: MouseEvent) {
     event.stopPropagation();
-    this.markRead.emit(this.notification._id);
+    this.markRead.emit(this.notification.id);
   }
 }

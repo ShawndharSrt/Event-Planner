@@ -1,5 +1,5 @@
 export interface Notification {
-    _id: string;
+    id: string;
     eventId?: string;
     userId: string;
     code: string;
@@ -7,6 +7,6 @@ export interface Notification {
     triggerType: 'ONLINE' | 'OFFLINE';
     message: string;
     read: boolean;
-    createdAt: string; // ISO Date string
-    closedAt?: string; // ISO Date string
+    createdAt: string;
+    closedAt?: string;
 }

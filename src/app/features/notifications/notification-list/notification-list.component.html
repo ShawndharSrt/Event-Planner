@@ -1,0 +1,35 @@
+<div class="notification-page">
+    <!-- Sticky Header -->
+    <header class="page-header">
+        <div class="header-content">
+            <div class="title-group">
+                <h1>Notifications</h1>
+                @if (unreadCount() > 0) {
+                <span class="badge">{{ unreadCount() }} New</span>
+                }
+            </div>
+
+            <button mat-stroked-button color="primary" (click)="markAllRead()" [disabled]="unreadCount() === 0">
+                <mat-icon>done_all</mat-icon>
+                Mark all read
+            </button>
+        </div>
+    </header>
+
+    <!-- Scrollable List -->
+    <div class="list-container">
+        @if (notifications().length === 0) {
+        <div class="empty-state">
+            <mat-icon>notifications_off</mat-icon>
+            <p>No notifications yet</p>
+        </div>
+        } @else {
+        <div class="cards-wrapper">
+            @for (notification of notifications(); track notification.id) {
+            <app-notification-card [notification]="notification" (markRead)="markAsRead($event)">
+            </app-notification-card>
+            }
+        </div>
+        }
+    </div>
+</div>

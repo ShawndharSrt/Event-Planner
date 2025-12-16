@@ -1,53 +1,99 @@
 <div class="notifications-page">
-    <div class="page-header">
-        <div class="header-content">
-            <h1>Notifications</h1>
-            <p class="subtitle">Stay updated with your events and tasks</p>
-        </div>
-        <div class="header-actions" *ngIf="notifications().length > 0">
-            <button class="btn-secondary" (click)="markAllAsRead()" *ngIf="unreadCount() > 0">
-                <span class="material-icons">done_all</span>
-                Mark All as Read
-            </button>
-        </div>
-    </div>
-
-    <div class="notifications-stats" *ngIf="notifications().length > 0">
-        <div class="stat-card">
-            <span class="stat-label">Total</span>
-            <span class="stat-value">{{ notifications().length }}</span>
-        </div>
-        <div class="stat-card unread">
-            <span class="stat-label">Unread</span>
-            <span class=" stat-value">{{ unreadCount() }}</span>
-        </div>
-    </div>
-
-    <div class="notifications-list" *ngIf="notifications().length > 0; else noNotifications">
-        <div class="notification-item" *ngFor="let notification of notifications()" [class.unread]="!notification.read"
-            (click)="markAsRead(notification._id, $event)">
-            <div class="notification-icon" [ngClass]="notification.severity.toLowerCase()">
-                <span class="material-icons" *ngIf="notification.severity === 'INFO'">info</span>
-                <span class="material-icons" *ngIf="notification.severity === 'WARNING'">warning</span>
-                <span class="material-icons" *ngIf="notification.severity === 'CRITICAL'">error</span>
+    <div class="notifications-container">
+        <div class="page-header">
+            <div class="header-content">
+                <h1>Notifications</h1>
+                <p class="subtitle">Stay updated with your events and tasks</p>
             </div>
-            <div class="notification-content">
-                <div class="notification-header">
-                    <span class="notification-time">{{ notification.createdAt | date:'medium' }}</span>
+            <div class="header-actions" *ngIf="notifications().length > 0">
+                <button class="btn-secondary" (click)="markAllAsRead()" *ngIf="unreadCount() > 0">
+                    <span class="material-icons">done_all</span>
+                    Mark All as Read
+                </button>
+            </div>
+        </div>
+
+        <div class="notifications-stats" *ngIf="notifications().length > 0">
+            <div class="stat-card">
+                <span class="stat-label">Total</span>
+                <span class="stat-value">{{ notifications().length }}</span>
+            </div>
+            <div class="stat-card unread">
+                <span class="stat-label">Unread</span>
+                <span class=" stat-value">{{ unreadCount() }}</span>
+            </div>
+        </div>
+
+        <div class="notifications-list" *ngIf="notifications().length > 0; else noNotifications">
+            <div class="notification-item" *ngFor="let notification of notifications()"
+                [class.unread]="!notification.read" (click)="markAsRead(notification._id, $event)">
+                <div class="notification-icon" [ngClass]="notification.severity.toLowerCase()">
+                    <span class="material-icons" *ngIf="notification.severity === 'INFO'">info</span>
+                    <span class="material-icons" *ngIf="notification.severity === 'WARNING'">warning</span>
+                    <span class="material-icons" *ngIf="notification.severity === 'CRITICAL'">error</span>
                 </div>
-                <p class="notification-message">{{ notification.message }}</p>
+                <div class="notification-content">
+                    <div class="notification-header">
+                        <span class="notification-time">{{ notification.createdAt | date:'medium' }}</span>
+                    </div>
+                    <p class="notification-message">{{ notification.message }}</p>
+                </div>
+                <div class="notification-status" *ngIf="!notification.read">
+                    <span class="unread-dot"></span>
+                </div>
             </div>
-            <div class="notification-status" *ngIf="!notification.read">
-                <span class="unread-dot"></span>
+        </div>
+
+        <ng-template #noNotifications>
+            <div class="empty-state">
+                <span class="material-icons">notifications_off</span>
+                <h3>No notifications</h3>
+                <p>You're all caught up! Check back later for updates.</p>
             </div>
+        </ng-template>
+
+        <!-- All Caught Up Message (when notifications exist but are few) -->
+        <div class="caught-up-message" *ngIf="notifications().length > 0 && notifications().length < 5">
+            <span class="material-icons">check_circle</span>
+            <p>You're all caught up!</p>
         </div>
     </div>
 
-    <ng-template #noNotifications>
-        <div class="empty-state">
-            <span class="material-icons">notifications_off</span>
-            <h3>No notifications</h3>
-            <p>You're all caught up! Check back later for updates.</p>
+    <!-- Quick Actions Section -->
+    <div class="quick-actions-section">
+        <h2 class="section-title">Quick Actions</h2>
+        <div class="quick-actions-grid">
+            <div class="action-card" routerLink="/events">
+                <div class="action-icon">
+                    <span class="material-icons">event</span>
+                </div>
+                <h3>View Events</h3>
+                <p>Manage your upcoming events and schedules</p>
+            </div>
+
+            <div class="action-card" routerLink="/tasks">
+                <div class="action-icon">
+                    <span class="material-icons">task_alt</span>
+                </div>
+                <h3>Check Tasks</h3>
+                <p>Review pending tasks and deadlines</p>
+            </div>
+
+            <div class="action-card" routerLink="/guests">
+                <div class="action-icon">
+                    <span class="material-icons">people</span>
+                </div>
+                <h3>Manage Guests</h3>
+                <p>View guest lists and RSVP status</p>
+            </div>
+
+            <div class="action-card" routerLink="/calendar">
+                <div class="action-icon">
+                    <span class="material-icons">calendar_month</span>
+                </div>
+                <h3>Open Calendar</h3>
+                <p>See all events in calendar view</p>
+            </div>
         </div>
-    </ng-template>
+    </div>
 </div>

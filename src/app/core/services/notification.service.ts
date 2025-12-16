@@ -51,13 +51,13 @@ export class NotificationService {
 
     markAsRead(id: string) {
         this.notifications.update(current =>
-            current.map(n => n._id === id ? { ...n, read: true } : n)
+            current.map(n => n.id === id ? { ...n, read: true } : n)
         );
-        this.api.patch<ApiResponse<Notification>>(`/notifications/${id}`, { read: true }).subscribe({
+        this.api.patch<ApiResponse<Notification>>(`/notifications/${id}/read`, { read: true }).subscribe({
             error: (error) => {
                 console.error('Failed to mark notification as read:', error);
                 this.notifications.update(current =>
-                    current.map(n => n._id === id ? { ...n, read: false } : n)
+                    current.map(n => n.id === id ? { ...n, read: false } : n)
                 );
             }
         });

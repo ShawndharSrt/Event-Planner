@@ -37,7 +37,7 @@ import { NotificationCardComponent } from '../notification-card/notification-car
           </div>
         } @else {
           <div class="cards-wrapper">
-            @for (notification of notifications(); track notification._id) {
+            @for (notification of notifications(); track notification.id) {
               <app-notification-card 
                 [notification]="notification"
                 (markRead)="markAsRead($event)">
@@ -60,7 +60,7 @@ import { NotificationCardComponent } from '../notification-card/notification-car
       display: flex;
       flex-direction: column;
       height: 100%;
-      max-width: 600px; /* Constrain width for better readability on large screens */
+      max-width: 1000px; /* Constrain width for better readability on large screens */
       margin: 0 auto;
       padding: 0 16px;
     }
