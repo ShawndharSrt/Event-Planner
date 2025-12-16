@@ -51,7 +51,7 @@
     .notification-list {
         max-height: 400px;
         overflow-y: auto;
-        background-color: var(--background-alt);
+        background-color: $surface-color;
 
         &::-webkit-scrollbar {
             width: 6px;

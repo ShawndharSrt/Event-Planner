@@ -15,7 +15,7 @@ export class NotificationService {
         this.loadNotifications();
     }
 
-    loadNotifications() {
+    public loadNotifications() {
         this.api.get<ApiResponse<Notification[]>>('/notifications').pipe(
             tap(response => {
                 if (response.success && response.data) {

@@ -56,14 +56,6 @@ import { NotificationCardComponent } from '../notification-card/notification-car
       background: #f8f9fc; /* Light mode bg fallback */
     }
 
-    /* Dark mode background override if supported by global styles, 
-       otherwise relying on parent container or media query */
-    @media (prefers-color-scheme: dark) {
-      :host {
-        background: #121212;
-      }
-    }
-
     .notification-page {
       display: flex;
       flex-direction: column;

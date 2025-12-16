@@ -1,0 +1,29 @@
+<div class="glass-card"
+    [ngClass]="['severity-' + notification.severity.toLowerCase(), notification.read ? 'read' : 'unread']">
+
+    <!-- Left Accent Bar -->
+    <div class="accent-bar"></div>
+
+    <!-- Icon Area -->
+    <div class="icon-wrapper">
+        <mat-icon>{{ getIcon() }}</mat-icon>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+        <div class="header">
+            <!-- <span class="title">{{ notification.severity }}</span> -->
+            <span class="time">{{ notification.createdAt | date:'short' }}</span>
+        </div>
+        <p class="message">{{ notification.message }}</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+        @if (!notification.read) {
+        <button mat-icon-button (click)="onMarkCheck($event)" matTooltip="Mark as read">
+            <mat-icon>check_circle_outline</mat-icon>
+        </button>
+        }
+    </div>
+</div>

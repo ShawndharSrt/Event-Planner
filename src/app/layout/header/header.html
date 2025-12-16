@@ -11,7 +11,7 @@
     <div class="header-right">
         <button #notificationButton data-notification-button class="icon-btn" (click)="toggleNotifications()">
             <span class="material-icons">notifications</span>
-            <span class="badge">3</span>
+            <span class="badge" *ngIf="unreadCount() > 0">{{ unreadCount() }}</span>
         </button>
         <app-notification #notificationDropdown *ngIf="showNotifications"></app-notification>
         <button class="icon-btn" routerLink="/settings">

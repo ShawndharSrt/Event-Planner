@@ -17,13 +17,13 @@
     text-align: left;
 
     thead {
-        background-color: var(--background-alt);
+        background-color: var(--background-alt-2);
         border-bottom: 1px solid var(--border-color);
 
         th {
             padding: $spacing-md;
             font-size: $font-size-xs;
-            font-weight: $font-weight-semibold;
+            font-weight: $font-weight-bold;
             color: $text-secondary;
             text-transform: uppercase;
             letter-spacing: 0.5px;

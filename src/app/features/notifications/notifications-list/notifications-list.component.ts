@@ -1,4 +1,4 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, inject, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -11,7 +11,7 @@ import { DatePipe } from '@angular/common';
     templateUrl: './notifications-list.component.html',
     styleUrl: './notifications-list.component.scss'
 })
-export class NotificationsListComponent {
+export class NotificationsListComponent implements OnInit {
     private notificationService = inject(NotificationService);
     router = inject(Router);
 
@@ -20,6 +20,10 @@ export class NotificationsListComponent {
     unreadCount = computed(() =>
         this.notifications().filter(n => !n.read).length
     );
+
+    ngOnInit() {
+        this.notificationService.loadNotifications();
+    }
 
     markAsRead(id: string, event: MouseEvent) {
         event.stopPropagation();
