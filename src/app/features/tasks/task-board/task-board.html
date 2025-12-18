@@ -5,9 +5,13 @@
             <p class="page-subtitle">Track progress and manage event tasks</p>
         </div>
         <div class="event-selector">
-            <select [ngModel]="selectedEventId()" (change)="onEventChange($event)">
-                <option *ngFor="let event of events()" [value]="event.id">{{ event.title }}</option>
-            </select>
+            <mat-form-field appearance="fill" subscriptSizing="dynamic">
+                <mat-select [ngModel]="selectedEventId()" (selectionChange)="onEventChange($event.value)">
+                    <mat-option *ngFor="let event of events()" [value]="event.id">
+                        {{ event.title }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </div>
         <button class="create-btn" (click)="addTask()">
             <span class="icon">+</span>

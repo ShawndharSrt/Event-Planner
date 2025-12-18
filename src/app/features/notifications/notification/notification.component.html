@@ -6,7 +6,7 @@
 
     <div class="notification-list" *ngIf="notifications().length > 0; else noNotifications">
         <div class="notification-item" *ngFor="let notification of notifications()" [class.unread]="!notification.read"
-            (click)="markAsRead(notification._id, $event)">
+            (click)="markAsRead(notification.id, $event)">
             <div class="notification-icon" [ngClass]="notification.severity.toLowerCase()">
                 <span class="material-icons" *ngIf="notification.severity === 'INFO'">info</span>
                 <span class="material-icons" *ngIf="notification.severity === 'WARNING'">warning</span>

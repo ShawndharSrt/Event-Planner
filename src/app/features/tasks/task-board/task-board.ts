@@ -1,7 +1,9 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DragDropModule, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms'; // Updated imports
+import { FormsModule, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { ConfirmationDialogService } from '../../../shared/services/confirmation-dialog.service';
 import { TaskService } from '../../../core/services/task.service';
@@ -13,7 +15,7 @@ import { BaseFormComponent } from '../../../shared/components/base-form/base-for
 @Component({
   selector: 'app-task-board',
   standalone: true,
-  imports: [CommonModule, DragDropModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, DragDropModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatFormFieldModule],
   templateUrl: './task-board.html',
   styleUrl: './task-board.scss',
 })
@@ -70,9 +72,7 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
     });
   }
 
-  onEventChange(event: Event) {
-    const selectElement = event.target as HTMLSelectElement;
-    const value = selectElement.value;
+  onEventChange(value: string) {
     // Handle case where value might be string "undefined" due to bad binding
     if (value && value !== 'undefined') {
       this.selectedEventId.set(value);

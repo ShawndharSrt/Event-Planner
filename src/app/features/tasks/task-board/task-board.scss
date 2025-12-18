@@ -31,21 +31,39 @@
         justify-content: center;
         padding: 0 $spacing-xl;
 
-        select {
-            padding: $spacing-sm $spacing-md;
-            border: 1px solid var(--border-color);
-            border-radius: $border-radius-md;
-            background-color: $surface-color;
-            color: $text-primary;
-            font-size: $font-size-sm;
-            min-width: 250px;
-            cursor: pointer;
-            outline: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
+        mat-form-field {
+            width: 100%;
+            max-width: 300px;
 
-            &:focus {
-                border-color: $primary-color;
-                box-shadow: 0 0 0 2px var(--primary-lightest-bg);
+            ::v-deep {
+                .mat-mdc-text-field-wrapper {
+                    background-color: transparent !important;
+                    padding-top: 0 !important;
+                    padding-bottom: 0 !important;
+                }
+
+                .mat-mdc-form-field-flex {
+                    border-bottom: 1px solid var(--border-color);
+                    border-radius: 0 !important;
+                    height: 40px;
+                    align-items: center;
+                }
+
+                .mat-mdc-form-field-focus-indicator {
+                    border-bottom-width: 2px;
+                    border-bottom-color: $primary-color;
+                }
+
+                // Hide the default MDC bottom line since we're using our own border-bottom for the idle state
+                .mdc-line-ripple {
+                    display: none;
+                }
+
+                .mat-mdc-select-value {
+                    font-size: $font-size-sm;
+                    font-weight: $font-weight-medium;
+                    color: $text-primary;
+                }
             }
         }
     }

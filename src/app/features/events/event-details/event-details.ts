@@ -96,8 +96,11 @@ export class EventDetailsComponent {
   );
 
   stats = toSignal(
-    this.route.paramMap.pipe(
-      switchMap(params =>
+    combineLatest([
+      this.route.paramMap,
+      this.refreshGuests$
+    ]).pipe(
+      switchMap(([params]) =>
         this.eventService
           .getEventStats(params.get('id') || '')
           .pipe(map(response => response.data))
