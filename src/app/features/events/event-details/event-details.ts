@@ -1,9 +1,9 @@
-import { Component, signal, inject, computed } from '@angular/core';
+import { Component, signal, inject, computed, effect } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink, ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EventTabsComponent, EventTab } from '../components/event-tabs/event-tabs.component';
+import { MatTabsModule, MatTabChangeEvent } from '@angular/material/tabs';
 import { DataTableComponent, TableColumn, TableConfig } from '../../../shared/components/data-table/data-table.component';
 import { BudgetTrackerComponent } from '../../../features/budget/budget-tracker/budget-tracker.component';
 import { GuestService } from '../../../core/services/guest.service';
@@ -13,16 +13,17 @@ import { Task } from '../../../core/models/task.model';
 import { SnackbarService } from '../../../shared/services/snackbar.service';
 import { ConfirmationDialogService } from '../../../shared/services/confirmation-dialog.service';
 
-
 import { EventService } from '../../../core/services/event.service';
 import { Event, TimelineItem, EventStats, EventGuestList } from '../../../core/models/event.model';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, take } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest } from 'rxjs';
+
+export type EventTab = 'overview' | 'guests' | 'tasks' | 'budget';
 
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, EventTabsComponent, DataTableComponent, BudgetTrackerComponent],
+  imports: [RouterLink, CommonModule, FormsModule, MatTabsModule, DataTableComponent, BudgetTrackerComponent],
   templateUrl: './event-details.html',
   styleUrl: './event-details.scss',
 })
@@ -47,6 +48,18 @@ export class EventDetailsComponent {
     ),
     { initialValue: 'overview' as EventTab }
   );
+
+  // Helper to get index from tab name
+  get selectedTabIndex(): number {
+    const tab = this.activeTab();
+    switch (tab) {
+      case 'overview': return 0;
+      case 'guests': return 1;
+      case 'tasks': return 2;
+      case 'budget': return 3;
+      default: return 0;
+    }
+  }
 
   // Get event ID from route
   eventId = toSignal(this.route.paramMap.pipe(
@@ -73,50 +86,103 @@ export class EventDetailsComponent {
     return evt?.guests || [];
   });
 
-  taskData = toSignal(
-    this.route.paramMap.pipe(
-      switchMap(params =>
-        this.taskService
-          .getTasks(params.get('id') || '')
-          .pipe(map(response => response.data ?? []))
-      )
-    ),
-    { initialValue: [] as Task[] }
-  );
+  // Lazy loaded signals
+  taskData = signal<Task[]>([]);
+  tasksLoaded = false;
 
-  timeline = toSignal(
-    this.route.paramMap.pipe(
-      switchMap(params =>
-        this.eventService
-          .getEventTimeline(params.get('id') || '')
-          .pipe(map(response => response.data ?? []))
-      )
-    ),
-    { initialValue: [] as TimelineItem[] }
-  );
+  timeline = signal<TimelineItem[]>([]);
+  timelineLoaded = false;
 
-  stats = toSignal(
-    combineLatest([
-      this.route.paramMap,
-      this.refreshGuests$
-    ]).pipe(
-      switchMap(([params]) =>
-        this.eventService
-          .getEventStats(params.get('id') || '')
-          .pipe(map(response => response.data))
-      )
-    )
-  );
+  stats = signal<EventStats | undefined>(undefined);
+  statsLoaded = false;
 
-  budgetSummary = toSignal(
-    this.route.paramMap.pipe(
-      switchMap(params =>
-        this.eventService
-          .getEventBudgetSummary(params.get('id') || '')
-          .pipe(map(response => response.data))
-      )
-    )
-  );
+  budgetSummary = signal<any>(null);
+  budgetLoaded = false;
+
+  constructor() {
+    effect(() => {
+      const tab = this.activeTab();
+      const id = this.eventId();
+
+      if (id) {
+        // Eagerly load tasks for count
+        if (!this.tasksLoaded) this.loadTasks(id);
+        // Eagerly load stats for guest count
+        if (!this.statsLoaded) this.loadStats(id);
+        this.loadTabContent(tab, id);
+      }
+    });
+  }
+
+  onTabChange(event: MatTabChangeEvent) {
+    const index = event.index;
+    let tab: EventTab = 'overview';
+    switch (index) {
+      case 0: tab = 'overview'; break;
+      case 1: tab = 'guests'; break;
+      case 2: tab = 'tasks'; break;
+      case 3: tab = 'budget'; break;
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab },
+      queryParamsHandling: 'merge'
+    });
+    // Content loading is triggered by the effect watching activeTab
+  }
+
+  loadTabContent(tab: EventTab, eventId: string) {
+    switch (tab) {
+      case 'overview':
+        if (!this.timelineLoaded) this.loadTimeline(eventId);
+        if (!this.budgetLoaded) this.loadBudget(eventId);
+        break;
+      // Guests loaded with main 'event'
+      // Tasks loaded eagerly in constructor/effect
+      // Budget loaded via Overview? Wait, logic says loadBudget on Overview too for the summary widget.
+    }
+  }
+
+  loadTasks(eventId: string) {
+    this.taskService.getTasks(eventId).pipe(take(1)).subscribe({
+      next: (res) => {
+        this.taskData.set(res.data ?? []);
+        this.tasksLoaded = true;
+      },
+      error: (err) => console.error('Failed to load tasks', err)
+    });
+  }
+
+  loadTimeline(eventId: string) {
+    this.eventService.getEventTimeline(eventId).pipe(take(1)).subscribe({
+      next: (res) => {
+        this.timeline.set(res.data ?? []);
+        this.timelineLoaded = true;
+      },
+      error: (err) => console.error('Failed to load timeline', err)
+    });
+  }
+
+  loadStats(eventId: string) {
+    this.eventService.getEventStats(eventId).pipe(take(1)).subscribe({
+      next: (res) => {
+        this.stats.set(res.data);
+        this.statsLoaded = true;
+      },
+      error: (err) => console.error('Failed to load stats', err)
+    });
+  }
+
+  loadBudget(eventId: string) {
+    this.eventService.getEventBudgetSummary(eventId).pipe(take(1)).subscribe({
+      next: (res) => {
+        this.budgetSummary.set(res.data);
+        this.budgetLoaded = true;
+      },
+      error: (err) => console.error('Failed to load budget', err)
+    });
+  }
 
   guestColumns: TableColumn[] = [
     { key: 'name', label: 'Name', type: 'text' },
@@ -134,14 +200,6 @@ export class EventDetailsComponent {
     showActions: true,
     pageSizeOptions: [5, 10]
   };
-
-  onTabChange(tab: EventTab) {
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: { tab },
-      queryParamsHandling: 'merge'
-    });
-  }
 
   getBudgetPercentage(): number {
     const planned = this.budgetSummary()?.planned || 0;

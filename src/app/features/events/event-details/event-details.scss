@@ -788,3 +788,32 @@
         color: $text-secondary;
     }
 }
+
+.tab-badge {
+    background-color: var(--text-light-bg);
+    padding: 2px 6px;
+    border-radius: $border-radius-sm;
+    font-size: 10px;
+    color: $text-secondary;
+    margin-left: 8px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+::ng-deep .mat-mdc-tab-body-wrapper {
+    margin-top: $spacing-lg;
+}
+
+::ng-deep .mat-mdc-tab-label-container {
+    display: flex;
+    overflow: hidden;
+    z-index: 1;
+    border-bottom-style: solid;
+    border-bottom-width: var(--mat-tab-divider-height, 1px);
+    border-bottom-color: var(--mat-tab-divider-color, var(--mat-sys-surface-variant));
+}
+
+
+::ng-deep .mat-mdc-tab {
+    flex-grow: 0 !important;
+}

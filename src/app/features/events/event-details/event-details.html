@@ -20,125 +20,175 @@
         </div>
     </div>
 
-    <!-- Navigation Tabs -->
-    <app-event-tabs [activeTab]="activeTab()" [guestCount]="stats()?.totalGuests || 0" [taskCount]="taskData().length"
-        (tabChange)="onTabChange($event)">
-    </app-event-tabs>
+    <!-- Material Tabs -->
+    <mat-tab-group [selectedIndex]="selectedTabIndex" (selectedTabChange)="onTabChange($event)" animationDuration="0ms">
+        <mat-tab label="Overview">
+            <div class="tab-content">
+                <div class="grid-layout">
+                    <!-- Left Column -->
+                    <div class="main-column">
+                        <div class="section-card">
+                            <h3 class="card-title">About Event</h3>
+                            <p class="description">
+                                {{ event()?.description }}
+                            </p>
+                        </div>
 
-    <!-- Tab Content (Overview) -->
-    <div class="tab-content" *ngIf="activeTab() === 'overview'">
-        <div class="grid-layout">
-            <!-- Left Column -->
-            <div class="main-column">
-                <div class="section-card">
-                    <h3 class="card-title">About Event</h3>
-                    <p class="description">
-                        {{ event()?.description }}
-                    </p>
-                </div>
+                        <div class="section-card">
+                            <h3 class="card-title">Budget Overview</h3>
+                            <div class="budget-overview">
+                                <div class="budget-comparison">
+                                    <div class="budget-stat">
+                                        <span class="budget-icon">💰</span>
+                                        <div class="budget-info">
+                                            <span class="budget-label">Planned Budget</span>
+                                            <span class="budget-value primary">{{ budgetSummary()?.planned | currency
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="budget-stat">
+                                        <span class="budget-icon">💳</span>
+                                        <div class="budget-info">
+                                            <span class="budget-label">Actual Spent</span>
+                                            <span class="budget-value">{{ budgetSummary()?.actual | currency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                <div class="section-card">
-                    <h3 class="card-title">Budget Overview</h3>
-                    <div class="budget-overview">
-                        <div class="budget-comparison">
-                            <div class="budget-stat">
-                                <span class="budget-icon">💰</span>
-                                <div class="budget-info">
-                                    <span class="budget-label">Planned Budget</span>
-                                    <span class="budget-value primary">{{ budgetSummary()?.planned | currency }}</span>
+                                <div class="budget-progress-container">
+                                    <div class="budget-progress-bar" [style.width.%]="getBudgetPercentage()"
+                                        [class.over-budget]="isOverBudget()">
+                                    </div>
+                                </div>
+
+                                <div class="budget-details">
+                                    <div class="detail-row">
+                                        <span class="detail-label">Variance</span>
+                                        <span class="detail-value" [class.positive]="getVariance() >= 0"
+                                            [class.negative]="getVariance() < 0">
+                                            {{ getVariance() >= 0 ? '+' : '' }}{{ getVariance() | currency }}
+                                        </span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Status</span>
+                                        <span class="budget-status" [class]="getBudgetStatus()">
+                                            {{ getBudgetStatusText() }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="budget-stat">
-                                <span class="budget-icon">💳</span>
-                                <div class="budget-info">
-                                    <span class="budget-label">Actual Spent</span>
-                                    <span class="budget-value">{{ budgetSummary()?.actual | currency }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="side-column">
+                        <div class="section-card">
+                            <h3 class="card-title">Quick Stats</h3>
+                            <div class="stats-list" *ngIf="stats()">
+                                <div class="stat-row">
+                                    <span class="label">Total Guests</span>
+                                    <span class="value">{{ stats()?.totalGuests }}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="label">Confirmed</span>
+                                    <span class="value success">{{ stats()?.confirmed }}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="label">Pending</span>
+                                    <span class="value warning">{{ stats()?.pending }}</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="label">Declined</span>
+                                    <span class="value danger">{{ stats()?.declined }}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="budget-progress-container">
-                            <div class="budget-progress-bar" [style.width.%]="getBudgetPercentage()"
-                                [class.over-budget]="isOverBudget()">
+                        <div class="section-card">
+                            <h3 class="card-title">Timeline</h3>
+                            <div class="timeline">
+                                <div class="timeline-item" *ngFor="let item of timeline()">
+                                    <div class="time">{{ item.time }}</div>
+                                    <div class="content">
+                                        <h4>{{ item.title }}</h4>
+                                        <p>{{ item.location }}</p>
+                                    </div>
+                                </div>
+                                <div *ngIf="timeline().length === 0" class="empty-state">No timeline available.</div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
 
-                        <div class="budget-details">
-                            <div class="detail-row">
-                                <span class="detail-label">Variance</span>
-                                <span class="detail-value" [class.positive]="getVariance() >= 0"
-                                    [class.negative]="getVariance() < 0">
-                                    {{ getVariance() >= 0 ? '+' : '' }}{{ getVariance() | currency }}
+        <mat-tab>
+            <ng-template mat-tab-label>
+                Guests <span class="tab-badge" *ngIf="stats()?.totalGuests">{{ stats()?.totalGuests }}</span>
+            </ng-template>
+            <div class="tab-content">
+                <div class="section-card">
+                    <div class="card-header-with-actions">
+                        <h3 class="card-title">Guest List</h3>
+                        <div class="header-actions">
+                            <button type="button" class="btn-action btn-link-guest" (click)="openLinkGuestModal()">Link
+                                Existing
+                                Guest</button>
+                            <button class="btn-action btn-export">Export CSV</button>
+                        </div>
+                    </div>
+                    <app-data-table [data]="guestData()" [columns]="guestColumns" [config]="guestTableConfig"
+                        [actions]="guestActions" [pageSize]="5" (action)="handleGuestAction($event)">
+                    </app-data-table>
+                </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab>
+            <ng-template mat-tab-label>
+                Tasks <span class="tab-badge" *ngIf="taskData().length">{{ taskData().length }}</span>
+            </ng-template>
+            <div class="tab-content">
+                <div class="section-card">
+                    <div class="card-header"
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="card-title" style="margin: 0;">Event Tasks</h3>
+                        <button class="btn-primary" routerLink="/tasks"
+                            style="padding: 8px 16px; font-size: 14px;">Manage
+                            Tasks</button>
+                    </div>
+
+                    <div class="tasks-list">
+                        <div class="task-item" *ngFor="let task of taskData()">
+                            <div class="task-info">
+                                <h4 class="task-title">{{ task.title }}</h4>
+                                <p class="task-description">{{ task.description }}</p>
+                            </div>
+                            <div class="task-meta">
+                                <span class="status-badge" [class]="task.status">
+                                    {{ task.status }}
+                                </span>
+                                <span class="assignee-avatar">
+                                    {{ task.assignee | slice:0:2 }}
                                 </span>
                             </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Status</span>
-                                <span class="budget-status" [class]="getBudgetStatus()">
-                                    {{ getBudgetStatusText() }}
-                                </span>
-                            </div>
+                        </div>
+                        <div *ngIf="taskData().length === 0" class="empty-state">
+                            No tasks found for this event.
                         </div>
                     </div>
                 </div>
             </div>
+        </mat-tab>
 
-            <!-- Right Column -->
-            <div class="side-column">
-                <div class="section-card">
-                    <h3 class="card-title">Quick Stats</h3>
-                    <div class="stats-list" *ngIf="stats()">
-                        <div class="stat-row">
-                            <span class="label">Total Guests</span>
-                            <span class="value">{{ stats()?.totalGuests }}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="label">Confirmed</span>
-                            <span class="value success">{{ stats()?.confirmed }}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="label">Pending</span>
-                            <span class="value warning">{{ stats()?.pending }}</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="label">Declined</span>
-                            <span class="value danger">{{ stats()?.declined }}</span>
-                        </div>
-                    </div>
+        <mat-tab label="Budget">
+            <ng-template matTabContent>
+                <div class="tab-content">
+                    <app-budget-tracker [eventId]="eventId()!"></app-budget-tracker>
                 </div>
-
-                <div class="section-card">
-                    <h3 class="card-title">Timeline</h3>
-                    <div class="timeline">
-                        <div class="timeline-item" *ngFor="let item of timeline()">
-                            <div class="time">{{ item.time }}</div>
-                            <div class="content">
-                                <h4>{{ item.title }}</h4>
-                                <p>{{ item.location }}</p>
-                            </div>
-                        </div>
-                        <div *ngIf="timeline().length === 0" class="empty-state">No timeline available.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="tab-content" *ngIf="activeTab() === 'guests'">
-        <div class="section-card">
-            <div class="card-header-with-actions">
-                <h3 class="card-title">Guest List</h3>
-                <div class="header-actions">
-                    <button type="button" class="btn-action btn-link-guest" (click)="openLinkGuestModal()">Link Existing
-                        Guest</button>
-                    <button class="btn-action btn-export">Export CSV</button>
-                </div>
-            </div>
-            <app-data-table [data]="guestData()" [columns]="guestColumns" [config]="guestTableConfig"
-                [actions]="guestActions" [pageSize]="5" (action)="handleGuestAction($event)">
-            </app-data-table>
-        </div>
-    </div>
-
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
 
     <!-- Link Guest Modal -->
     <div class="modal-overlay" *ngIf="isLinkGuestModalOpen()" (click)="closeLinkGuestModal()">
@@ -161,40 +211,5 @@
                     [disabled]="selectedGuestIds().size === 0">Link Selected</button>
             </div>
         </div>
-    </div>
-
-    <div class="tab-content" *ngIf="activeTab() === 'tasks'">
-        <div class="section-card">
-            <div class="card-header"
-                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h3 class="card-title" style="margin: 0;">Event Tasks</h3>
-                <button class="btn-primary" routerLink="/tasks" style="padding: 8px 16px; font-size: 14px;">Manage
-                    Tasks</button>
-            </div>
-
-            <div class="tasks-list">
-                <div class="task-item" *ngFor="let task of taskData()">
-                    <div class="task-info">
-                        <h4 class="task-title">{{ task.title }}</h4>
-                        <p class="task-description">{{ task.description }}</p>
-                    </div>
-                    <div class="task-meta">
-                        <span class="status-badge" [class]="task.status">
-                            {{ task.status }}
-                        </span>
-                        <span class="assignee-avatar">
-                            {{ task.assignee | slice:0:2 }}
-                        </span>
-                    </div>
-                </div>
-                <div *ngIf="taskData().length === 0" class="empty-state">
-                    No tasks found for this event.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="tab-content" *ngIf="activeTab() === 'budget'">
-        <app-budget-tracker [eventId]="eventId()!"></app-budget-tracker>
     </div>
 </div>

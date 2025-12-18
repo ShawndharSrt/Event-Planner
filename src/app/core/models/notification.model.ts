@@ -9,4 +9,5 @@ export interface Notification {
     read: boolean;
     createdAt: string;
     closedAt?: string;
+    status: string;
 }
