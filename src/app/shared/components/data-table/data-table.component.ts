@@ -44,8 +44,8 @@ export class DataTableComponent implements OnChanges {
 
     selectedRows = signal<Set<any>>(new Set());
     isAllSelected = computed(() => {
-        const pageData = this.pagedData();
-        return pageData.length > 0 && pageData.every(row => this.selectedRows().has(row));
+        const allData = this.processedData();
+        return allData.length > 0 && allData.every(row => this.selectedRows().has(row));
     });
 
     currentPage = signal(1);
@@ -126,12 +126,12 @@ export class DataTableComponent implements OnChanges {
         if (!this.selectable) return;
 
         const current = new Set(this.selectedRows());
-        const pageData = this.pagedData();
+        const allData = this.processedData();
 
         if (this.isAllSelected()) {
-            pageData.forEach(row => current.delete(row));
+            allData.forEach(row => current.delete(row));
         } else {
-            pageData.forEach(row => current.add(row));
+            allData.forEach(row => current.add(row));
         }
 
         this.selectedRows.set(current);

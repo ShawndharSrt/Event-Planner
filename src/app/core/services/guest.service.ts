@@ -108,4 +108,37 @@ export class GuestService {
     getGuestById(id: string): Observable<ApiResponse<EventGuest>> {
         return this.api.get<ApiResponse<EventGuest>>(`/guests/${id}`);
     }
+
+    updateGuestsStatus(ids: string[], status: string): Observable<any> {
+        const batchSize = 5;
+        return new Observable(observer => {
+            const chunks = [];
+            for (let i = 0; i < ids.length; i += batchSize) {
+                chunks.push(ids.slice(i, i + batchSize));
+            }
+            this.processChunks(chunks, status, observer);
+        });
+    }
+
+    private processChunks(chunks: string[][], status: string, observer: any) {
+        if (chunks.length === 0) {
+            observer.next({ success: true });
+            observer.complete();
+            return;
+        }
+
+        const chunk = chunks.shift();
+        if (!chunk) return;
+
+        const tasks = chunk.map(id => this.updateGuest(id, { status: status as any }));
+
+        forkJoin(tasks).subscribe({
+            next: () => {
+                this.processChunks(chunks, status, observer);
+            },
+            error: (err) => {
+                observer.error(err);
+            }
+        });
+    }
 }

@@ -128,7 +128,7 @@
             </ng-template>
             <div class="tab-content">
                 <div class="section-card">
-                    <div class="card-header-with-actions">
+                    <div class="card-header-with-actions" *ngIf="selectedTableGuests().length === 0">
                         <h3 class="card-title">Guest List</h3>
                         <div class="header-actions">
                             <button type="button" class="btn-action btn-link-guest" (click)="openLinkGuestModal()">Link
@@ -137,8 +137,31 @@
                             <button class="btn-action btn-export">Export CSV</button>
                         </div>
                     </div>
+
+                    <div class="card-header-with-actions bulk-header" *ngIf="selectedTableGuests().length > 0">
+                        <div class="selection-count">
+                            <span class="count-badge">{{ selectedTableGuests().length }}</span>
+                            <span class="label">Guests Selected</span>
+                        </div>
+                        <div class="header-actions">
+                            <button class="btn-action btn-confirm" (click)="bulkUpdateStatus('confirmed')"
+                                [disabled]="activeBulkOperation()">
+                                <span class="material-icons">check_circle</span> Confirm
+                            </button>
+                            <button class="btn-action btn-pending" (click)="bulkUpdateStatus('pending')"
+                                [disabled]="activeBulkOperation()">
+                                <span class="material-icons">schedule</span> Pending
+                            </button>
+                            <button class="btn-action btn-decline" (click)="bulkUpdateStatus('declined')"
+                                [disabled]="activeBulkOperation()">
+                                <span class="material-icons">cancel</span> Decline
+                            </button>
+                        </div>
+                    </div>
+
                     <app-data-table [data]="guestData()" [columns]="guestColumns" [config]="guestTableConfig"
-                        [actions]="guestActions" [pageSize]="5" (action)="handleGuestAction($event)">
+                        [actions]="guestActions" [pageSize]="5" (action)="handleGuestAction($event)" [selectable]="true"
+                        (selectionChange)="onGuestSelectionChange($event)">
                     </app-data-table>
                 </div>
             </div>

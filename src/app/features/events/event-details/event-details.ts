@@ -323,6 +323,39 @@ export class EventDetailsComponent {
     }
   }
 
+  selectedTableGuests = signal<any[]>([]);
+
+  onGuestSelectionChange(selected: any[]) {
+    this.selectedTableGuests.set(selected);
+  }
+
+  activeBulkOperation = signal(false);
+
+  bulkUpdateStatus(status: 'confirmed' | 'pending' | 'declined') {
+    const guests = this.selectedTableGuests();
+    if (guests.length === 0) return;
+
+    const ids = guests.map(g => g.guestId || g._id).filter(id => !!id);
+    const count = ids.length;
+
+    if (count === 0) return;
+
+    this.activeBulkOperation.set(true);
+    this.guestService.updateGuestsStatus(ids, status).subscribe({
+      next: () => {
+        this.snackbar.show(`Successfully updated ${count} guests to ${status}`, 'success');
+        this.refreshGuests$.next();
+        this.selectedTableGuests.set([]); // Clear local tracking
+        this.activeBulkOperation.set(false);
+      },
+      error: (err) => {
+        console.error('Bulk update failed', err);
+        this.snackbar.show('Failed to update guests', 'error');
+        this.activeBulkOperation.set(false);
+      }
+    });
+  }
+
   deleteGuestFromEvent(guest: any) {
     const guestName = guest.name || 'this guest';
     this.confirmationService.confirm(

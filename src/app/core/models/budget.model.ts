@@ -3,6 +3,7 @@ export interface Budget {
     eventId: string;
     totalBudget: number;
     currency: string;
+    categories?: Partial<BudgetCategory>[];
     createdAt?: string;
     updatedAt?: string;
 }

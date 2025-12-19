@@ -635,11 +635,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
             });
         } else {
             // Create new budget
-            this.budgetService.createBudget({
-                eventId: this.eventId,
-                totalBudget: amount,
-                currency: 'USD'
-            }).subscribe({
+            this.budgetService.updateBudget(this.eventId, { totalBudget: amount }).subscribe({
                 next: (response) => {
                     if (response.data) {
                         this.snackbarService.show('Budget created successfully', 'success');

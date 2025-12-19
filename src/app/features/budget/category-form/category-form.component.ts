@@ -15,6 +15,7 @@ import { BudgetCategory } from '../../../core/models/budget.model';
 })
 export class CategoryFormComponent extends BaseFormComponent implements OnChanges {
     @Input() budgetId!: string;
+    @Input() eventId!: string;
     @Input() category: BudgetCategory | null = null;
     @Output() saved = new EventEmitter<void>();
     @Output() cancelled = new EventEmitter<void>();
@@ -105,8 +106,14 @@ export class CategoryFormComponent extends BaseFormComponent implements OnChange
                 }
             });
         } else {
-            // Create new category
-            this.budgetService.createCategory(this.budgetId, categoryData).subscribe({
+            // Create new category or budget
+            const budgetPayload = {
+                eventId: this.eventId,
+                currency: 'USD',
+                categories: [categoryData]
+            };
+
+            this.budgetService.updateBudget(this.eventId, budgetPayload).subscribe({
                 next: () => {
                     this.snackbarService.show('Category created successfully', 'success');
                     this.isLoading.set(false);

@@ -817,3 +817,93 @@
 ::ng-deep .mat-mdc-tab {
     flex-grow: 0 !important;
 }
+
+/* Bulk Actions Toolbar */
+.bulk-header {
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+    margin-bottom: 20px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px;
+
+    .selection-count {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        .count-badge {
+            background: #1976d2;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+
+        .label {
+            font-weight: 500;
+            color: #1565c0;
+            font-size: 1.1em;
+        }
+    }
+
+    .header-actions {
+        gap: 12px;
+        display: flex;
+    }
+}
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
+
+    .material-icons {
+        font-size: 18px;
+    }
+
+    &.btn-confirm {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+        border-color: #a5d6a7;
+
+        &:hover {
+            background-color: #c8e6c9;
+        }
+    }
+
+    &.btn-pending {
+        background-color: #fff8e1;
+        color: #f57c00;
+        border-color: #ffcc80;
+
+        &:hover {
+            background-color: #ffecb3;
+        }
+    }
+
+    &.btn-decline {
+        background-color: #ffebee;
+        color: #c62828;
+        border-color: #ef9a9a;
+
+        &:hover {
+            background-color: #ffcdd2;
+        }
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        filter: grayscale(0.5);
+    }
+}

@@ -244,7 +244,7 @@
     </div>
 
     <!-- Category Form Modal -->
-    <app-category-form *ngIf="showCategoryForm()" [budgetId]="budget()._id" [category]="editingCategory()"
-        (saved)="handleCategorySaved()" (cancelled)="closeCategoryForm()">
+    <app-category-form *ngIf="showCategoryForm()" [budgetId]="budget()._id" [eventId]="eventId"
+        [category]="editingCategory()" (saved)="handleCategorySaved()" (cancelled)="closeCategoryForm()">
     </app-category-form>
 </div>
