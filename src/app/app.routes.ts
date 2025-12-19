@@ -12,6 +12,7 @@ import { LoginComponent } from './features/auth/login/login';
 import { ProfileComponent } from './features/profile/profile';
 import { SettingsComponent } from './features/settings/settings';
 import { NotificationListComponent } from './features/notifications/notification-list/notification-list.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
     {
@@ -25,6 +26,7 @@ export const routes: Routes = [
     {
         path: '',
         component: MainLayoutComponent,
+        canActivate: [authGuard],
         children: [
             { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardComponent },

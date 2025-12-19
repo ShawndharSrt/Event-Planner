@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { AbstractControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
+import { finalize } from 'rxjs/operators';
 import { BaseFormComponent } from '../../../shared/components/base-form/base-form.component';
 
 @Component({
@@ -14,14 +16,15 @@ import { BaseFormComponent } from '../../../shared/components/base-form/base-for
 })
 export class SignUpComponent extends BaseFormComponent {
     private authService = inject(AuthService);
+    private snackbarService = inject(SnackbarService);
     private router = inject(Router);
 
     isLoading = false;
-    errorMessage = '';
 
     getFormConfig(): Record<string, any> {
         return {
-            name: ['', [Validators.required]],
+            firstName: ['', [Validators.required]],
+            lastName: ['', [Validators.required]],
             email: ['', [Validators.required, Validators.email]],
             password: ['', [Validators.required, Validators.minLength(6)]],
             confirmPassword: ['', [Validators.required]]
@@ -41,24 +44,23 @@ export class SignUpComponent extends BaseFormComponent {
     onSubmit(): void {
         if (this.isFormValid()) {
             this.isLoading = true;
-            this.errorMessage = '';
 
-            const { name, email, password } = this.form.value;
+            const { firstName, lastName, email, password } = this.form.value;
 
-            this.authService.register({ name, email, password } as any).subscribe({
-                next: (response) => {
-                    this.isLoading = false;
-                    if (response.success && response.data) {
-                        this.router.navigateByUrl('/dashboard');
-                    } else {
-                        this.errorMessage = response.message || 'Registration failed. Please try again.';
+            this.authService.register({ firstName, lastName, email, password } as any)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe({
+                    next: (response) => {
+                        if (response.success && response.data) {
+                            this.router.navigateByUrl('/dashboard');
+                        } else {
+                            this.snackbarService.show(response.message || 'Registration failed. Please try again.', 'error');
+                        }
+                    },
+                    error: () => {
+                        this.snackbarService.show('An error occurred. Please try again.', 'error');
                     }
-                },
-                error: () => {
-                    this.isLoading = false;
-                    this.errorMessage = 'An error occurred. Please try again.';
-                }
-            });
+                });
         } else {
             this.markAllAsTouched();
         }

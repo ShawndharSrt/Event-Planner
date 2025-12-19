@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { SnackbarService } from '../../../shared/services/snackbar.service';
+import { finalize } from 'rxjs/operators';
 import { BaseFormComponent } from '../../../shared/components/base-form/base-form.component';
 
 @Component({
@@ -14,11 +16,14 @@ import { BaseFormComponent } from '../../../shared/components/base-form/base-for
 })
 export class LoginComponent extends BaseFormComponent {
     private authService = inject(AuthService);
+    private snackbarService = inject(SnackbarService);
     private router = inject(Router);
 
     isLoading = false;
-    errorMessage = '';
 
+    /**
+     * Define the form controls and validators for the login form.
+     */
     getFormConfig(): Record<string, any> {
         return {
             email: ['', [Validators.required, Validators.email]],
@@ -26,28 +31,34 @@ export class LoginComponent extends BaseFormComponent {
         };
     }
 
+    /**
+     * Handle form submission.
+     * Calls the AuthService to authenticate the user and redirects to dashboard on success.
+     */
     onSubmit(): void {
         if (this.isFormValid()) {
             this.isLoading = true;
-            this.errorMessage = '';
 
             const { email, password } = this.form.value;
 
-            this.authService.login(email, password).subscribe({
-                next: (response) => {
-                    this.isLoading = false;
-                    if (response.success && response.data) {
-                        this.router.navigate(['/dashboard']);
-                    } else {
-                        this.errorMessage = response.message || 'Invalid email or password';
+            // Call login API
+            this.authService.login(email, password)
+                .pipe(finalize(() => this.isLoading = false))
+                .subscribe({
+                    next: (response) => {
+                        // Check if response contains data (user/token)
+                        if (response.success && response.data) {
+                            this.router.navigate(['/dashboard']);
+                        } else {
+                            this.snackbarService.show('Invalid email or password', 'error');
+                        }
+                    },
+                    error: () => {
+                        this.snackbarService.show('Invalid email or password', 'error');
                     }
-                },
-                error: () => {
-                    this.isLoading = false;
-                    this.errorMessage = 'An error occurred. Please try again.';
-                }
-            });
+                });
         } else {
+            // Mark all fields as touched to show validation errors
             this.markAllAsTouched();
         }
     }

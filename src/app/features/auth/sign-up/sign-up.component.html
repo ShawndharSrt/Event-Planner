@@ -19,15 +19,28 @@
             </div>
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <div class="input-wrapper">
-                        <span class="material-icons icon">badge</span>
-                        <input type="text" id="name" formControlName="name" placeholder="Enter your full name"
-                            [class.error]="form.get('name')?.invalid && form.get('name')?.touched">
+                <div class="form-row" style="display: flex; gap: 1rem;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="firstName">First Name</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons icon">person</span>
+                            <input type="text" id="firstName" formControlName="firstName" placeholder="First Name"
+                                [class.error]="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+                        </div>
+                        <div class="error-msg" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
+                            First Name is required
+                        </div>
                     </div>
-                    <div class="error-msg" *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
-                        Full Name is required
+                    <div class="form-group" style="flex: 1;">
+                        <label for="lastName">Last Name</label>
+                        <div class="input-wrapper">
+                            <span class="material-icons icon">person</span>
+                            <input type="text" id="lastName" formControlName="lastName" placeholder="Last Name"
+                                [class.error]="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+                        </div>
+                        <div class="error-msg" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
+                            Last Name is required
+                        </div>
                     </div>
                 </div>
 
@@ -72,10 +85,7 @@
                     </div>
                 </div>
 
-                <div class="alert error" *ngIf="errorMessage">
-                    <span class="material-icons">error_outline</span>
-                    {{ errorMessage }}
-                </div>
+
 
                 <button type="submit" class="btn-submit" [disabled]="form.invalid || isLoading">
                     <span *ngIf="!isLoading">Sign Up</span>

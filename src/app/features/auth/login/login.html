@@ -49,10 +49,7 @@
                     <a routerLink="/forgot-password" class="forgot-password">Forgot password?</a>
                 </div>
 
-                <div class="alert error" *ngIf="errorMessage">
-                    <span class="material-icons">error_outline</span>
-                    {{ errorMessage }}
-                </div>
+
 
                 <button type="submit" class="btn-submit" [disabled]="form.invalid || isLoading">
                     <span *ngIf="!isLoading">Sign In</span>

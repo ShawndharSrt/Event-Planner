@@ -30,11 +30,13 @@
         </a>
     </nav>
 
+    @if (authService.currentUser(); as user) {
     <div class="user-profile" routerLink="/profile" (click)="closeSidebar()">
-        <div class="avatar">JD</div>
+        <div class="avatar">{{ userInitials }}</div>
         <div class="user-info">
-            <span class="name">John Doe</span>
-            <span class="role">Event Manager</span>
+            <span class="name">{{ userName }}</span>
+            <span class="role">{{ user.role }}</span>
         </div>
     </div>
+    }
 </aside>
