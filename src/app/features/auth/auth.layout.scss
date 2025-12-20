@@ -1,4 +1,4 @@
-@import 'auth.theme.scss';
+@use 'auth.theme' as theme;
 
 // Common Auth Layout shared between Login and Signup
 
@@ -28,7 +28,7 @@
         }
 
         input {
-            @include premium-input;
+            @include theme.premium-input;
             padding-left: 44px; // Space for icon
 
             &:focus+.input-icon {
@@ -137,7 +137,7 @@
 
 // Common Card Styles
 .login-card {
-    @include glass-card;
+    @include theme.glass-card;
     width: 100%;
     max-width: 420px;
     padding: 2.5rem;
@@ -190,7 +190,7 @@
     }
 
     .btn-primary {
-        @include premium-button;
+        @include theme.premium-button;
         margin-top: 1rem;
         width: 100%;
     }
