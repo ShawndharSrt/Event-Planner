@@ -1,0 +1,240 @@
+@import 'auth.theme.scss';
+
+// Common Auth Layout shared between Login and Signup
+
+
+// Mixins (Must be defined before use)
+@mixin form-group-base {
+    label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: var(--auth-text-color);
+        font-size: 0.9rem;
+    }
+
+    .input-wrapper {
+        position: relative;
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+            z-index: 1;
+        }
+
+        input {
+            @include premium-input;
+            padding-left: 44px; // Space for icon
+
+            &:focus+.input-icon {
+                color: var(--auth-primary);
+            }
+
+            &.error {
+                border-color: #ff6b6b !important;
+                background: #fff5f5;
+            }
+        }
+    }
+
+    .error-msg {
+        color: #e74c3c;
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+        margin-left: 0.2rem;
+        font-weight: 500;
+    }
+}
+
+.auth-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--auth-bg-color);
+}
+
+.auth-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: var(--background-url, url('/assets/images/premium-bg.png'));
+    background-size: cover;
+    background-position: center;
+    z-index: 0;
+
+    // Stronger overlay for better text contrast
+    &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        // Gradient from dark to light to help text pop
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 100%);
+    }
+}
+
+.auth-card-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    gap: 2rem;
+
+    @media (min-width: 900px) {
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+        padding-top: 5vh;
+    }
+}
+
+.auth-welcome {
+    text-align: center;
+    color: white;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5); // Strong text shadow for readability
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+    margin-bottom: 1rem;
+
+    @media (min-width: 900px) {
+        text-align: left;
+        max-width: 450px;
+        margin-top: 10vh;
+    }
+
+    h1 {
+        font-family: var(--font-family-heading);
+        font-size: 3.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+    }
+
+    p {
+        font-family: var(--font-family-body);
+        font-size: 1.3rem;
+        opacity: 0.95;
+        font-weight: 400;
+    }
+}
+
+// Common Card Styles
+.login-card {
+    @include glass-card;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: slideUpFade 0.8s ease-out 0.3s forwards;
+
+    .card-header {
+        text-align: center;
+        margin-bottom: 2rem;
+
+        h2 {
+            font-family: var(--font-family-heading);
+            color: var(--auth-text-color);
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: var(--auth-text-muted);
+            font-size: 0.95rem;
+        }
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+    }
+
+    .form-group {
+        @include form-group-base;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+
+        .forgot-password {
+            color: var(--auth-primary-dark);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+
+            &:hover {
+                color: var(--auth-accent);
+            }
+        }
+    }
+
+    .btn-primary {
+        @include premium-button;
+        margin-top: 1rem;
+        width: 100%;
+    }
+
+    .card-footer {
+        margin-top: 1.5rem;
+        text-align: center;
+        font-size: 0.9rem;
+        color: var(--auth-text-muted);
+
+        a {
+            color: var(--auth-primary-dark);
+            text-decoration: none;
+            font-weight: 600;
+            margin-left: 5px;
+
+            &:hover {
+                color: var(--auth-accent);
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+
+// Animations
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

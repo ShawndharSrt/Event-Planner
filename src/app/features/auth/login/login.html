@@ -1,29 +1,30 @@
-<div class="auth-container">
-    <div class="auth-content">
-        <div class="content-overlay"></div>
-        <div class="content-body">
-            <h1>Welcome to Event Planner</h1>
-            <p>Plan, organize, and manage your events with ease. Join our community of professional event planners
-                today.</p>
-        </div>
-    </div>
+<div class="auth-wrapper">
+    <!-- Background Image -->
+    <div class="auth-background"></div>
 
-    <div class="auth-form-container">
-        <div class="login-card">
-            <div class="brand-header">
-                <div class="logo">
-                    <span class="material-icons">event</span>
-                </div>
-                <h2>Sign In</h2>
-                <p>Welcome back! Please enter your details.</p>
+    <!-- Main Content -->
+    <div class="auth-card-container">
+
+        <!-- Welcome Text (Left Side / Top on Mobile) -->
+        <div class="auth-welcome">
+            <h1>Event Planner</h1>
+            <p>Design your perfect moments.</p>
+        </div>
+
+        <!-- Login Card -->
+        <div class="login-card glass-panel">
+            <div class="card-header">
+                <h2>Welcome Back</h2>
+                <p>Please enter your details to sign in.</p>
             </div>
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <!-- Email -->
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email Address</label>
                     <div class="input-wrapper">
-                        <span class="material-icons icon">email</span>
-                        <input type="email" id="email" formControlName="email" placeholder="Enter your email"
+                        <span class="material-icons input-icon">email</span>
+                        <input type="email" id="email" formControlName="email" placeholder="example@domain.com"
                             [class.error]="form.get('email')?.invalid && form.get('email')?.touched">
                     </div>
                     <div class="error-msg" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
@@ -32,12 +33,12 @@
                     </div>
                 </div>
 
+                <!-- Password -->
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-wrapper">
-                        <span class="material-icons icon">lock</span>
-                        <input type="password" id="password" formControlName="password"
-                            placeholder="Enter your password"
+                        <span class="material-icons input-icon">lock</span>
+                        <input type="password" id="password" formControlName="password" placeholder="••••••••"
                             [class.error]="form.get('password')?.invalid && form.get('password')?.touched">
                     </div>
                     <div class="error-msg" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
@@ -46,22 +47,17 @@
                 </div>
 
                 <div class="form-actions">
-                    <a routerLink="/forgot-password" class="forgot-password">Forgot password?</a>
+                    <a routerLink="/forgot-password" class="forgot-password">Forgot Password?</a>
                 </div>
 
-
-
-                <button type="submit" class="btn-submit" [disabled]="form.invalid || isLoading">
+                <button type="submit" class="btn-primary" [disabled]="form.invalid || isLoading">
                     <span *ngIf="!isLoading">Sign In</span>
                     <span *ngIf="isLoading" class="spinner"></span>
                 </button>
             </form>
 
-            <div class="login-footer">
-                <p>Don't have an account? <a routerLink="/sign-up">Sign up</a></p>
-                <div class="demo-credentials">
-                    <small>Demo Credentials: admin / password</small>
-                </div>
+            <div class="card-footer">
+                <p>New here? <a routerLink="/sign-up">Create an account</a></p>
             </div>
         </div>
     </div>

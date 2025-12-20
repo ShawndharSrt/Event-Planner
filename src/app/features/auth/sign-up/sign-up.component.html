@@ -1,81 +1,83 @@
-<div class="auth-container">
-    <div class="auth-content">
-        <div class="content-overlay"></div>
-        <div class="content-body">
-            <h1>Join Event Planner</h1>
-            <p>Create an account to start planning your dream events. Access powerful tools and manage everything in one
-                place.</p>
-        </div>
-    </div>
+<div class="auth-wrapper">
+    <!-- Background Image -->
+    <div class="auth-background"></div>
 
-    <div class="auth-form-container">
-        <div class="login-card">
-            <div class="brand-header">
-                <div class="logo">
-                    <span class="material-icons">event</span>
-                </div>
+    <!-- Main Content -->
+    <div class="auth-card-container">
+
+        <!-- Welcome Text (Left Side / Top on Mobile) -->
+        <div class="auth-welcome">
+            <h1>Join Event Planner</h1>
+            <p>Begin your journey to unforgettable events.</p>
+        </div>
+
+        <!-- Sign-up Card -->
+        <div class="login-card glass-panel signup-card">
+            <div class="card-header">
                 <h2>Create Account</h2>
-                <p>Sign up to start planning your events</p>
+                <p>Fill in your details to get started.</p>
             </div>
 
             <form [formGroup]="form" (ngSubmit)="onSubmit()">
-                <div class="form-row" style="display: flex; gap: 1rem;">
-                    <div class="form-group" style="flex: 1;">
+                <!-- Name Row -->
+                <div class="form-row">
+                    <div class="form-group half-width">
                         <label for="firstName">First Name</label>
                         <div class="input-wrapper">
-                            <span class="material-icons icon">person</span>
+                            <span class="material-icons input-icon">person</span>
                             <input type="text" id="firstName" formControlName="firstName" placeholder="First Name"
                                 [class.error]="form.get('firstName')?.invalid && form.get('firstName')?.touched">
                         </div>
                         <div class="error-msg" *ngIf="form.get('firstName')?.invalid && form.get('firstName')?.touched">
-                            First Name is required
+                            Required
                         </div>
                     </div>
-                    <div class="form-group" style="flex: 1;">
+                    <div class="form-group half-width">
                         <label for="lastName">Last Name</label>
                         <div class="input-wrapper">
-                            <span class="material-icons icon">person</span>
+                            <span class="material-icons input-icon">person</span>
                             <input type="text" id="lastName" formControlName="lastName" placeholder="Last Name"
                                 [class.error]="form.get('lastName')?.invalid && form.get('lastName')?.touched">
                         </div>
                         <div class="error-msg" *ngIf="form.get('lastName')?.invalid && form.get('lastName')?.touched">
-                            Last Name is required
+                            Required
                         </div>
                     </div>
                 </div>
 
-
+                <!-- Email -->
                 <div class="form-group">
-                    <label for="email">Email</label>
+                    <label for="email">Email Address</label>
                     <div class="input-wrapper">
-                        <span class="material-icons icon">email</span>
-                        <input type="email" id="email" formControlName="email" placeholder="Enter your email"
+                        <span class="material-icons input-icon">email</span>
+                        <input type="email" id="email" formControlName="email" placeholder="example@domain.com"
                             [class.error]="form.get('email')?.invalid && form.get('email')?.touched">
                     </div>
                     <div class="error-msg" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
                         <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
-                        <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
+                        <span *ngIf="form.get('email')?.errors?.['email']">Invalid email address</span>
                     </div>
                 </div>
 
+                <!-- Password -->
                 <div class="form-group">
                     <label for="password">Password</label>
                     <div class="input-wrapper">
-                        <span class="material-icons icon">lock</span>
+                        <span class="material-icons input-icon">lock</span>
                         <input type="password" id="password" formControlName="password" placeholder="Create a password"
                             [class.error]="form.get('password')?.invalid && form.get('password')?.touched">
                     </div>
                     <div class="error-msg" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
                         <span *ngIf="form.get('password')?.errors?.['required']">Password is required</span>
-                        <span *ngIf="form.get('password')?.errors?.['minlength']">Password must be at least 6
-                            characters</span>
+                        <span *ngIf="form.get('password')?.errors?.['minlength']">Min 6 chars</span>
                     </div>
                 </div>
 
+                <!-- Confirm Password -->
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
                     <div class="input-wrapper">
-                        <span class="material-icons icon">lock_clock</span>
+                        <span class="material-icons input-icon">lock_clock</span>
                         <input type="password" id="confirmPassword" formControlName="confirmPassword"
                             placeholder="Confirm your password"
                             [class.error]="form.hasError('mismatch') && form.get('confirmPassword')?.touched">
@@ -85,15 +87,13 @@
                     </div>
                 </div>
 
-
-
-                <button type="submit" class="btn-submit" [disabled]="form.invalid || isLoading">
+                <button type="submit" class="btn-primary" [disabled]="form.invalid || isLoading">
                     <span *ngIf="!isLoading">Sign Up</span>
                     <span *ngIf="isLoading" class="spinner"></span>
                 </button>
             </form>
 
-            <div class="login-footer">
+            <div class="card-footer">
                 <p>Already have an account? <a routerLink="/login">Sign in</a></p>
             </div>
         </div>
