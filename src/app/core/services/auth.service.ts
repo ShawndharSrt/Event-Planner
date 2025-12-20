@@ -119,23 +119,45 @@ export class AuthService {
     }
 
     private autoLogout(expirationDuration: number): void {
+        console.log(`Auto-logout scheduled in ${expirationDuration} ms`);
         if (this.tokenTimer) {
             this.tokenTimer.unsubscribe();
         }
 
         this.tokenTimer = timer(expirationDuration).subscribe(() => {
+            console.log('Auto-logout timer triggered. Logging out...');
             this.logout();
         });
     }
 
     private getTokenExpirationDate(token: string): Date | null {
         try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            const payload = JSON.parse(jsonPayload);
+
             if (payload && payload.exp) {
-                return new Date(payload.exp * 1000);
+                let exp = payload.exp;
+                // Check if exp is in milliseconds (common backend error)
+                // If exp is > 100,000,000,000 (11 digits), it's likely ms (current timestamps are ~1.7 trillion in ms, ~1.7 billion in s)
+                if (exp > 100000000000) {
+                    console.warn('WARNING: JWT "exp" claim appears to be in milliseconds. It should be in seconds. Treating as ms.');
+                    exp = Math.floor(exp / 1000);
+                }
+
+                const expiry = new Date(exp * 1000);
+                const now = new Date();
+                console.log('Token Expiry:', expiry, 'Current Time:', now);
+                console.log('Time until expiry:', (expiry.getTime() - now.getTime()) / 1000, 'seconds');
+                return expiry;
             }
             return null;
-        } catch {
+        } catch (error) {
+            console.error('Error decoding token:', error);
             return null;
         }
     }

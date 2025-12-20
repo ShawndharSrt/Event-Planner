@@ -1,4 +1,5 @@
 export interface Event {
+    _id?: string;
     id?: string;
     title: string;
     type: 'conference' | 'wedding' | 'party' | 'meeting' | 'other';

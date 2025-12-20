@@ -5,6 +5,16 @@
             <p class="page-subtitle">View upcoming events and deadlines</p>
         </div>
         <div class="actions">
+            <mat-form-field appearance="outline" class="event-select">
+                <mat-select [ngModel]="selectedEventId()" (selectionChange)="selectedEventId.set($event.value)"
+                    placeholder="All Events">
+                    <mat-option [value]="null">All Events</mat-option>
+                    <mat-option *ngFor="let option of dropdownOptions()" [value]="option.id">
+                        {{ option.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
             <div class="view-toggle">
                 <button class="toggle-btn" [class.active]="currentView() === 'month'"
                     (click)="setView('month')">Month</button>
@@ -22,10 +32,10 @@
 
     <div class="calendar-container">
         <div class="calendar-header">
-            <button class="nav-btn" (click)="prevMonth()">←</button>
+            <button class="nav-btn" (click)="prev()">←</button>
             <h2 class="current-month" (click)="today()" style="cursor: pointer" title="Go to Today">{{
                 currentMonthName() }}</h2>
-            <button class="nav-btn" (click)="nextMonth()">→</button>
+            <button class="nav-btn" (click)="next()">→</button>
         </div>
 
         <div class="calendar-grid">
@@ -40,12 +50,14 @@
 
             <!-- Dynamic Calendar Days -->
             <div class="day" *ngFor="let day of calendarDays()" [class.prev-month]="!day.isCurrentMonth"
-                [class.today]="day.isToday" [class.has-event]="day.events.length > 0">
+                [class.today]="day.isToday" [class.has-event]="day.items.length > 0">
 
                 <span class="date">{{ day.date.getDate() }}</span>
 
-                <div class="event-indicator" *ngFor="let event of day.events" [ngClass]="event.type">
-                    {{ event.title }}
+                <div class="event-indicator" *ngFor="let item of day.items" [class.task-item]="item.type === 'task'"
+                    [class.event-item]="item.type === 'event'"
+                    [style.background-color]="item.color || 'var(--primary-color)'" (click)="onItemClick(item)">
+                    {{ item.title }}
                 </div>
             </div>
         </div>
