@@ -1,0 +1,154 @@
+<div class="home-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-background"></div>
+        <div class="hero-content">
+            <div class="dove-icon">
+                <!-- Simple SVG Dove/Bird placeholder -->
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2L15 8L21 9L17 14L18 20L12 17L6 20L7 14L3 9L9 8L12 2Z" />
+                    <!-- Star/Bird abstraction -->
+                </svg>
+            </div>
+            <h1 class="hero-title">
+                <span class="line">Celebrate Love With</span>
+                <span class="line serif">Castella</span>
+            </h1>
+            <p class="hero-subtitle">Elegant Wedding & Event Planner</p>
+            <div class="hero-cta" style="display: flex; gap: 1rem; justify-content: center;">
+                <a routerLink="/events" class="btn-castella">Plan Your Event</a>
+                <a routerLink="/login" class="btn-castella">Login</a>
+            </div>
+
+            <!-- <div class="scroll-indicator">
+                <span class="material-icons">keyboard_arrow_down</span>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Welcome Section -->
+    <section class="welcome-section">
+        <div class="content-wrapper">
+            <div class="text-content">
+                <span class="overline">Welcome</span>
+                <h2>Creating Unforgettable Moments</h2>
+                <p>
+                    We specialize in crafting bespoke weddings and events that reflect your unique love story.
+                    From intimate gatherings to grand celebrations, our team is dedicated to perfection.
+                </p>
+                <img src="assets/images/wedding-guests-happy.png" alt="Signature Signature" class="signature-img"
+                    style="height: 50px; object-fit: contain; opacity: 0.5;">
+            </div>
+            <div class="image-content">
+                <div class="image-frame">
+                    <img src="assets/images/wedding-guests-happy.png" alt="Wedding Couple">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section (Glassmorphism) -->
+    <section class="services-section">
+        <div class="section-header">
+            <span class="overline">Our Services</span>
+            <h2>What We Offer</h2>
+        </div>
+        <div class="services-grid">
+            <div class="service-card" *ngFor="let service of services">
+                <div class="card-icon">
+                    <span class="material-icons">{{ service.icon }}</span>
+                </div>
+                <h3>{{ service.title }}</h3>
+                <p>{{ service.description }}</p>
+                <a href="javascript:void(0)" class="read-more">Read More</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section (3D Effect) -->
+    <section class="portfolio-section">
+        <div class="section-header">
+            <span class="overline">Our Work</span>
+            <h2>Captured Moments</h2>
+        </div>
+        <div class="portfolio-grid">
+            <div class="portfolio-item-3d" *ngFor="let item of portfolioImages">
+                <div class="portfolio-card">
+                    <div class="card-front">
+                        <img [src]="item.src" [alt]="item.alt">
+                        <div class="overlay">
+                            <h3>{{ item.alt }}</h3>
+                        </div>
+                    </div>
+                    <div class="card-back">
+                        <h3>View Details</h3>
+                        <p>Experience the magic of our meticulously planned events.</p>
+                        <a routerLink="/events" class="btn-outline-small">See More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="section-header">
+            <span class="overline">Testimonials</span>
+            <h2>Words of Love</h2>
+        </div>
+        <div class="testimonials-slider">
+            <div class="testimonial-card" *ngFor="let testimonial of testimonials">
+                <div class="quote-icon">
+                    <span class="material-icons">format_quote</span>
+                </div>
+                <p class="quote-text">"{{ testimonial.quote }}"</p>
+                <div class="client-info">
+                    <img [src]="testimonial.image" [alt]="testimonial.name" class="client-avatar">
+                    <div class="client-details">
+                        <h4>{{ testimonial.name }}</h4>
+                        <span class="client-role">{{ testimonial.role }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote/Parallax Section -->
+    <section class="quote-section">
+        <div class="quote-content">
+            <blockquote>"Love is the master key that opens the gates of happiness."</blockquote>
+            <cite>- Oliver Wendell Holmes</cite>
+        </div>
+    </section>
+
+    <!-- Contact & Social Media Section -->
+    <section class="contact-section">
+        <div class="content-wrapper">
+            <div class="contact-info">
+                <span class="overline">Get in Touch</span>
+                <h2>Let's Plan Your Day</h2>
+                <div class="contact-details">
+                    <div class="detail-item">
+                        <span class="material-icons">location_on</span>
+                        <p>123 Castella Avenue, Beverly Hills, CA 90210</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="material-icons">phone</span>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="detail-item">
+                        <span class="material-icons">email</span>
+                        <p>hello@castella-events.com</p>
+                    </div>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
+                    <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

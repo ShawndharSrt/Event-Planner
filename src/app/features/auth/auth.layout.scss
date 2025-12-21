@@ -9,7 +9,7 @@
         display: block;
         margin-bottom: 0.5rem;
         font-weight: 600;
-        color: var(--auth-text-color);
+        color: var(--auth-text-color) !important;
         font-size: 0.9rem;
     }
 
@@ -21,7 +21,7 @@
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: #888;
+            color: rgba(255, 255, 255, 0.7);
             font-size: 1.2rem;
             transition: color 0.3s ease;
             z-index: 1;
@@ -37,7 +37,8 @@
 
             &.error {
                 border-color: #ff6b6b !important;
-                background: #fff5f5;
+                background: rgba(255, 107, 107, 0.1);
+                box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
             }
         }
     }
@@ -68,7 +69,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: var(--background-url, url('/assets/images/premium-bg.png'));
+    background-image: url('../../../assets/images/wedding-hero.png');
     background-size: cover;
     background-position: center;
     z-index: 0;
@@ -81,8 +82,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        // Gradient from dark to light to help text pop
-        background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.1) 100%);
+        background: rgba(0, 0, 0, 0.5); // Dark overlay to match Home
     }
 }
 
@@ -123,15 +123,20 @@
         font-family: var(--font-family-heading);
         font-size: 3.5rem;
         margin-bottom: 0.5rem;
-        font-weight: 700;
+        font-weight: 400; // Match Home page (Cinzel Regular)
         line-height: 1.1;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: white !important;
     }
 
     p {
         font-family: var(--font-family-body);
         font-size: 1.3rem;
         opacity: 0.95;
-        font-weight: 400;
+        font-weight: 400; // Inter Regular
+        letter-spacing: 1px;
+        color: white !important;
     }
 }
 
@@ -148,17 +153,20 @@
     .card-header {
         text-align: center;
         margin-bottom: 2rem;
+        color: #ffffff !important;
 
         h2 {
             font-family: var(--font-family-heading);
-            color: var(--auth-text-color);
+            color: #ffffff !important;
             font-size: 2rem;
             margin-bottom: 0.5rem;
+            font-weight: 400; // Match Home page
         }
 
         p {
-            color: var(--auth-text-muted);
+            color: rgba(255, 255, 255, 0.9) !important;
             font-size: 0.95rem;
+            font-weight: 300; // Lighter weight for subtitle
         }
     }
 
@@ -199,7 +207,11 @@
         margin-top: 1.5rem;
         text-align: center;
         font-size: 0.9rem;
-        color: var(--auth-text-muted);
+        color: #ffffff !important;
+
+        p {
+            color: #ffffff !important;
+        }
 
         a {
             color: var(--auth-primary-dark);

@@ -1,18 +1,23 @@
 // Colors
 :root {
-    --primary-color: #5D3FD3;
-    --primary-light: #8B78E6;
-    --primary-dark: #3F2B96;
+    // Castella Theme
+    --primary-color: #C5A059; // Gold/Bronze
+    --primary-light: #E0C080;
+    --primary-dark: #9E7D3E;
 
-    --secondary-color: #FF6B6B;
-    --secondary-light: #FF8E8E;
+    --secondary-color: #D4AF37; // Metallic Gold
+    --secondary-light: #F2D272;
 
-    --background-color: #F4F7F6;
+    --background-color: #FDFBF7; // Warm cream white
     --surface-color: #FFFFFF;
 
-    --text-primary: #2C3E50;
-    --text-secondary: #7F8C8D;
-    --text-light: #BDC3C7;
+    --text-primary: #1A1A1A; // Soft black
+    --text-secondary: #666666;
+    --text-light: #A0A0A0;
+
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
 
     --success-color: #2ECC71;
     --warning-color: #F1C40F;

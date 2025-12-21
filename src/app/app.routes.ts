@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layout/main-layout/main-layout';
+import { HomeComponent } from './features/home/home';
 import { DashboardComponent } from './features/dashboard/dashboard';
 import { EventListComponent } from './features/events/event-list/event-list';
 import { EventFormComponent } from './features/events/event-form/event-form';
@@ -44,5 +45,6 @@ export const routes: Routes = [
             { path: 'settings', component: SettingsComponent }
         ]
     },
+    { path: 'home', component: HomeComponent },
     { path: '**', redirectTo: 'dashboard' }
 ];

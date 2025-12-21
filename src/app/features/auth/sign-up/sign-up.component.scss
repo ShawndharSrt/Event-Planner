@@ -18,4 +18,29 @@
     .half-width {
         flex: 1;
     }
+
+    // Ensure white text for card header
+    .card-header {
+        h2 {
+            color: #ffffff !important;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+    }
+
+    // Ensure white text for form labels
+    label {
+        color: #ffffff !important;
+    }
+
+    .form-group label {
+        color: #ffffff !important;
+    }
+
+    // Ensure white text for inputs
+    input {
+        color: #ffffff !important;
+    }
 }

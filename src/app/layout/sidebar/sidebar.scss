@@ -6,11 +6,11 @@
 .sidebar {
     width: 200px;
     height: 100vh;
-    background-color: $surface-color;
-    border-right: 1px solid var(--border-color);
+    background-color: var(--background-color); // Warm cream
+    border-right: 1px solid rgba(0, 0, 0, 0.05); // Very subtle border
     display: flex;
     flex-direction: column;
-    padding: $spacing-md; // Reduced padding
+    padding: $spacing-xl $spacing-lg;
     position: fixed;
     left: 0;
     top: 0;
@@ -19,6 +19,7 @@
 
     @media (max-width: map.get($breakpoints, 'md')) {
         transform: translateX(-100%);
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); // Shadow only when floating on mobile
 
         &.open {
             transform: translateX(0);
@@ -27,33 +28,15 @@
 }
 
 .logo-container {
-    @include flex-center;
-    justify-content: center;
-    margin-bottom: $spacing-xl;
-    padding-bottom: $spacing-md;
-    // cursor: pointer;
-    padding: $spacing-sm;
-    // border-radius: $border-radius-md;
-    // border-bottom: 1px solid var(--border-color);
-    // transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-    // &:hover {
-    //     background-color: var(--background-alt);
-    //     transform: translateY(-2px);
-    //     border-bottom-color: rgba($primary-color, 0.3);
-
-    //     .logo-image {
-    //         transform: scale(1.1) rotate(5deg);
-    //         filter: drop-shadow(0 4px 6px rgba($primary-color, 0.3));
-    //     }
-    // }
+    padding-bottom: $spacing-2xl;
+    text-align: center;
 
     .logo-image {
-        width: 120px;
+        width: 140px;
         height: auto;
         object-fit: contain;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        // Optional: Filter to match gold theme if logo isn't already
+        // filter: sepia(1) hue-rotate(5deg) saturate(1.5); 
     }
 }
 
@@ -68,171 +51,99 @@
     display: flex;
     align-items: center;
     gap: $spacing-md;
-    padding: $spacing-md $spacing-lg;
-    border-radius: $border-radius-lg;
-    color: #6b7280;
-    font-weight: $font-weight-medium;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
+    padding: $spacing-sm $spacing-md; // Smaller vertical padding
+    border-radius: $border-radius-sm; // Minimal radius
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
     text-decoration: none;
-    cursor: pointer;
-
-    // Smooth background gradient on hover
-    &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(135deg, var(--primary-lightest-bg), transparent);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-        z-index: 0;
-    }
-
-    .nav-icon,
-    .label {
-        position: relative;
-        z-index: 1;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+    position: relative; // For pseudo-elements
 
     .nav-icon {
         font-size: 20px;
-        color: #6b7280;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        color: var(--text-light); // Muted icon
+        transition: color 0.3s ease;
     }
 
     &:hover {
-        background-color: var(--primary-lightest-bg);
-        color: $primary-color;
-        transform: translateX(6px) scale(1.02);
-        box-shadow: 0 4px 12px rgba($primary-color, 0.15);
-
-        &::before {
-            opacity: 1;
-        }
+        color: var(--text-primary);
+        background-color: transparent; // No background on hover, keep it clean
 
         .nav-icon {
-            color: $primary-color;
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .label {
-            font-weight: $font-weight-semibold;
+            color: var(--primary-color);
         }
     }
 
     &.active {
-        background: linear-gradient(135deg, var(--primary-light-bg), var(--primary-lightest-bg));
-        color: $primary-color;
-        font-weight: $font-weight-semibold;
-        box-shadow: 0 2px 8px rgba($primary-color, 0.2);
+        color: var(--primary-color); // Gold text
+        font-weight: 500;
+        background-color: transparent;
 
         .nav-icon {
-            color: $primary-color;
-            transform: scale(1.05);
+            color: var(--primary-color);
         }
 
-        &::after {
+        // Simple subtle left border indicator
+        &::before {
             content: '';
             position: absolute;
-            left: 0;
+            left: -16px; // Align with edge or slightly outside
             top: 50%;
             transform: translateY(-50%);
-            height: 70%;
-            width: 4px;
-            background: linear-gradient(180deg, $primary-color, $primary-light);
-            border-radius: 0 $border-radius-sm $border-radius-sm 0;
-            box-shadow: 0 0 8px rgba($primary-color, 0.5);
+            height: 20px;
+            width: 3px;
+            background-color: var(--primary-color);
         }
-
-        &:hover {
-            transform: translateX(6px) scale(1.02);
-            box-shadow: 0 4px 16px rgba($primary-color, 0.25);
-        }
-    }
-
-    .label {
-        font-size: $font-size-base;
     }
 }
 
 .user-profile {
-    @include flex-center;
-    justify-content: flex-start;
+    display: flex;
+    align-items: center;
     gap: $spacing-md;
-    padding: $spacing-md;
+    padding: $spacing-md 0;
     margin-top: $spacing-lg;
-    border-top: 1px solid var(--border-color);
-    border-radius: $border-radius-lg;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
     cursor: pointer;
-    position: relative;
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: $border-radius-lg;
-        background: linear-gradient(135deg, var(--primary-lightest-bg), transparent);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
+    transition: opacity 0.3s ease;
 
     &:hover {
-        background-color: var(--background-alt);
-        transform: translateY(-3px);
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-
-        &::before {
-            opacity: 1;
-        }
-
-        .avatar {
-            transform: scale(1.1);
-            box-shadow: 0 0 0 3px var(--primary-light-bg), 0 4px 12px rgba($primary-color, 0.3);
-        }
-
-        .user-info .name {
-            color: $primary-color;
-        }
+        opacity: 0.8;
     }
 
     .avatar {
-        width: 48px;
-        height: 48px;
-        background-color: var(--primary-light-bg);
-        color: $primary-color;
-        border-radius: $border-radius-full;
-        @include flex-center;
-        font-weight: $font-weight-bold;
-        font-size: $font-size-lg;
-        border: 2px solid var(--surface-color);
-        box-shadow: 0 0 0 2px var(--primary-light-bg);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        position: relative;
-        z-index: 1;
+        width: 40px;
+        height: 40px;
+        background-color: var(--primary-light); // Light gold bg
+        color: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+        font-weight: 500;
+        font-family: 'Cinzel', serif; // Classy initial font
     }
 
     .user-info {
         display: flex;
         flex-direction: column;
-        position: relative;
-        z-index: 1;
 
         .name {
-            font-weight: $font-weight-bold;
+            font-size: 0.9rem;
+            font-weight: 500;
             color: var(--text-primary);
-            font-size: $font-size-sm;
-            transition: color 0.3s ease;
+            font-family: 'Cinzel', serif;
         }
 
         .role {
-            font-size: $font-size-xs;
-            color: #6b7280;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
     }
 }
