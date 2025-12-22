@@ -29,9 +29,9 @@ export class HomeComponent {
   ];
 
   portfolioImages = [
-    { src: 'assets/images/wedding-hero.png', alt: 'Elegant Indoor Wedding' },
-    { src: 'assets/images/wedding-guests-happy.png', alt: 'Outdoor Celebration' },
-    { src: 'assets/images/wedding-hero.png', alt: 'Romantic Reception' }
+    { src: 'assets/images/conference_meeting.png', alt: 'Conference Meeting' },
+    { src: 'assets/images/venue_center.png', alt: 'Venue Center' },
+    { src: 'assets/images/travel_trip.png', alt: 'Trip' }
   ];
 
   testimonials = [
