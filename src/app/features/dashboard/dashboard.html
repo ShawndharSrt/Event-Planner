@@ -1,7 +1,7 @@
 <div class="dashboard-container">
     <div class="page-header">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Welcome back! Here's what's happening with your events.</p>
+        <h1 class="page-title">Overview</h1>
+        <p class="page-subtitle">Event insights at a glance.</p>
     </div>
 
     <div class="stats-grid" *ngIf="stats()">
@@ -17,7 +17,7 @@
 
         <div class="stat-card">
             <div class="icon-container secondary">
-                <span class="material-icons">group</span>
+                <span class="material-icons">people</span>
             </div>
             <div class="stat-info">
                 <span class="value">{{ stats().totalGuests }}</span>
@@ -49,7 +49,10 @@
     <div class="content-grid">
         <div class="section-card recent-events">
             <div class="card-header">
-                <h3>Recent Events</h3>
+                <div class="header-text">
+                    <span class="overline small">Latest Activity</span>
+                    <h3>Recent Events</h3>
+                </div>
                 <button class="view-all" routerLink="/events">View All</button>
             </div>
             <div class="card-body">
@@ -70,7 +73,10 @@
 
         <div class="section-card tasks-overview">
             <div class="card-header">
-                <h3>Tasks Overview</h3>
+                <div class="header-text">
+                    <span class="overline small">To-Do List</span>
+                    <h3>Tasks Overview</h3>
+                </div>
                 <button class="view-all" routerLink="/tasks">View All</button>
             </div>
             <div class="card-body">

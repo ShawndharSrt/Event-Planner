@@ -17,13 +17,14 @@ import { EventService } from '../../../core/services/event.service';
 import { Event, TimelineItem, EventStats, EventGuestList } from '../../../core/models/event.model';
 import { switchMap, map, take } from 'rxjs/operators';
 import { BehaviorSubject, combineLatest } from 'rxjs';
+import { MatIconModule } from '@angular/material/icon';
 
 export type EventTab = 'overview' | 'guests' | 'tasks' | 'budget';
 
 @Component({
   selector: 'app-event-details',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, MatTabsModule, DataTableComponent, BudgetTrackerComponent],
+  imports: [RouterLink, CommonModule, FormsModule, MatTabsModule, DataTableComponent, BudgetTrackerComponent, MatIconModule],
   templateUrl: './event-details.html',
   styleUrl: './event-details.scss',
 })

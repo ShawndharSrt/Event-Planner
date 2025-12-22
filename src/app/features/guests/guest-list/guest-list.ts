@@ -10,11 +10,12 @@ import { ConfirmationDialogService } from '../../../shared/services/confirmation
 import { DataTableComponent, TableColumn, TableAction } from '../../../shared/components/data-table/data-table.component';
 import { Subject, of } from 'rxjs';
 import { switchMap, startWith, map, catchError } from 'rxjs/operators';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-guest-list',
   standalone: true,
-  imports: [RouterLink, CommonModule, FormsModule, DataTableComponent],
+  imports: [RouterLink, CommonModule, FormsModule, DataTableComponent, MatIconModule],
   templateUrl: './guest-list.html',
   styleUrl: './guest-list.scss',
 })
