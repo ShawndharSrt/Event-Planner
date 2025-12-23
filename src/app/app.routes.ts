@@ -46,5 +46,5 @@ export const routes: Routes = [
         ]
     },
     { path: 'home', component: HomeComponent },
-    { path: '**', redirectTo: 'dashboard' }
+    { path: '**', redirectTo: 'home' }
 ];

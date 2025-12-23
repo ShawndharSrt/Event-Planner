@@ -81,7 +81,7 @@ export class AuthService {
             this.tokenTimer = null;
         }
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/home']);
     }
 
     // Helper methods
