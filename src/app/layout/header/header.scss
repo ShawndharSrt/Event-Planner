@@ -5,14 +5,14 @@
 
 .header {
     height: 80px;
-    background-color: $surface-color;
-    border-bottom: 1px solid var(--border-color);
+    background-color: var(--background-color); // Warm cream/off-white to match theme
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05); // Very subtle separator
     padding: 0 $spacing-xl;
     @include flex-between;
     position: sticky;
     top: 0;
     z-index: 90;
-    transition: $transition-base;
+    // Removed generic transition to avoid floating feel
 
     @media (max-width: map.get($breakpoints, 'md')) {
         padding: 0 $spacing-md;
@@ -26,9 +26,17 @@
 
     .menu-btn {
         display: none;
+        background: none;
+        border: none;
+        color: $text-secondary;
+        cursor: pointer;
 
         @media (max-width: map.get($breakpoints, 'md')) {
             display: flex;
+        }
+
+        .material-icons {
+            font-size: 24px;
         }
     }
 
@@ -39,34 +47,31 @@
         cursor: pointer;
         text-decoration: none;
         color: $text-primary;
-        transition: $transition-base;
-        padding: $spacing-xs $spacing-sm;
-        border-radius: $border-radius-md;
+        padding: 0; // Removed extra padding
+        transition: opacity 0.3s ease;
 
         &:hover {
-            color: $primary-color;
-            background-color: var(--primary-lightest-bg);
-        }
-
-        .logo-icon {
-            font-size: 28px;
-            color: $primary-color;
+            opacity: 0.8;
+            // Removed flashy background hover
         }
 
         .app-title {
-            font-family: $font-family-heading;
-            font-size: $font-size-xl;
-            font-weight: $font-weight-semibold;
-            letter-spacing: -0.5px;
+            font-family: $font-family-heading; // Cinzel
+            font-size: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 1px; // Elegant spacing
+            color: $text-primary;
+            line-height: 1;
+        }
+
+        // Hide logo icon if it exists in HTML to focus on text as requested
+        .logo-icon {
+            display: none;
         }
 
         @media (max-width: map.get($breakpoints, 'sm')) {
             .app-title {
-                display: none;
-            }
-
-            .logo-icon {
-                font-size: 24px;
+                font-size: 1.25rem;
             }
         }
     }
@@ -75,72 +80,49 @@
 .header-right {
     display: flex;
     align-items: center;
-    gap: $spacing-lg;
-    position: relative;
+    gap: $spacing-md;
 
+    // Notification and Settings Buttons
     .icon-btn {
-        background: none;
-        color: $text-secondary;
-        position: relative;
-        padding: $spacing-xs;
-        border-radius: $border-radius-full;
-        transition: $transition-base;
+        background-color: transparent;
+        color: #8C8C8C; // Muted neutral
+        width: 40px;
+        height: 40px;
+        border-radius: 12px; // Softly rounded square
+        border: 1px solid rgba(0, 0, 0, 0.06); // Subtle definition
         display: flex;
         align-items: center;
         justify-content: center;
+        transition: all 0.3s ease;
+        position: relative;
+        cursor: pointer;
 
         &:hover {
-            background-color: var(--text-light-bg);
+            border-color: rgba(197, 160, 89, 0.3); // Soft gold hint
             color: $primary-color;
+            background-color: rgba(197, 160, 89, 0.05); // Very faint gold tint
         }
 
         .material-icons {
-            font-size: 24px;
+            font-size: 22px; // Refined size
         }
 
         .badge {
             position: absolute;
-            top: 0;
-            right: 0;
+            top: -2px;
+            right: -2px;
             background-color: $danger-color;
             color: $surface-color;
             font-size: 10px;
-            font-weight: bold;
+            font-weight: 600;
             min-width: 16px;
             height: 16px;
-            border-radius: $border-radius-full;
-            @include flex-center;
-            border: 2px solid $surface-color;
-        }
-    }
-
-    .create-btn {
-        background-color: $primary-color;
-        color: $surface-color;
-        padding: $spacing-sm $spacing-lg;
-        border-radius: $border-radius-md;
-        font-weight: $font-weight-medium;
-        display: flex;
-        align-items: center;
-        gap: $spacing-sm;
-        transition: $transition-base;
-        box-shadow: $shadow-sm;
-
-        &:hover {
-            background-color: $primary-dark;
-            box-shadow: $shadow-md;
-        }
-
-        .icon {
-            font-size: 20px;
-        }
-
-        @media (max-width: map.get($breakpoints, 'sm')) {
-            span:not(.icon) {
-                display: none;
-            }
-
-            padding: $spacing-sm;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--background-color); // Blend with header bg
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     }
 }
