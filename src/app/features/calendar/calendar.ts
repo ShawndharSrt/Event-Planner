@@ -27,6 +27,15 @@ export class CalendarComponent {
   currentDate = signal(new Date());
   currentView = signal<CalendarView>('month');
   selectedEventId = signal<string | null>(null);
+  isDropdownOpen = signal(false);
+
+  // Helper for display name
+  selectedEventName = computed(() => {
+    const id = this.selectedEventId();
+    if (!id) return 'All Events';
+    const match = this.dropdownOptions().find(o => o.id === id);
+    return match ? match.name : 'All Events';
+  });
 
   calendarItems = signal<CalendarItem[]>([]);
   dropdownOptions = signal<EventDropdownItem[]>([]);
@@ -140,9 +149,13 @@ export class CalendarComponent {
     this.currentDate.set(new Date());
   }
 
-  onEventFilterChange(event: any) {
-    // Value handled by signal binding or manually setting signal if standard select
-    // If using MatSelect, we might bind directly to signal if using ngModel, or handle selectionChange
+  toggleDropdown() {
+    this.isDropdownOpen.update(v => !v);
+  }
+
+  selectEvent(id: string | null) {
+    this.selectedEventId.set(id);
+    this.isDropdownOpen.set(false);
   }
 
   onItemClick(item: CalendarItem) {

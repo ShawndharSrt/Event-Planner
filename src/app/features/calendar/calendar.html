@@ -5,15 +5,24 @@
             <p class="page-subtitle">View upcoming events and deadlines</p>
         </div>
         <div class="actions">
-            <mat-form-field appearance="outline" class="event-select">
-                <mat-select [ngModel]="selectedEventId()" (selectionChange)="selectedEventId.set($event.value)"
-                    placeholder="All Events">
-                    <mat-option [value]="null">All Events</mat-option>
-                    <mat-option *ngFor="let option of dropdownOptions()" [value]="option.id">
+            <!-- Premium Dropdown -->
+            <div class="premium-dropdown" [class.is-open]="isDropdownOpen()" style="width: 200px;">
+                <div class="premium-dropdown__trigger" tabindex="0" (click)="toggleDropdown()"
+                    (keydown.enter)="toggleDropdown()">
+                    <span class="premium-dropdown__selected">{{ selectedEventName() }}</span>
+                    <span class="premium-dropdown__icon"></span>
+                </div>
+                <div class="premium-dropdown__menu">
+                    <div class="premium-dropdown__item" [class.selected]="selectedEventId() === null"
+                        (click)="selectEvent(null)">
+                        All Events
+                    </div>
+                    <div class="premium-dropdown__item" *ngFor="let option of dropdownOptions()"
+                        [class.selected]="selectedEventId() === option.id" (click)="selectEvent(option.id)">
                         {{ option.name }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+                    </div>
+                </div>
+            </div>
 
             <div class="view-toggle">
                 <button class="toggle-btn" [class.active]="currentView() === 'month'"

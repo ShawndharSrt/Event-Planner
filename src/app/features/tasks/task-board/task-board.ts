@@ -28,8 +28,16 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
   tasks = signal<Task[]>([]);
   events = signal<AppEvent[]>([]);
   selectedEventId = signal<string>('');
+  isDropdownOpen = signal(false);
   showTaskForm = signal(false);
   editingTask = signal<Task | null>(null);
+
+  selectedEventName = computed(() => {
+    const id = this.selectedEventId();
+    if (!id) return 'Select Event';
+    const match = this.events().find(e => e.id === id);
+    return match ? match.title : 'Select Event';
+  });
 
   // Use writable signals for each column so CDK can mutate them
   todoTasks = signal<Task[]>([]);
@@ -70,6 +78,15 @@ export class TaskBoardComponent extends BaseFormComponent implements OnInit {
         this.loadTasks();
       }
     });
+  }
+
+  toggleDropdown() {
+    this.isDropdownOpen.update(v => !v);
+  }
+
+  selectEvent(eventIds: string) {
+    this.isDropdownOpen.set(false);
+    this.onEventChange(eventIds);
   }
 
   onEventChange(value: string) {

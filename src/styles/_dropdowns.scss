@@ -1,0 +1,176 @@
+@use 'styles/variables' as *;
+
+// Modern Premium Dropdown Component
+// 2025 SaaS Style - Clean, Minimal, Professional
+
+.premium-dropdown {
+    // Component functionality
+    position: relative;
+    width: 100%;
+    min-width: 240px;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+
+    // Local Variables for strict control
+    --pd-height: 44px;
+    --pd-radius: 8px;
+
+    // Centers - Neutral scale
+    --pd-bg: #FFFFFF;
+    --pd-border: #E3E6EA;
+    --pd-border-hover: #CBD5E1;
+    --pd-text: #1F2937; // Dark charcoal
+    --pd-text-secondary: #6B7280;
+    --pd-placeholder: #9CA3AF;
+
+    // States
+    --pd-hover-bg: #F5F7FA; // Light neutral gray
+    --pd-selected-bg: #F3F4F6; // Neutral option for selected
+    --pd-focus-border: var(--primary-color, #C5A059);
+
+    // Shadows - extremely subtle and realistic
+    --pd-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --pd-menu-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.05),
+        0 10px 15px -3px rgba(0, 0, 0, 0.05);
+
+    // Dark theme overrides - completely separating specific values
+    @at-root body.dark-theme & {
+        --pd-bg: #1F2937;
+        --pd-border: #374151;
+        --pd-border-hover: #4B5563;
+        --pd-text: #F9FAFB;
+        --pd-text-secondary: #9CA3AF;
+        --pd-placeholder: #6B7280;
+        --pd-hover-bg: #374151;
+        --pd-selected-bg: #374151;
+        --pd-primary: var(--primary-color);
+        --pd-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+        --pd-menu-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.2),
+            0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    }
+
+    &__trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: var(--pd-height);
+        padding: 0 14px; // Clean padding
+        background-color: var(--pd-bg);
+        border: 1px solid var(--pd-border);
+        border-radius: var(--pd-radius);
+        color: var(--pd-text);
+        font-size: 0.9375rem; // ~15px
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
+        box-shadow: var(--pd-shadow);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        outline: none;
+
+        &:hover {
+            border-color: var(--pd-border-hover);
+        }
+
+        // Active / Focus state
+        &:focus,
+        &.is-open {
+            border-color: var(--pd-focus-border);
+            // No glow, no shadow as requested
+        }
+
+        // Placeholder text if needed
+        &.placeholder {
+            color: var(--pd-placeholder);
+        }
+    }
+
+    &__selected {
+        color: var(--pd-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--pd-text-secondary);
+        transition: transform 0.2s ease;
+        margin-left: 12px;
+
+        // Custom minimal chevron
+        &::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-right: 1.5px solid currentColor;
+            border-bottom: 1.5px solid currentColor;
+            transform: rotate(45deg);
+            margin-top: -3px; // Optical balance
+        }
+
+        .premium-dropdown.is-open &,
+        .is-open & {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__menu {
+        position: absolute;
+        top: calc(100% + 4px); // Tight spacing
+        left: 0;
+        width: 100%;
+        background-color: var(--pd-bg);
+        border: 1px solid var(--pd-border);
+        border-radius: var(--pd-radius);
+        box-shadow: var(--pd-menu-shadow);
+        z-index: 50;
+        padding: 4px; // Clean separation
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-4px);
+        transition: all 0.2s ease-in-out;
+
+        // Ensure menu is not clickable when hidden
+        pointer-events: none;
+
+        &.is-open,
+        .premium-dropdown.is-open & {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 8px 12px; // Adjusted for 2025 modern feel
+        font-size: 0.9375rem;
+        color: var(--pd-text);
+        cursor: pointer;
+        border-radius: 6px; // Slightly less than container
+        transition: background-color 0.15s ease;
+        text-align: left;
+        margin-bottom: 1px;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        &:hover {
+            background-color: var(--pd-hover-bg);
+        }
+
+        &.selected {
+            background-color: var(--pd-selected-bg);
+            color: var(--pd-focus-border); // Primary color text
+            font-weight: 500;
+        }
+    }
+}

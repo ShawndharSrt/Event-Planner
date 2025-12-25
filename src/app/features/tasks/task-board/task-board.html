@@ -5,13 +5,20 @@
             <p class="page-subtitle">Track progress and manage event tasks</p>
         </div>
         <div class="event-selector">
-            <mat-form-field appearance="fill" subscriptSizing="dynamic">
-                <mat-select [ngModel]="selectedEventId()" (selectionChange)="onEventChange($event.value)">
-                    <mat-option *ngFor="let event of events()" [value]="event.id">
+            <!-- Premium Dropdown -->
+            <div class="premium-dropdown" [class.is-open]="isDropdownOpen()" style="width: 250px;">
+                <div class="premium-dropdown__trigger" tabindex="0" (click)="toggleDropdown()"
+                    (keydown.enter)="toggleDropdown()">
+                    <span class="premium-dropdown__selected">{{ selectedEventName() }}</span>
+                    <span class="premium-dropdown__icon"></span>
+                </div>
+                <div class="premium-dropdown__menu">
+                    <div class="premium-dropdown__item" *ngFor="let event of events()"
+                        [class.selected]="selectedEventId() === event.id" (click)="selectEvent(event.id!)">
                         {{ event.title }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
+                    </div>
+                </div>
+            </div>
         </div>
         <button class="create-btn" (click)="addTask()">
             <span class="icon">+</span>
