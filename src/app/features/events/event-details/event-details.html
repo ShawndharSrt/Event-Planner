@@ -131,6 +131,10 @@
                     <div class="card-header-with-actions" *ngIf="selectedTableGuests().length === 0">
                         <h3 class="card-title">Guest List</h3>
                         <div class="header-actions">
+                            <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;"
+                                accept=".xlsx, .xls">
+                            <button type="button" class="btn-action btn-import" (click)="fileInput.click()">Import
+                                Guests</button>
                             <button type="button" class="btn-action btn-link-guest" (click)="openLinkGuestModal()">Link
                                 Existing
                                 Guest</button>
@@ -232,6 +236,33 @@
                 <button class="btn-secondary" (click)="closeLinkGuestModal()">Cancel</button>
                 <button class="btn-primary" (click)="linkSelectedGuests()"
                     [disabled]="selectedGuestIds().size === 0">Link Selected</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Result Modal -->
+    <div class="modal-overlay" *ngIf="isImportResultModalOpen()" (click)="closeImportResultModal()">
+        <div class="modal-container" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Import Results</h3>
+                <button class="close-btn" (click)="closeImportResultModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="result-summary">
+                    <p class="summary-item"><strong>Successfully Added:</strong> <span class="success-text">{{
+                            importResult()?.inserted }}</span></p>
+                    <p class="summary-item"><strong>Duplicates Found:</strong> <span class="warning-text">{{
+                            importResult()?.duplicates }}</span></p>
+                </div>
+                <div class="duplicates-list" *ngIf="(importResult()?.duplicates || 0) > 0">
+                    <h4>Duplicate Emails:</h4>
+                    <ul class="email-list">
+                        <li *ngFor="let email of importResult()?.duplicateEmails">{{ email }}</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" (click)="closeImportResultModal()">Close</button>
             </div>
         </div>
     </div>

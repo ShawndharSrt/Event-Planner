@@ -43,6 +43,10 @@ export class EventDetailsComponent {
   selectedGuestIds = signal<Set<string>>(new Set());
   private refreshGuests$ = new BehaviorSubject<void>(undefined);
 
+  // Import Guest Logic
+  isImportResultModalOpen = signal(false);
+  importResult = signal<{ inserted: number; duplicates: number; duplicateEmails: string[] } | null>(null);
+
   activeTab = toSignal(
     this.route.queryParamMap.pipe(
       map(params => (params.get('tab') as EventTab) || 'overview')
@@ -255,14 +259,23 @@ export class EventDetailsComponent {
 
   openLinkGuestModal() {
     this.selectedGuestIds.set(new Set());
-    this.guestService.getAllGuests().subscribe({
+    // Fetch all guests (ideally without limit, but for now assuming default size is enough or need larger)
+    // Current getAllGuests() uses default 0, 10. To link, we might need SEARCH or larger page.
+    // For now, let's just get the first page or pass a large size.
+    // Ideally user should search in the modal. But for quick fix:
+    this.guestService.getAllGuests(0, 100).subscribe({
       next: (response) => {
-        const allGuests = response.data || [];
+        // response.data is Page<Guest>
+        const page = response.data;
+        // Verify if it is indeed a page or array (in case of fallback)
+        // Check for 'content' property
+        const allGuests: Guest[] = (page && 'content' in page) ? page.content : [];
+
         const currentGuests = this.guestData() || [];
         // Map current guests to simple IDs to check existence
         const currentGuestIds = new Set(currentGuests.map(g => g.guestId));
 
-        const availableGuests = allGuests.filter(g => !currentGuestIds.has(g._id || g.guestId || g.id || ''));
+        const availableGuests = allGuests.filter((g: Guest) => !currentGuestIds.has(g._id || g.guestId || g.id || ''));
 
         this.commonGuests.set(availableGuests);
         this.isLinkGuestModalOpen.set(true);
@@ -355,6 +368,48 @@ export class EventDetailsComponent {
         this.activeBulkOperation.set(false);
       }
     });
+  }
+
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.uploadGuests(file);
+    }
+    // Reset value so same file can be selected again if needed
+    event.target.value = '';
+  }
+
+  uploadGuests(file: File) {
+    if (!this.eventId()) return;
+
+    // Show loading? Using snackbar for now or we could add a loading signal
+    this.snackbar.show('Uploading guests...', 'info');
+
+    this.eventService.uploadGuests(this.eventId()!, file).subscribe({
+      next: (res) => {
+        const data = res.data;
+        const result = {
+          inserted: data.insertedCount ?? data.inserted ?? 0,
+          duplicates: data.duplicateCount ?? data.duplicates ?? 0,
+          duplicateEmails: data.duplicateEmails || []
+        };
+
+        this.importResult.set(result);
+        this.isImportResultModalOpen.set(true);
+        this.refreshGuests$.next();
+        this.snackbar.show('Guest import processed', 'success');
+      },
+      error: (err) => {
+        console.error('Import failed', err);
+        this.snackbar.show('Failed to import guests. Please check the file format.', 'error');
+      }
+    });
+  }
+
+  closeImportResultModal() {
+    this.isImportResultModalOpen.set(false);
+    this.importResult.set(null);
   }
 
   deleteGuestFromEvent(guest: any) {

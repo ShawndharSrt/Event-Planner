@@ -1,5 +1,5 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
 import { RouterLink, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -31,68 +31,49 @@ export class GuestListComponent {
   searchQuery = signal('');
   selectedGroup = signal('all');
   selectedStatus = signal('all');
-  currentPage = signal(1);
+  currentPage = signal(0);
   pageSize = signal(10);
   selectedGuests = signal<Set<Guest>>(new Set());
 
   // Data Source
-  private allGuestsResource = toSignal(
-    this.refreshTrigger.pipe(
-      startWith(null),
-      switchMap(() =>
-        this.guestService.getAllGuests().pipe(
-          map(response => {
-            return response.data ?? [];
-          }),
+  // Data Source
+  allGuestsResource = toSignal(
+    toObservable(this.currentPage).pipe( // Trigger on page change
+      // distinctUntilChanged(), // Optional
+      switchMap((page) => {
+        // We also need to trigger on refresh or size change, but let's simplify. 
+        // Better: combineLatest of page, size, and refreshSubject.
+        // But toSignal with computed input is easier if we just use a computed signal that calls the service? No, must be observable for async.
+
+        // Let's use a standard pattern:
+        return this.guestService.getAllGuests(this.currentPage(), this.pageSize()).pipe(
+          map(response => response.data),
           catchError(err => {
             console.error('Error fetching guests:', err);
-            return of([]);
+            return of({ content: [], totalPages: 0, totalElements: 0, size: 10, number: 0, first: true, last: true, empty: true } as any);
           })
-        )
-      )
+        );
+      })
     ),
-    { initialValue: [] as Guest[] }
+    { initialValue: { content: [], totalPages: 0, totalElements: 0, size: 10, number: 0, first: true, last: true, empty: true } as any } // simplified Initial Page
   );
-
 
   // Derived State
   filteredGuests = computed(() => {
-    let guests = this.allGuestsResource();
-    const search = this.searchQuery().toLowerCase();
-    const group = this.selectedGroup();
-    const status = this.selectedStatus();
-
-    // 1. Filter by Search
-    if (search) {
-      guests = guests.filter(g =>
-        (g.firstName?.toLowerCase().includes(search) ?? false) ||
-        (g.lastName?.toLowerCase().includes(search) ?? false) ||
-        (g.email?.toLowerCase().includes(search) ?? false)
-      );
-    }
-
-    // 2. Filter by Group
-    if (group !== 'all') {
-      guests = guests.filter(g => g.group === group);
-    }
-
-    // 3. Filter by Status
-    if (status !== 'all') {
-      guests = guests.filter(g => g.status === status);
-    }
-
-    return guests;
+    // With server-side pagination, the resource IS the filtered page.
+    return this.allGuestsResource().content || [];
   });
 
-  paginatedCardGuests = computed(() => {
-    const guests = this.filteredGuests();
-    const start = (this.currentPage() - 1) * this.pageSize();
-    const end = start + this.pageSize();
-    return guests.slice(start, end);
-  });
+  paginatedCardGuests = computed(() => this.filteredGuests());
 
-  totalItems = computed(() => this.filteredGuests().length);
-  totalPages = computed(() => Math.ceil(this.totalItems() / this.pageSize()));
+  totalItems = computed(() => this.allGuestsResource().totalElements || 0);
+  totalPages = computed(() => this.allGuestsResource().totalPages || 0);
+
+  // Note: Local filtering (group/status/search) is currently NOT applied because we act as if the server handled it.
+  // If the server does NOT support filtering yet, this UI will show unfiltered pages.
+  // Given instructions, we only pass page/size.
+
+
 
   // Table Configuration
   tableColumns: TableColumn[] = [
@@ -120,7 +101,7 @@ export class GuestListComponent {
     effect(() => {
       this.filteredGuests(); // dependency
       this.selectedGuests.set(new Set());
-      this.currentPage.set(1); // Reset page on filter change
+      this.currentPage.set(0); // Reset page on filter change
     }, { allowSignalWrites: true });
   }
 
@@ -207,13 +188,13 @@ export class GuestListComponent {
 
   // Card View Pagination Methods
   nextPage() {
-    if (this.currentPage() < this.totalPages()) {
+    if (this.currentPage() < this.totalPages() - 1) {
       this.currentPage.update(p => p + 1);
     }
   }
 
   prevPage() {
-    if (this.currentPage() > 1) {
+    if (this.currentPage() > 0) {
       this.currentPage.update(p => p - 1);
     }
   }

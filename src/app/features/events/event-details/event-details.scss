@@ -225,6 +225,22 @@
         }
     }
 
+    &.btn-import {
+        background-color: transparent;
+        color: $success-color;
+        border: 1px solid $success-color;
+
+        &:hover:not(:disabled) {
+            background-color: rgba($success-color, 0.1);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba($success-color, 0.2);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+    }
+
     &.btn-export {
         background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
         color: white;
@@ -642,6 +658,64 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: $spacing-md;
+        }
+
+        .result-summary {
+            background-color: var(--text-light-bg);
+            padding: $spacing-md;
+            border-radius: $border-radius-md;
+            margin-bottom: $spacing-lg;
+
+            .summary-item {
+                margin-bottom: $spacing-xs;
+                display: flex;
+                justify-content: space-between;
+                font-size: $font-size-base;
+                color: $text-primary;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .success-text {
+            color: $success-color;
+            font-weight: bold;
+        }
+
+        .warning-text {
+            color: $warning-color;
+            font-weight: bold;
+        }
+
+        .duplicates-list {
+            h4 {
+                margin: 0 0 $spacing-sm 0;
+                color: $warning-color;
+                font-size: $font-size-base;
+            }
+
+            .email-list {
+                max-height: 150px;
+                overflow-y: auto;
+                background-color: var(--text-light-bg);
+                border-radius: $border-radius-md;
+                padding: $spacing-md;
+                list-style: none;
+                margin: 0;
+
+                li {
+                    padding: $spacing-xs 0;
+                    border-bottom: 1px solid var(--border-color);
+                    color: $text-secondary;
+                    font-size: $font-size-sm;
+
+                    &:last-child {
+                        border-bottom: none;
+                    }
+                }
+            }
         }
 
         .form-group {

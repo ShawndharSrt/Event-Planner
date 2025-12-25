@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
-import { ApiResponse } from '../models/api-response.model';
+import { ApiResponse, Page } from '../models/api-response.model';
 import { Guest, EventGuest } from '../models/guest.model';
 import { Event } from '../models/event.model';
 
@@ -10,6 +10,8 @@ import { Event } from '../models/event.model';
     providedIn: 'root'
 })
 export class GuestService {
+
+
     // private guests: Guest[] = [
     //     { id: 1, eventId: 1, firstName: 'John', lastName: 'Doe', email: 'john@example.com', group: 'vip', status: 'confirmed' },
     //     { id: 2, eventId: 1, firstName: 'Jane', lastName: 'Smith', email: 'jane@example.com', group: 'speaker', status: 'confirmed' },
@@ -78,8 +80,8 @@ export class GuestService {
         );
     }
 
-    getAllGuests(): Observable<ApiResponse<Guest[]>> {
-        return this.api.get<ApiResponse<Guest[]>>('/guests');
+    getAllGuests(page: number = 0, size: number = 10): Observable<ApiResponse<Page<Guest>>> {
+        return this.api.get<ApiResponse<Page<Guest>>>('/guests', { page, size });
     }
 
     addGuest(guest: Partial<EventGuest>): Observable<ApiResponse<EventGuest>> {

@@ -4,8 +4,7 @@
             <h1 class="page-title">Guest List</h1>
             <p class="page-subtitle">Manage guest.</p>
         </div>
-        <button class="create-btn" routerLink="/guests/new">
-            <mat-icon class="icon">add</mat-icon>
+        <button class="btn-action btn-export" routerLink="/guests/new">
             Add Guest
         </button>
     </div>
@@ -105,21 +104,22 @@
             <div *ngIf="filteredGuests().length === 0" class="empty-state">No guests match your filters.</div>
         </div>
 
-        <!-- Card View Pagination -->
-        <div class="pagination" *ngIf="totalPages() > 1">
-            <span class="page-info">
-                Showing {{ (currentPage() - 1) * pageSize() + 1 }}-{{ Math.min(currentPage() * pageSize(), totalItems())
-                }} of {{ totalItems() }}
-            </span>
-            <div class="page-controls">
-                <button class="icon-btn" [disabled]="currentPage() === 1" (click)="prevPage()">
-                    <mat-icon>chevron_left</mat-icon>
-                </button>
-                <span class="page-number">Page {{ currentPage() }}</span>
-                <button class="icon-btn" [disabled]="currentPage() === totalPages()" (click)="nextPage()">
-                    <mat-icon>chevron_right</mat-icon>
-                </button>
-            </div>
+    </div>
+
+    <!-- Shared Pagination Controls -->
+    <div class="pagination" *ngIf="totalPages() > 1">
+        <span class="page-info">
+            Showing {{ currentPage() * pageSize() + 1 }}-{{ Math.min((currentPage() + 1) * pageSize(), totalItems()) }}
+            of {{ totalItems() }}
+        </span>
+        <div class="page-controls">
+            <button class="icon-btn" [disabled]="currentPage() === 0" (click)="prevPage()">
+                <mat-icon>chevron_left</mat-icon>
+            </button>
+            <span class="page-number">Page {{ currentPage() + 1 }}</span>
+            <button class="icon-btn" [disabled]="currentPage() === totalPages() - 1" (click)="nextPage()">
+                <mat-icon>chevron_right</mat-icon>
+            </button>
         </div>
     </div>
 </div>

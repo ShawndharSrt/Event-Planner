@@ -59,8 +59,16 @@ export class EventService {
         return this.api.get<ApiResponse<TimelineItem[]>>(`/events/${id}/timeline`);
     }
 
+
     getEventBudgetSummary(id: string): Observable<ApiResponse<BudgetSummary>> {
         return this.api.get<ApiResponse<BudgetSummary>>(`/events/${id}/budget/summary`);
+    }
+
+    uploadGuests(eventId: string, file: File): Observable<ApiResponse<any>> {
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('eventId', eventId);
+        return this.api.post<ApiResponse<any>>('/events/upload-guests', formData);
     }
 
 }
