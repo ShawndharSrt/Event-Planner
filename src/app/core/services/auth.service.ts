@@ -5,6 +5,7 @@ import { tap, map, catchError } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
 import { User } from '../models/user.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 export interface RegisterPayload extends Partial<User> {
     firstName?: string;
@@ -27,7 +28,7 @@ export class AuthService {
 
     private tokenTimer: Subscription | null = null;
 
-    constructor(private router: Router, private api: ApiService) {
+    constructor(private router: Router, private api: ApiService, private http: HttpClient) {
         this.performAutoLogin();
     }
 
@@ -66,6 +67,18 @@ export class AuthService {
                     this.setSession(response.data);
                 }
             })
+        );
+    }
+
+
+    private baseUrl = 'http://localhost:8080';
+
+    forgotPassword(email: string): Observable<ApiResponse<any>> {
+        const params = new HttpParams().set('email', email);
+        return this.http.post<ApiResponse<any>>(
+            `${this.baseUrl}/auth/forgot-password`,
+            null,                // body
+            { params }           // request params
         );
     }
 

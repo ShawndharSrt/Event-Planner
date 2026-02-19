@@ -26,21 +26,8 @@
         }
 
         p {
+            font-family: palatino;
             color: rgba(255, 255, 255, 0.9) !important;
         }
-    }
-
-    // Ensure white text for form labels
-    label {
-        color: #ffffff !important;
-    }
-
-    .form-group label {
-        color: #ffffff !important;
-    }
-
-    // Ensure white text for inputs
-    input {
-        color: #ffffff !important;
     }
 }

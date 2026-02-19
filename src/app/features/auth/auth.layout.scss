@@ -6,11 +6,13 @@
 // Mixins (Must be defined before use)
 @mixin form-group-base {
     label {
+        font-family: palatino;
         display: block;
         margin-bottom: 0.5rem;
         font-weight: 600;
-        color: var(--auth-text-color) !important;
+        color: #ffffff !important;
         font-size: 0.9rem;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5); // Added text shadow for better contrast
     }
 
     .input-wrapper {
@@ -21,7 +23,7 @@
             left: 14px;
             top: 50%;
             transform: translateY(-50%);
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.9); // Increased opacity
             font-size: 1.2rem;
             transition: color 0.3s ease;
             z-index: 1;
@@ -30,6 +32,8 @@
         input {
             @include theme.premium-input;
             padding-left: 44px; // Space for icon
+            color: #ffffff !important; // Force white text
+
 
             &:focus+.input-icon {
                 color: var(--auth-primary);
@@ -131,7 +135,7 @@
     }
 
     p {
-        font-family: var(--font-family-body);
+        font-family: palatino;
         font-size: 1.3rem;
         opacity: 0.95;
         font-weight: 400; // Inter Regular
@@ -185,14 +189,15 @@
         justify-content: flex-end;
 
         .forgot-password {
-            color: var(--auth-primary-dark);
+            color: white;
             text-decoration: none;
             font-size: 0.9rem;
             font-weight: 500;
+            font-family: palatino;
             transition: color 0.2s;
 
             &:hover {
-                color: var(--auth-accent);
+                color: white;
             }
         }
     }
@@ -211,6 +216,7 @@
 
         p {
             color: #ffffff !important;
+            font-family: palatino;
         }
 
         a {

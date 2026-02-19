@@ -27,10 +27,10 @@
                         <input type="email" id="email" formControlName="email" placeholder="example@domain.com"
                             [class.error]="form.get('email')?.invalid && form.get('email')?.touched">
                     </div>
-                    <div class="error-msg" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+                    <!-- <div class="error-msg" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
                         <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
                         <span *ngIf="form.get('email')?.errors?.['email']">Please enter a valid email</span>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Password -->
@@ -41,9 +41,9 @@
                         <input type="password" id="password" formControlName="password" placeholder="••••••••"
                             [class.error]="form.get('password')?.invalid && form.get('password')?.touched">
                     </div>
-                    <div class="error-msg" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
+                    <!-- <div class="error-msg" *ngIf="form.get('password')?.invalid && form.get('password')?.touched">
                         Password is required
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="form-actions">
