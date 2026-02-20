@@ -4,39 +4,61 @@
 @use 'styles/mixins' as *;
 
 .sidebar {
-    width: 200px;
+    width: 240px;
     height: 100vh;
-    background-color: var(--background-color); // Warm cream
-    border-right: 1px solid rgba(0, 0, 0, 0.05); // Very subtle border
+    background: linear-gradient(175deg, #FFFDF8 0%, #FAEDD6 50%, #DBC18C 100%);
+    border-right: none;
+    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    padding: $spacing-xl $spacing-lg;
+    padding: 32px 16px;
     position: fixed;
     left: 0;
     top: 0;
     z-index: 100;
     transition: $transition-base;
 
-    @media (max-width: map.get($breakpoints, 'md')) {
+    @include respond-down('lg') {
+        width: 220px;
+    }
+
+    @include respond-down('md') {
         transform: translateX(-100%);
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05); // Shadow only when floating on mobile
+        box-shadow: none;
+        width: 280px;
 
         &.open {
             transform: translateX(0);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.2);
         }
+    }
+
+    // Create the intense bottom left curve glow
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 300px;
+        background: radial-gradient(circle at bottom left, rgba(185, 134, 43, 0.15) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
     }
 }
 
 .logo-container {
-    padding-bottom: $spacing-2xl;
+    padding-bottom: 24px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid rgba(185, 134, 43, 0.15);
     text-align: center;
+    position: relative;
+    z-index: 1;
 
     .logo-image {
-        width: 140px;
+        width: 150px;
         height: auto;
         object-fit: contain;
-        // Optional: Filter to match gold theme if logo isn't already
-        // filter: sepia(1) hue-rotate(5deg) saturate(1.5); 
     }
 }
 
@@ -44,59 +66,51 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: $spacing-xs;
+    gap: 8px;
+    padding-top: 12px;
+    position: relative;
+    z-index: 1;
 }
 
 .nav-item {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
-    padding: $spacing-sm $spacing-md; // Smaller vertical padding
-    border-radius: $border-radius-sm; // Minimal radius
-    color: var(--text-secondary);
+    gap: 16px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    color: #555;
     font-family: 'Inter', sans-serif;
-    font-weight: 400;
-    font-size: 0.95rem;
+    font-weight: 500;
+    font-size: 1rem;
     text-decoration: none;
-    transition: all 0.3s ease;
-    letter-spacing: 0.5px;
-    position: relative; // For pseudo-elements
+    transition: all 0.2s ease;
+    position: relative;
 
     .nav-icon {
-        font-size: 20px;
-        color: var(--text-light); // Muted icon
-        transition: color 0.3s ease;
+        font-size: 18px;
+        color: #777;
+        transition: color 0.2s ease;
+        width: 24px;
+        text-align: center;
     }
 
     &:hover {
-        color: var(--text-primary);
-        background-color: transparent; // No background on hover, keep it clean
+        color: #222;
+        background-color: rgba(255, 255, 255, 0.4);
 
         .nav-icon {
-            color: var(--primary-color);
+            color: #C5A059;
         }
     }
 
     &.active {
-        color: var(--primary-color); // Gold text
-        font-weight: 500;
-        background-color: rgba(212, 175, 55, 0.08); // Soft gold background highlight
+        color: #fff;
+        font-weight: 600;
+        background: linear-gradient(135deg, #C5A059 0%, #8C5C1A 100%);
+        box-shadow: 0 4px 15px rgba(139, 94, 26, 0.3);
 
         .nav-icon {
-            color: var(--primary-color);
-        }
-
-        // Refined vertical left accent bar
-        &::before {
-            content: '';
-            position: absolute;
-            left: 0; // Stick to the very edge
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background-color: var(--primary-color);
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
+            color: #fff;
         }
     }
 }
@@ -104,47 +118,67 @@
 .user-profile {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
-    padding: $spacing-md 0;
-    margin-top: $spacing-lg;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    gap: 12px;
+    padding: 12px;
+    margin-top: 16px;
+    border-top: none;
     cursor: pointer;
-    transition: opacity 0.3s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    position: relative;
+    z-index: 1;
 
     &:hover {
-        opacity: 0.8;
+        background-color: rgba(255, 255, 255, 0.3);
     }
 
     .avatar {
-        width: 40px;
-        height: 40px;
-        background-color: var(--primary-light); // Light gold bg
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #BA8933 0%, #7B5216 100%);
         color: #fff;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.9rem;
-        font-weight: 500;
-        font-family: 'Cinzel', serif; // Classy initial font
+        font-size: 1rem;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        position: relative;
+        flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+        // Green online dot
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 12px;
+            height: 12px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
     }
 
     .user-info {
         display: flex;
         flex-direction: column;
+        min-width: 0;
 
         .name {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-primary);
-            font-family: 'Cinzel', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #222;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .role {
-            font-size: 0.75rem;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            display: none; // Hiding role to match image layout closer
         }
     }
 }

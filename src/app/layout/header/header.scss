@@ -5,16 +5,15 @@
 
 .header {
     height: 80px;
-    background-color: var(--background-color); // Warm cream/off-white to match theme
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05); // Very subtle separator
+    background-color: transparent;
+    border-bottom: none;
     padding: 0 $spacing-xl;
     @include flex-between;
     position: sticky;
     top: 0;
     z-index: 90;
-    // Removed generic transition to avoid floating feel
 
-    @media (max-width: map.get($breakpoints, 'md')) {
+    @include respond-down('md') {
         padding: 0 $spacing-md;
     }
 }
@@ -31,7 +30,7 @@
         color: $text-secondary;
         cursor: pointer;
 
-        @media (max-width: map.get($breakpoints, 'md')) {
+        @include respond-down('md') {
             display: flex;
         }
 
@@ -43,35 +42,29 @@
     .app-logo {
         display: flex;
         align-items: center;
-        gap: $spacing-sm;
         cursor: pointer;
         text-decoration: none;
-        color: $text-primary;
-        padding: 0; // Removed extra padding
+        color: #333;
         transition: opacity 0.3s ease;
 
         &:hover {
             opacity: 0.8;
-            // Removed flashy background hover
         }
 
         .app-title {
-            font-family: $font-family-heading; // Cinzel
             font-size: 1.5rem;
-            font-weight: 500;
-            letter-spacing: 1px; // Elegant spacing
-            color: $text-primary;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            color: #333;
             line-height: 1;
-        }
 
-        // Hide logo icon if it exists in HTML to focus on text as requested
-        .logo-icon {
-            display: none;
-        }
-
-        @media (max-width: map.get($breakpoints, 'sm')) {
-            .app-title {
+            @include respond-down('sm') {
                 font-size: 1.25rem;
+            }
+
+            strong {
+                font-weight: 700;
+                color: #222;
             }
         }
     }
@@ -80,16 +73,17 @@
 .header-right {
     display: flex;
     align-items: center;
-    gap: $spacing-md;
+    gap: 16px;
 
-    // Notification and Settings Buttons
-    .icon-btn {
-        background-color: transparent;
-        color: #8C8C8C; // Muted neutral
-        width: 40px;
-        height: 40px;
-        border-radius: 12px; // Softly rounded square
-        border: 1px solid rgba(0, 0, 0, 0.06); // Subtle definition
+    .icon-btn,
+    .avatar-btn {
+        background-color: #fff;
+        color: #555;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -98,31 +92,42 @@
         cursor: pointer;
 
         &:hover {
-            border-color: rgba(197, 160, 89, 0.3); // Soft gold hint
-            color: $primary-color;
-            background-color: rgba(197, 160, 89, 0.05); // Very faint gold tint
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+            color: #222;
         }
 
         .material-icons {
-            font-size: 22px; // Refined size
+            font-size: 24px;
         }
+    }
 
+    .icon-btn {
         .badge {
             position: absolute;
             top: -2px;
             right: -2px;
-            background-color: $danger-color;
-            color: $surface-color;
+            background-color: #E53935;
+            color: #fff;
             font-size: 10px;
-            font-weight: 600;
-            min-width: 16px;
-            height: 16px;
+            font-weight: 700;
+            min-width: 18px;
+            height: 18px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid var(--background-color); // Blend with header bg
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border: 2px solid #fff;
+            box-shadow: 0 2px 5px rgba(229, 57, 53, 0.4);
+        }
+    }
+
+    .avatar-btn {
+        background-color: #fff;
+        color: #666;
+
+        .material-icons {
+            font-size: 32px;
         }
     }
 }

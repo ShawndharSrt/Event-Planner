@@ -26,29 +26,36 @@
         pointer-events: auto;
     }
 
-    @media (max-width: map.get($breakpoints, 'md')) {
+    @include respond-down('md') {
         display: block;
     }
 }
 
 .main-content {
     flex: 1;
-    margin-left: 200px;
+    margin-left: 240px;
     display: flex;
     flex-direction: column;
     transition: $transition-base;
+    min-width: 0;
 
-    @media (max-width: map.get($breakpoints, 'md')) {
+    @include respond-down('lg') {
+        margin-left: 220px;
+    }
+
+    @include respond-down('md') {
         margin-left: 0;
     }
 }
 
 .content-area {
     flex: 1;
-    padding: $spacing-xl;
+    padding: 0; // Removing padding to allow full bleed backgrounds from pages
     overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 
-    @media (max-width: map.get($breakpoints, 'md')) {
-        padding: $spacing-md;
+    @include respond-down('md') {
+        padding: 0;
     }
 }

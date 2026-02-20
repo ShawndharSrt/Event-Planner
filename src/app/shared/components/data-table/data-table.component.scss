@@ -6,9 +6,15 @@
 .table-container {
     width: 100%;
     overflow-x: auto;
-    background-color: $surface-color;
-    border-radius: $border-radius-lg;
-    border: 1px solid var(--border-color);
+    background-color: transparent;
+    border-radius: 20px;
+    border: none;
+    box-shadow: none; // Box shadow should ideally be controlled by parent cards, but can add if naked
+    -webkit-overflow-scrolling: touch;
+
+    @include respond-down('md') {
+        border-radius: 12px;
+    }
 }
 
 .data-table {
@@ -17,26 +23,27 @@
     text-align: left;
 
     thead {
-        background-color: var(--background-alt-2);
-        border-bottom: 1px solid var(--border-color);
+        background-color: rgba(0, 0, 0, 0.02);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.05);
 
         th {
-            padding: $spacing-md;
-            font-size: $font-size-xs;
-            font-weight: $font-weight-bold;
-            color: $text-secondary;
+            padding: 16px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
             white-space: nowrap;
-            transition: $transition-base;
+            transition: all 0.3s ease;
 
             &.sortable {
                 cursor: pointer;
                 user-select: none;
 
                 &:hover {
-                    color: $primary-color;
-                    background-color: var(--primary-light-bg);
+                    color: #C5A059;
+                    background-color: rgba(197, 160, 89, 0.05);
                 }
             }
 
@@ -62,21 +69,25 @@
 
     tbody {
         tr {
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
 
             &:last-child {
                 border-bottom: none;
             }
 
             &:hover {
-                background-color: var(--background-alt);
+                background-color: rgba(0, 0, 0, 0.02);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
             }
 
             td {
-                padding: $spacing-md;
-                font-size: $font-size-sm;
-                color: $text-primary;
+                padding: 16px;
+                font-family: 'Inter', sans-serif;
+                font-size: 0.9rem;
+                color: #333;
+                font-weight: 500;
                 vertical-align: middle;
 
                 &.checkbox-col {
@@ -113,8 +124,8 @@
                         }
 
                         &:hover {
-                            background-color: rgba(0, 0, 0, 0.05);
-                            color: $primary-color;
+                            background-color: rgba(197, 160, 89, 0.1);
+                            color: #C5A059;
                         }
 
                         &.danger:hover {
@@ -172,9 +183,14 @@
 
 .pagination {
     @include flex-between;
-    padding: $spacing-md;
-    border-top: 1px solid var(--border-color);
-    background-color: $surface-color;
+    padding: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    background-color: transparent;
+
+    @include respond-down('sm') {
+        flex-direction: column;
+        gap: 12px;
+    }
 
     .page-info {
         font-size: $font-size-sm;
@@ -186,20 +202,20 @@
         gap: $spacing-sm;
 
         .icon-btn {
-            background: none;
-            border: 1px solid var(--border-color);
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.05);
             border-radius: $border-radius-md;
             width: 32px;
             height: 32px;
             @include flex-center;
             cursor: pointer;
-            color: $text-primary;
-            transition: $transition-base;
+            color: #555;
+            transition: all 0.2s ease;
 
             &:hover:not(:disabled) {
-                background-color: var(--background-alt);
-                color: $primary-color;
-                border-color: $primary-color;
+                background-color: rgba(197, 160, 89, 0.05);
+                color: #C5A059;
+                border-color: #C5A059;
             }
 
             &:disabled {

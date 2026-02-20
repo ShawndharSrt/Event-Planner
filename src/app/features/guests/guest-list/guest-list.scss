@@ -3,12 +3,16 @@
 @use 'styles/mixins' as *;
 
 .page-container {
-    padding: $spacing-xl;
+    padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: $spacing-xl;
-    min-height: 100vh;
-    background-color: #fff;
+    gap: 32px;
+    background-color: transparent;
+
+    @include respond-down('md') {
+        padding: 16px;
+        gap: 16px;
+    }
 }
 
 .page-header {
@@ -18,44 +22,67 @@
     .header-content {
         .page-title {
             font-family: 'Cinzel', serif;
-            font-size: 2rem;
-            color: var(--secondary-color);
-            margin-bottom: $spacing-sm;
-            font-weight: 500;
+            font-size: 2.4rem;
+            background: linear-gradient(135deg, #CFAB64 0%, #9E7431 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            margin-bottom: 8px;
+            font-weight: 600;
+
+            @include respond-down('md') {
+                font-size: 2rem;
+            }
         }
 
         .page-subtitle {
-            color: $text-secondary;
             font-family: 'Inter', sans-serif;
-            font-size: $font-size-base;
+            color: $text-secondary;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0px;
         }
     }
 
     .create-btn {
-        background-color: var(--secondary-color);
+        position: absolute;
+        // top: 50%;s
+        transform: translateY(-50%);
+        right: 1rem;
+        background: linear-gradient(135deg, #C5A059 0%, #8B5E23 60%, #6B4418 100%);
         color: #fff;
-        padding: $spacing-sm $spacing-xl;
-        border-radius: $border-radius-md;
+        padding: 12px 24px;
+        border-radius: 24px;
         font-weight: 600;
         display: flex;
         align-items: center;
-        gap: $spacing-sm;
+        gap: 8px;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(139, 94, 26, 0.3);
         border: none;
-        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        cursor: pointer;
         text-transform: uppercase;
         letter-spacing: 1px;
-        font-size: 0.85rem;
-        cursor: pointer;
+        font-size: 0.9rem;
 
         &:hover {
-            background-color: var(--primary-color);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+            transform: translateY(calc(-50% - 2px));
+            box-shadow: 0 6px 20px rgba(139, 94, 26, 0.4);
         }
 
-        .icon {
-            font-size: $font-size-lg;
+        @include respond-down('md') {
+            position: relative;
+            transform: none;
+            top: auto;
+            right: auto;
+            width: 100%;
+            justify-content: center;
+            margin-top: 16px;
+
+            &:hover {
+                transform: translateY(-2px);
+            }
         }
     }
 }
@@ -70,13 +97,18 @@
 
 .filters-bar {
     display: flex;
-    gap: $spacing-md;
-    padding: $spacing-md;
-    background: #fff;
-    border: 1px solid var(--border-color);
-    border-radius: $border-radius-md;
-    box-shadow: $shadow-sm;
+    gap: 16px;
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
     align-items: center;
+    flex-wrap: wrap;
+
+    @include respond-down('md') {
+        padding: 16px;
+        flex-direction: column;
+        align-items: stretch;
+    }
 
     .search-input {
         flex: 1;
@@ -130,6 +162,15 @@
             &:focus {
                 outline: none;
                 border-color: var(--secondary-color);
+            }
+        }
+
+        @include respond-down('sm') {
+            flex-direction: column;
+            width: 100%;
+
+            .filter-select {
+                width: 100%;
             }
         }
     }
@@ -244,22 +285,25 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: $spacing-lg;
+
+    @include respond-down('sm') {
+        grid-template-columns: 1fr;
+    }
 }
 
 .guest-card {
     background: #fff;
-    border: 1px solid rgba(212, 175, 55, 0.2); // Subtle gold border
-    border-radius: $border-radius-md;
-    padding: $spacing-lg;
-    box-shadow: $shadow-sm;
+    border: none;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
 
     &:hover {
-        transform: translateY(-4px);
-        box-shadow: $shadow-lg;
-        border-color: var(--secondary-color);
+        transform: translateY(-8px);
+        box-shadow: 0 15px 45px rgba(0, 0, 0, 0.1);
     }
 
     .card-header {

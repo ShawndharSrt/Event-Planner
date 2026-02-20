@@ -22,6 +22,19 @@ $breakpoints: (
     }
 }
 
+// Max-width breakpoints for desktop-first down-scaling
+@mixin respond-down($breakpoint) {
+    @if map.has-key($breakpoints, $breakpoint) {
+        @media (max-width: map.get($breakpoints, $breakpoint)) {
+            @content;
+        }
+    }
+
+    @else {
+        @warn ("Unfortunately, no value could be retrieved from `#{$breakpoint}`. " + "Available breakpoints are: #{map.keys($breakpoints)}.");
+    }
+}
+
 // Flexbox Helpers
 @mixin flex-center {
     display: flex;

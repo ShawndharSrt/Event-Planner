@@ -1,9 +1,13 @@
+@use 'sass:color';
+@use 'sass:map';
+@use 'styles/variables' as *;
+@use 'styles/mixins' as *;
+
 :host {
     display: block;
     height: 100%;
     overflow: hidden;
-    background: #f8f9fc;
-    /* Light mode bg fallback */
+    background: transparent;
 }
 
 .notification-page {
@@ -11,9 +15,12 @@
     flex-direction: column;
     height: 100%;
     max-width: 1000px;
-    /* Constrain width for better readability on large screens */
     margin: 0 auto;
-    padding: 0 16px;
+    padding: 32px;
+
+    @include respond-down('md') {
+        padding: 16px;
+    }
 }
 
 .page-header {
@@ -44,21 +51,65 @@
 
     h1 {
         margin: 0;
-        font-size: 1.5rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        font-family: 'Outfit', sans-serif;
+        font-family: 'Cinzel', serif;
+        font-size: 2.4rem;
+        background: linear-gradient(135deg, #CFAB64 0%, #9E7431 100%);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 600;
+        line-height: 1.2;
+
+        @include respond-down('md') {
+            font-size: 2rem;
+        }
     }
 }
 
 .badge {
-    background: #3b82f6;
+    background: linear-gradient(135deg, #CFAB64 0%, #9E7431 100%);
     color: white;
     font-size: 0.75rem;
     font-weight: 600;
     padding: 2px 8px;
     border-radius: 12px;
     animation: bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+// Override material stroked button
+button[mat-stroked-button] {
+    background: linear-gradient(135deg, #C5A059 0%, #8C5C1A 100%) !important;
+    color: #fff !important;
+    border-radius: 24px !important;
+    font-weight: 600 !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(139, 94, 26, 0.3) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(139, 94, 26, 0.4) !important;
+    }
+
+    &:disabled {
+        background: var(--text-light-bg) !important;
+        color: var(--text-secondary) !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    @include respond-down('md') {
+        width: 100%;
+        margin-top: 16px;
+    }
+}
+
+@include respond-down('md') {
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .list-container {

@@ -16,12 +16,8 @@ export class SidebarComponent {
 
   get userInitials(): string {
     const user = this.authService.currentUser();
-    // Debug log to see user object
-    console.log('Sidebar user:', user);
-
     if (!user) return 'GU'; // Guest/Unknown
 
-    // Check for name first
     if (user.name) {
       const names = user.name.split(' ');
       if (names.length >= 2) {

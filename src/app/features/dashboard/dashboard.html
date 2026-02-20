@@ -1,91 +1,214 @@
 <div class="dashboard-container">
+    <!-- Page Header -->
     <div class="page-header">
-        <h1 class="page-title">Overview</h1>
-        <p class="page-subtitle">Event insights at a glance.</p>
+        <h1 class="page-title">OVERVIEW</h1>
+        <p class="page-subtitle">Event insights at a glance</p>
+        <div class="header-divider">
+            <span class="line"></span>
+            <span class="diamond">&#x25C6;</span>
+            <span class="small-diamond">&#x25C7;</span>
+            <span class="diamond">&#x25C6;</span>
+            <span class="line"></span>
+        </div>
     </div>
 
+    <!-- Stats Row -->
     <div class="stats-grid" *ngIf="stats()">
+        <!-- Upcoming Events -->
         <div class="stat-card">
-            <div class="icon-container primary">
-                <span class="material-icons">event</span>
+            <div class="stat-icon-wrap primary">
+                <span class="material-icons">calendar_today</span>
             </div>
             <div class="stat-info">
-                <span class="value">{{ stats().upcomingEvents }}</span>
-                <span class="label">Upcoming Events</span>
+                <span class="stat-value">{{ stats().upcomingEvents }}</span>
+                <span class="stat-label"><span class="primary-label">Upcoming</span><br />Events</span>
             </div>
         </div>
 
-        <div class="stat-card">
-            <div class="icon-container secondary">
-                <span class="material-icons">people</span>
+        <!-- Total Guests (highlighted) -->
+        <div class="stat-card highlighted">
+            <div class="stat-icon-wrap guests">
+                <span class="material-icons">groups</span>
             </div>
             <div class="stat-info">
-                <span class="value">{{ stats().totalGuests }}</span>
-                <span class="label">Total Guests</span>
+                <span class="stat-value">{{ stats().totalGuests }}</span>
+                <span class="stat-label text-white">Total Guests</span>
+            </div>
+            <div class="sparkline-bg">
+                <svg viewBox="0 0 100 40" preserveAspectRatio="none">
+                    <path d="M0,35 C15,35 25,10 50,25 C70,40 85,5 100,10" fill="none" stroke="rgba(255,255,255,0.6)"
+                        stroke-width="2" stroke-linecap="round" />
+                    <circle cx="25" cy="18" r="2.5" fill="#fff" />
+                    <circle cx="50" cy="25" r="2.5" fill="#fff" />
+                    <circle cx="85" cy="5" r="2.5" fill="#fff" />
+                    <circle cx="100" cy="10" r="2.5" fill="#fff" />
+                </svg>
             </div>
         </div>
 
+        <!-- Pending Tasks -->
         <div class="stat-card">
-            <div class="icon-container warning">
+            <div class="stat-icon-wrap warning">
                 <span class="material-icons">pending_actions</span>
             </div>
             <div class="stat-info">
-                <span class="value">{{ stats().pendingTasks }}</span>
-                <span class="label">Pending Tasks</span>
+                <span class="stat-value">{{ stats().pendingTasks }}</span>
+                <span class="stat-label"><span class="danger-label">Pending</span><br />Tasks</span>
             </div>
         </div>
 
+        <!-- Completed Tasks -->
         <div class="stat-card">
-            <div class="icon-container success">
+            <div class="stat-icon-wrap success">
                 <span class="material-icons">check_circle</span>
             </div>
             <div class="stat-info">
-                <span class="value">{{ stats().completedTasks }}</span>
-                <span class="label">Completed Tasks</span>
+                <span class="stat-value">{{ stats().completedTasks }}</span>
+                <span class="stat-label"><span class="success-label">Completed</span><br />Tasks</span>
             </div>
         </div>
     </div>
 
+    <!-- Middle Content Row -->
     <div class="content-grid">
-        <div class="section-card recent-events">
+        <!-- Latest Activity / Recent Events -->
+        <div class="section-card">
             <div class="card-header">
-                <div class="header-text">
-                    <span class="overline small">Latest Activity</span>
-                    <h3>Recent Events</h3>
-                </div>
-                <button class="view-all" routerLink="/events">View All</button>
+                <span class="overline-label">Latest Activity</span>
+                <button class="view-all-btn" routerLink="/events">View All <span
+                        class="material-icons">chevron_right</span></button>
             </div>
             <div class="card-body">
-                <div class="event-item" *ngFor="let event of recentEvents()" [routerLink]="['/events', event.id]">
-                    <div class="date-badge">
-                        <span class="month">{{ event.month }}</span>
-                        <span class="day">{{ event.day }}</span>
+                <h3 class="section-title">Recent <strong>Events</strong></h3>
+                <div class="event-list">
+                    <div class="event-item" *ngFor="let event of recentEvents()" [routerLink]="['/events', event.id]">
+                        <div class="event-thumb">
+                            <!-- <img [src]="event.imageUrl || 'assets/images/event-placeholder.jpg'" [alt]="event.title"
+                                onerror="this.src='assets/images/event-placeholder.jpg'" /> -->
+                        </div>
+                        <div class="event-details">
+                            <h4 [innerHTML]="formatEventTitle(event.title)"></h4>
+                            <p class="event-location">
+                                <span class="material-icons">location_on</span>
+                                {{ event.location }}
+                            </p>
+                        </div>
+                        <div class="event-meta">
+                            <span class="event-date">
+                                <span class="material-icons">calendar_today</span>
+                                {{ event.date }}
+                            </span>
+                            <span class="status-badge" [ngClass]="event.status">{{ event.status | titlecase }}</span>
+                        </div>
                     </div>
-                    <div class="event-details">
-                        <h4>{{ event.title }}</h4>
-                        <p>{{ event.location }} • {{ event.time }}</p>
-                    </div>
-                    <span class="status-badge" [ngClass]="event.status">{{ event.status | titlecase }}</span>
+                    <div *ngIf="recentEvents().length === 0" class="empty-state">No recent events.</div>
                 </div>
-                <div *ngIf="recentEvents().length === 0" class="empty-state">No recent events.</div>
             </div>
         </div>
 
-        <div class="section-card tasks-overview">
+        <!-- To-Do List -->
+        <div class="section-card todo-card">
             <div class="card-header">
-                <div class="header-text">
-                    <span class="overline small">To-Do List</span>
-                    <h3>Tasks Overview</h3>
-                </div>
-                <button class="view-all" routerLink="/tasks">View All</button>
+                <span class="overline-label">
+                    <span class="material-icons todo-icon">receipt_long</span>
+                    To-Do List
+                </span>
+                <button class="view-all-btn" routerLink="/tasks">View All <span
+                        class="material-icons">chevron_right</span></button>
             </div>
             <div class="card-body">
-                <div class="task-item" *ngFor="let task of tasks()">
-                    <input type="checkbox" [id]="'task-' + task.id" [checked]="task.completed" />
-                    <label [for]="'task-' + task.id" [class.completed]="task.completed">{{ task.title }}</label>
-                    <span class="tag" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
+                <h3 class="section-title">Tasks <strong>Overview</strong></h3>
+                <div class="task-list">
+                    <div class="task-item" *ngFor="let task of tasks()">
+                        <label class="task-title" [class.completed]="task.completed">{{ task.title }}</label>
+                        <span class="priority-tag" [ngClass]="task.priority">{{ task.priority | titlecase }}</span>
+                        <button class="three-dot-btn">
+                            <span class="material-icons">more_vert</span>
+                        </button>
+                    </div>
+                    <div *ngIf="tasks().length === 0" class="empty-state">No pending tasks.</div>
                 </div>
-                <div *ngIf="tasks().length === 0" class="empty-state">No pending tasks.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Summary Row -->
+    <div class="summary-row">
+        <!-- Upcoming Events Mini Card -->
+        <div class="summary-card events-mini">
+            <div class="summary-header">
+                <div class="icon-title-wrap">
+                    <span class="material-icons summary-icon">calendar_today</span>
+                    <strong>Upcoming Events</strong>
+                </div>
+                <button class="dots-btn"><span class="material-icons">more_horiz</span></button>
+            </div>
+            <div class="event-mini-item" *ngFor="let event of recentEvents().slice(0,1)">
+                <div class="mini-thumb">
+                    <!-- <img [src]="event.imageUrl || 'assets/images/event-placeholder.jpg'" [alt]="event.title"
+                        onerror="this.src='assets/images/event-placeholder.jpg'" /> -->
+                </div>
+                <div class="mini-info">
+                    <span class="mini-title">{{ event.title }}</span>
+                    <span class="mini-date">{{ event.date }}, {{ event.location }}</span>
+                </div>
+                <button class="arrow-btn">
+                    <span class="material-icons">chevron_right</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Guests Mini Card -->
+        <div class="summary-card guests-mini">
+            <div class="summary-header">
+                <span class="material-icons summary-icon">group</span>
+                <strong>Guests</strong>
+                <button class="dots-btn arrow-fwd" routerLink="/guests"><span
+                        class="material-icons">chevron_right</span></button>
+            </div>
+            <div class="guests-chart">
+                <span class="guests-total"><strong>{{ stats().totalGuests }}</strong> Total</span>
+                <div class="mini-chart">
+                    <svg viewBox="0 0 120 40" preserveAspectRatio="none">
+                        <polyline points="0,35 30,28 50,30 70,15 90,20 110,8 120,10" fill="none" stroke="#D4AF37"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <circle cx="110" cy="8" r="4" fill="#D4AF37" />
+                    </svg>
+                </div>
+            </div>
+            <div class="guests-stats">
+                <span class="g-stat pending-g">{{ pendingGuests() }} Pending</span>
+                <span class="g-divider">|</span>
+                <span class="g-stat confirmed-g">{{ confirmedGuests() }} Confirmed</span>
+            </div>
+        </div>
+
+        <!-- Task Progress Mini Card -->
+        <div class="summary-card progress-mini">
+            <div class="summary-header">
+                <span class="material-icons summary-icon trend">trending_up</span>
+                <strong>Task Progress</strong>
+            </div>
+            <div class="progress-content">
+                <div class="donut-chart">
+                    <svg viewBox="0 0 80 80">
+                        <circle cx="40" cy="40" r="30" fill="none" stroke="#f0f0f0" stroke-width="10" />
+                        <circle cx="40" cy="40" r="30" fill="none" stroke="#D4AF37" stroke-width="10"
+                            [attr.stroke-dasharray]="taskProgressDash() + ' 188.5'" stroke-dashoffset="47"
+                            stroke-linecap="round" transform="rotate(-90 40 40)" />
+                    </svg>
+                    <span class="donut-label">{{ taskProgressPercent() }}%</span>
+                </div>
+                <div class="progress-legend">
+                    <div class="legend-item">
+                        <span class="dot completed-dot"></span>
+                        <span>Completed</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="dot pending-dot"></span>
+                        <span>Pending</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -27,6 +27,7 @@ export interface RecentEvent {
     status: 'active' | 'planning' | 'completed';
     month: string;
     day: string;
+    imageUrl?: string;
 }
 
 export interface DashboardTask {

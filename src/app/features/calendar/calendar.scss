@@ -7,6 +7,10 @@
     padding: $spacing-xl;
     max-width: 1400px;
     margin: 0 auto;
+
+    @include respond-down('md') {
+        padding: 16px;
+    }
 }
 
 .page-header {
@@ -19,16 +23,24 @@
 
     .header-content {
         .page-title {
-            margin: 0 0 $spacing-xs 0;
-            font-size: 2rem;
-            font-weight: $font-weight-bold;
-            color: $text-primary;
+            font-family: 'Cinzel', serif;
+            font-size: 2.4rem;
+            background: linear-gradient(135deg, #CFAB64 0%, #9E7431 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            margin-bottom: 8px;
+            font-weight: 600;
         }
 
         .page-subtitle {
-            margin: 0;
+            font-family: 'Inter', sans-serif;
             color: $text-secondary;
-            font-size: $font-size-base;
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 0px;
+            margin: 0;
         }
     }
 
@@ -78,38 +90,45 @@
         }
 
         .create-btn {
-            @include flex-center;
-            gap: $spacing-xs;
-            padding: $spacing-sm $spacing-lg;
-            background-color: $primary-color;
-            color: $surface-color;
+            background: linear-gradient(135deg, #C5A059 0%, #8C5C1A 100%);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
             border: none;
-            border-radius: $border-radius-md;
-            font-weight: $font-weight-medium;
+            box-shadow: 0 4px 15px rgba(139, 94, 26, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: $transition-base;
-            box-shadow: $shadow-sm;
 
             &:hover {
-                background-color: $primary-dark;
-                box-shadow: $shadow-md;
-                transform: translateY(-1px);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(139, 94, 26, 0.4);
             }
 
             .icon {
-                font-size: 1.25rem;
-                font-weight: $font-weight-bold;
+                font-size: 1.2rem;
+            }
+
+            @include respond-down('md') {
+                width: 100%;
+                justify-content: center;
             }
         }
     }
 }
 
 .calendar-container {
-    background-color: $surface-color;
-    border-radius: $border-radius-lg;
-    padding: $spacing-xl;
-    box-shadow: $shadow-md;
-    border: 1px solid var(--border-color);
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    padding: 32px;
 }
 
 .calendar-header {
@@ -200,12 +219,12 @@
         }
 
         &.today {
-            background-color: var(--primary-light-bg);
+            background-color: rgba(197, 160, 89, 0.05);
 
             .date {
-                background-color: $primary-color;
-                color: $surface-color;
-                font-weight: $font-weight-bold;
+                background: linear-gradient(135deg, #C5A059 0%, #8B5E23 100%);
+                color: #fff;
+                font-weight: 600;
             }
         }
 
@@ -250,7 +269,7 @@
                     width: 8px;
                     height: 8px;
                     border-radius: 50%;
-                    background-color: var(--primary-color);
+                    background-color: #C5A059;
                     flex-shrink: 0;
                 }
 
@@ -267,7 +286,7 @@
     }
 }
 
-@media (max-width: 1024px) {
+@include respond-down('lg') {
     .calendar-grid .day {
         min-height: 100px;
         padding: $spacing-sm;
@@ -279,7 +298,7 @@
     }
 }
 
-@media (max-width: 768px) {
+@include respond-down('md') {
     .page-header {
         flex-direction: column;
         align-items: flex-start;
@@ -322,5 +341,9 @@
             width: 36px;
             height: 36px;
         }
+    }
+
+    .calendar-container {
+        padding: 16px;
     }
 }

@@ -6,7 +6,13 @@
 .details-container {
     display: flex;
     flex-direction: column;
-    gap: $spacing-lg;
+    gap: 32px;
+    padding: 32px;
+
+    @include respond-down('md') {
+        padding: 16px;
+        gap: 16px;
+    }
 }
 
 .event-hero {
@@ -54,11 +60,20 @@
             font-size: $font-size-4xl;
             margin-bottom: $spacing-sm;
             color: white;
+
+            @include respond-down('sm') {
+                font-size: clamp(2rem, 6vw, 2.5rem);
+            }
         }
 
         .event-meta {
             display: flex;
             gap: $spacing-xl;
+
+            @include respond-down('md') {
+                flex-direction: column;
+                gap: $spacing-xs;
+            }
 
             .meta-item {
                 display: flex;
@@ -77,6 +92,18 @@
         display: flex;
         gap: $spacing-md;
         z-index: 2;
+
+        @include respond-down('sm') {
+            position: relative;
+            bottom: auto;
+            right: auto;
+            margin-top: $spacing-lg;
+            width: 100%;
+
+            button {
+                flex: 1;
+            }
+        }
 
         button {
             padding: $spacing-sm $spacing-lg;
@@ -107,40 +134,79 @@
 
 .tabs-nav {
     display: flex;
-    gap: $spacing-lg;
-    border-bottom: 1px solid var(--border-color);
+    gap: 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     padding-bottom: 1px;
 
     .tab-item {
         background: none;
-        padding: $spacing-md $spacing-sm;
-        color: $text-secondary;
-        font-weight: $font-weight-medium;
-        font-size: $font-size-base;
+        padding: 16px 12px;
+        color: #777;
+        font-weight: 500;
+        font-family: 'Inter', sans-serif;
+        font-size: 1rem;
         border-bottom: 2px solid transparent;
         display: flex;
         align-items: center;
-        gap: $spacing-xs;
+        gap: 8px;
 
         .count {
-            background-color: var(--text-light-bg);
-            padding: 2px 6px;
-            border-radius: $border-radius-sm;
-            font-size: 10px;
-            color: $text-secondary;
+            background-color: rgba(0, 0, 0, 0.05);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #555;
+            font-weight: 600;
         }
 
         &:hover {
-            color: $primary-color;
+            color: #C5A059;
         }
 
         &.active {
-            color: $primary-color;
-            border-bottom-color: $primary-color;
+            color: #C5A059;
+            border-bottom-color: #C5A059;
 
             .count {
-                background-color: var(--primary-light-bg);
-                color: $primary-color;
+                background-color: rgba(197, 160, 89, 0.1);
+                color: #C5A059;
+            }
+        }
+    }
+}
+
+::ng-deep {
+    .mat-mdc-tab-group {
+        .mdc-tab-indicator__content--underline {
+            border-color: #C5A059 !important;
+        }
+
+        .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+            color: #C5A059 !important;
+        }
+
+        .mat-mdc-tab .mdc-tab__text-label {
+            font-family: 'Cinzel', serif !important;
+            font-weight: 600 !important;
+            letter-spacing: 1px !important;
+            color: #555 !important;
+        }
+
+        .mat-mdc-tab {
+            .tab-badge {
+                background: rgba(0, 0, 0, 0.05);
+                color: #555;
+                font-family: 'Inter', sans-serif;
+                font-size: 0.75rem;
+                padding: 2px 8px;
+                border-radius: 12px;
+                margin-left: 8px;
+                font-weight: 600;
+            }
+
+            &.mdc-tab--active .tab-badge {
+                background: rgba(197, 160, 89, 0.1);
+                color: #C5A059;
             }
         }
     }
@@ -151,24 +217,31 @@
     grid-template-columns: 2fr 1fr;
     gap: $spacing-lg;
 
-    @media (max-width: map.get($breakpoints, 'lg')) {
+    @include respond-down('lg') {
         grid-template-columns: 1fr;
     }
 }
 
 .section-card {
-    @include card-style;
-    margin-bottom: $spacing-lg;
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    padding: 24px 28px;
+    margin-bottom: 24px;
 
     .card-title {
-        font-size: $font-size-lg;
-        margin-bottom: $spacing-lg;
-        color: $text-primary;
+        font-size: 1.25rem;
+        margin-bottom: 24px;
+        color: #333;
+        font-family: 'Cinzel', serif;
+        font-weight: 600;
     }
 
     .description {
-        color: $text-secondary;
+        color: #666;
         line-height: 1.6;
+        font-family: 'Inter', sans-serif;
     }
 }
 
@@ -178,6 +251,20 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: $spacing-lg;
+
+    @include respond-down('sm') {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: $spacing-sm;
+
+        .header-actions {
+            width: 100%;
+
+            button {
+                width: 100%;
+            }
+        }
+    }
 
     .card-title {
         margin: 0;
@@ -195,13 +282,14 @@
 
 // Action buttons styling
 .btn-action {
-    padding: $spacing-sm $spacing-lg;
-    font-size: $font-size-sm;
-    font-weight: $font-weight-medium;
-    border-radius: $border-radius-md;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    border-radius: 8px;
     border: none;
     cursor: pointer;
-    transition: all $transition-base;
+    transition: all 0.2s ease;
     white-space: nowrap;
 
     &:disabled {
@@ -210,14 +298,14 @@
     }
 
     &.btn-link-guest {
-        background-color: $surface-color;
-        color: $primary-color;
-        border: 1px solid $primary-color;
+        background-color: transparent;
+        color: #C5A059;
+        border: 1px solid #C5A059;
 
         &:hover:not(:disabled) {
-            background-color: var(--primary-light-bg);
+            background-color: rgba(197, 160, 89, 0.05);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba($primary-color, 0.2);
+            box-shadow: 0 4px 12px rgba(197, 160, 89, 0.15);
         }
 
         &:active:not(:disabled) {
@@ -227,13 +315,13 @@
 
     &.btn-import {
         background-color: transparent;
-        color: $success-color;
-        border: 1px solid $success-color;
+        color: #4CAF50;
+        border: 1px solid #4CAF50;
 
         &:hover:not(:disabled) {
-            background-color: rgba($success-color, 0.1);
+            background-color: rgba(76, 175, 80, 0.05);
             transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba($success-color, 0.2);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
         }
 
         &:active:not(:disabled) {
@@ -242,19 +330,18 @@
     }
 
     &.btn-export {
-        background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+        background: linear-gradient(135deg, #C5A059 0%, #8C5C1A 100%);
         color: white;
-        box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+        box-shadow: 0 4px 15px rgba(139, 94, 26, 0.2);
 
         &:hover:not(:disabled) {
-            background: linear-gradient(135deg, $primary-dark 0%, #2F1F6E 100%);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 94, 26, 0.3);
         }
 
         &:active:not(:disabled) {
             transform: translateY(0);
-            box-shadow: 0 2px 4px rgba($primary-color, 0.2);
+            box-shadow: 0 2px 4px rgba(139, 94, 26, 0.2);
         }
     }
 }
@@ -366,7 +453,7 @@
         flex-direction: row;
         gap: $spacing-md;
 
-        @media (max-width: map.get($breakpoints, 'md')) {
+        @include respond-down('md') {
             flex-direction: column;
         }
 
@@ -385,7 +472,7 @@
             }
 
             .budget-icon {
-                font-size: $font-size-3xl;
+                font-size: 32px;
                 width: 48px;
                 height: 48px;
                 display: flex;
@@ -393,6 +480,7 @@
                 justify-content: center;
                 background: rgba(255, 255, 255, 0.3);
                 border-radius: $border-radius-md;
+                color: #C5A059;
             }
 
             .budget-info {
@@ -658,6 +746,10 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: $spacing-md;
+
+            @include respond-down('md') {
+                grid-template-columns: 1fr;
+            }
         }
 
         .result-summary {

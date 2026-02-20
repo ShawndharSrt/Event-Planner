@@ -4,12 +4,13 @@
             <span class="material-icons">menu</span>
         </button>
         <div class="app-logo" routerLink="/dashboard">
-            <span class="app-title">Event Planner</span>
+            <span class="app-title">Event <strong>Planner</strong></span>
         </div>
     </div>
 
     <div class="header-right">
-        <button #notificationButton data-notification-button class="icon-btn" (click)="toggleNotifications()">
+        <button #notificationButton data-notification-button class="icon-btn notification-btn"
+            (click)="toggleNotifications()">
             <span class="material-icons">notifications</span>
             <span class="badge" *ngIf="unreadCount() > 0">{{ unreadCount() }}</span>
         </button>

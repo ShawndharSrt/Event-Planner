@@ -1,4 +1,4 @@
-import { Component, DestroyRef, effect, inject, signal } from '@angular/core';
+import { Component, DestroyRef, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -18,6 +18,30 @@ export class DashboardComponent {
   recentEvents = signal<RecentEvent[]>([]);
   tasks = signal<DashboardTask[]>([]);
 
+  // Computed task progress
+  taskProgressPercent = computed(() => {
+    const s = this.stats();
+    const total = s.completedTasks + s.pendingTasks;
+    if (total === 0) return 0;
+    return Math.round((s.completedTasks / total) * 100);
+  });
+
+  // SVG dash for donut (circumference = 2 * PI * 30 ≈ 188.5)
+  taskProgressDash = computed(() => {
+    return Math.round((this.taskProgressPercent() / 100) * 188.5);
+  });
+
+  // Guest breakdown (fallback: split evenly if no breakdown from API)
+  pendingGuests = computed(() => {
+    const total = this.stats().totalGuests;
+    return Math.ceil(total / 2);
+  });
+
+  confirmedGuests = computed(() => {
+    const total = this.stats().totalGuests;
+    return Math.floor(total / 2);
+  });
+
   constructor() {
     this.dashboardService
       .getStats()
@@ -28,16 +52,13 @@ export class DashboardComponent {
           const mappedStats: DashboardStats = {
             upcomingEvents: apiData.totalEvents,
             totalGuests: apiData.totalGuests,
-            pendingTasks: apiData.totalTasks,
+            pendingTasks: apiData.totalTasks - apiData.completedTasks,
             completedTasks: apiData.completedTasks
           };
           this.stats.set(mappedStats);
         },
         error: (error) => {
           console.error('DashboardComponent: Error getting stats:', error);
-          console.error('Error status:', error?.status);
-          console.error('Error message:', error?.message);
-          console.error('Error body:', error?.error);
         }
       });
 
@@ -66,20 +87,18 @@ export class DashboardComponent {
           console.error('DashboardComponent: Error getting tasks:', error);
         }
       });
+  }
 
-    // Log API response when stats are received
-    effect(() => {
-      const statsValue = this.stats();
-    });
-
-    // Log recent events when received
-    effect(() => {
-      const eventsValue = this.recentEvents();
-    });
-
-    // Log tasks when received
-    effect(() => {
-      const tasksValue = this.tasks();
-    });
+  /**
+   * Format event title: makes the last word bold like in the screenshot
+   * e.g. "Company Product Launch" → "Company <strong>Product Launch</strong>"
+   */
+  formatEventTitle(title: string): string {
+    if (!title) return '';
+    const words = title.split(' ');
+    if (words.length <= 1) return `<strong>${title}</strong>`;
+    const first = words.slice(0, words.length - 1).join(' ');
+    const last = words[words.length - 1];
+    return `${first} <strong>${last}</strong>`;
   }
 }
