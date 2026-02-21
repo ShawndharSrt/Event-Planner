@@ -37,7 +37,7 @@
 
                         <!-- Currency Cell -->
                         <span *ngIf="col.type === 'currency'">
-                            {{ col.format ? col.format(row[col.key]) : (row[col.key] | currency:'USD') }}
+                            {{ col.format ? col.format(row[col.key]) : (row[col.key] | currency:'INR') }}
                         </span>
 
                         <!-- Date Cell -->

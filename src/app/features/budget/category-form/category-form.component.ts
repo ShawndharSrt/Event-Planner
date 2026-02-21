@@ -123,7 +123,7 @@ export class CategoryFormComponent extends BaseFormComponent implements OnChange
             // Create new category or budget
             const budgetPayload = {
                 eventId: this.eventId,
-                currency: 'USD',
+                currency: 'INR',
                 categories: [categoryData]
             };
 

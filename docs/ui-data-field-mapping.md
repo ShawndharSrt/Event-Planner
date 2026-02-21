@@ -382,7 +382,7 @@ Response Body:
     "id": 1,
     "eventId": 1,
     "totalBudget": 50000,
-    "currency": "USD",
+    "currency": "INR",
     "categories": [
       { "id": 1, "name": "Venue", "allocatedAmount": 15000, "spentAmount": 12000, "color": "#6366f1", "icon": "location_on" }
     ],

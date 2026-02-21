@@ -162,7 +162,7 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
             eventId: this.eventId || '',
             totalBudget: 0,
             totalSpent: 0,
-            currency: 'USD',
+            currency: 'INR',
             categories: []
         };
     }
@@ -401,9 +401,9 @@ export class BudgetTrackerComponent extends BaseFormComponent implements AfterVi
     }
 
     formatCurrency(amount: number): string {
-        return new Intl.NumberFormat('en-US', {
+        return new Intl.NumberFormat('en-IN', {
             style: 'currency',
-            currency: this.budget()?.currency || 'USD'
+            currency: 'INR'
         }).format(amount);
     }
 

@@ -47,7 +47,7 @@ export class BudgetChartComponent {
     getDataValue(index: number): string {
         const dataVal = this.data.datasets[0]?.data[index];
         if (typeof dataVal === 'number') {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(dataVal);
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(dataVal);
         }
         return '';
     }

@@ -42,7 +42,8 @@
                                         <span class="budget-icon material-icons">account_balance_wallet</span>
                                         <div class="budget-info">
                                             <span class="budget-label">Planned Budget</span>
-                                            <span class="budget-value primary">{{ budgetSummary()?.planned | currency
+                                            <span class="budget-value primary">{{ budgetSummary()?.planned |
+                                                currency:'INR'
                                                 }}</span>
                                         </div>
                                     </div>
@@ -50,7 +51,8 @@
                                         <span class="budget-icon material-icons">credit_card</span>
                                         <div class="budget-info">
                                             <span class="budget-label">Actual Spent</span>
-                                            <span class="budget-value">{{ budgetSummary()?.actual | currency }}</span>
+                                            <span class="budget-value">{{ budgetSummary()?.actual | currency:'INR'
+                                                }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -66,7 +68,7 @@
                                         <span class="detail-label">Variance</span>
                                         <span class="detail-value" [class.positive]="getVariance() >= 0"
                                             [class.negative]="getVariance() < 0">
-                                            {{ getVariance() >= 0 ? '+' : '' }}{{ getVariance() | currency }}
+                                            {{ getVariance() >= 0 ? '+' : '' }}{{ getVariance() | currency:'INR' }}
                                         </span>
                                     </div>
                                     <div class="detail-row">
