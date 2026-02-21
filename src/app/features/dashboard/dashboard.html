@@ -79,12 +79,13 @@
                         class="material-icons">chevron_right</span></button>
             </div>
             <div class="card-body">
-                <h3 class="section-title">Recent <strong>Events</strong></h3>
+                <h3 class="section-title"><strong>Recent Events</strong></h3>
                 <div class="event-list">
                     <div class="event-item" *ngFor="let event of recentEvents()" [routerLink]="['/events', event.id]">
                         <div class="event-thumb">
-                            <!-- <img [src]="event.imageUrl || 'assets/images/event-placeholder.jpg'" [alt]="event.title"
-                                onerror="this.src='assets/images/event-placeholder.jpg'" /> -->
+                            <img [src]="event.coverImage || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'"
+                                [alt]="event.title"
+                                onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'" />
                         </div>
                         <div class="event-details">
                             <h4 [innerHTML]="formatEventTitle(event.title)"></h4>
@@ -117,7 +118,7 @@
                         class="material-icons">chevron_right</span></button>
             </div>
             <div class="card-body">
-                <h3 class="section-title">Tasks <strong>Overview</strong></h3>
+                <h3 class="section-title"><strong>Tasks Overview</strong></h3>
                 <div class="task-list">
                     <div class="task-item" *ngFor="let task of tasks()">
                         <label class="task-title" [class.completed]="task.completed">{{ task.title }}</label>
@@ -145,8 +146,9 @@
             </div>
             <div class="event-mini-item" *ngFor="let event of recentEvents().slice(0,1)">
                 <div class="mini-thumb">
-                    <!-- <img [src]="event.imageUrl || 'assets/images/event-placeholder.jpg'" [alt]="event.title"
-                        onerror="this.src='assets/images/event-placeholder.jpg'" /> -->
+                    <img [src]="event.coverImage || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'"
+                        [alt]="event.title"
+                        onerror="this.src='https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80'" />
                 </div>
                 <div class="mini-info">
                     <span class="mini-title">{{ event.title }}</span>

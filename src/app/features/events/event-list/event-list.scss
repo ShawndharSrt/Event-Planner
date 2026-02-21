@@ -5,7 +5,7 @@
 .page-container {
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 20px;
     padding: 32px;
     background-color: transparent;
     min-height: 100vh;
@@ -367,5 +367,29 @@
             transition: all 0.3s ease;
             font-size: 20px;
         }
+    }
+}
+
+.header-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 14px 0 24px 0;
+
+    .diamond {
+        font-size: 9px;
+        color: #C5A059;
+    }
+
+    .small-diamond {
+        font-size: 6px;
+        color: #C5A059;
+    }
+
+    .line {
+        width: 50px;
+        height: 1.5px;
+        background: linear-gradient(90deg, transparent, #C5A059, transparent);
     }
 }

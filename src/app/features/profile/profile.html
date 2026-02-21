@@ -1,9 +1,22 @@
 <div class="page-container">
+    <!-- HEADER SECTION -->
     <div class="profile-header-card">
-        <div class="cover-image"></div>
-        <div class="profile-content">
+        <div class="header-inner">
+            <div class="cover-image-container">
+                <div class="cover-gradient"></div>
+                <div class="user-details-overlay">
+                    <div class="user-text">
+                        <h1 class="name">{{ user()?.name || 'Shawndhar B' }}</h1>
+                        <p class="email">
+                            <span class="material-icons">email</span>
+                            {{ user()?.email || 'B.P.SHAWNDHARSRT10@GMAIL.COM' | uppercase }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <div class="avatar-container">
-                <div class="avatar">
+                <div class="avatar-bg">
                     <span class="material-icons" *ngIf="!user()?.avatar">person</span>
                     <img *ngIf="user()?.avatar" [src]="user()?.avatar" alt="User Avatar">
                 </div>
@@ -12,77 +25,79 @@
                 </button>
             </div>
 
-            <div class="user-info">
-                <div class="info-header">
-                    <div>
-                        <h1 class="name">{{ user()?.name }}</h1>
-                        <p class="role">
-                            <span class="material-icons">verified_user</span>
-                            {{ user()?.role?.join(', ') | titlecase }}
-                        </p>
-                    </div>
-                    <button class="btn-primary" (click)="toggleEdit()" *ngIf="!isEditing()">
-                        <span class="material-icons">edit</span>
-                        Edit Profile
+            <div class="header-actions">
+                <button class="btn-primary edit-btn" (click)="toggleEdit()" *ngIf="!isEditing()">
+                    <span class="material-icons">edit</span>
+                    EDIT PROFILE
+                </button>
+                <div class="edit-actions" *ngIf="isEditing()">
+                    <button class="btn-secondary" (click)="toggleEdit()" [disabled]="isSaving()">CANCEL</button>
+                    <button class="btn-primary" (click)="saveProfile()" [disabled]="form.invalid || isSaving()">
+                        <span *ngIf="!isSaving()">SAVE CHANGES</span>
+                        <span *ngIf="isSaving()" class="spinner"></span>
                     </button>
-                    <div class="edit-actions" *ngIf="isEditing()">
-                        <button class="btn-secondary" (click)="toggleEdit()" [disabled]="isSaving()">Cancel</button>
-                        <button class="btn-primary" (click)="saveProfile()" [disabled]="form.invalid || isSaving()">
-                            <span *ngIf="!isSaving()">Save Changes</span>
-                            <span *ngIf="isSaving()" class="spinner"></span>
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="profile-details-grid">
-        <div class="details-card">
-            <div class="card-header">
-                <h2>Personal Information</h2>
+    <!-- PERSONAL INFO SECTION -->
+    <div class="details-card">
+        <div class="card-header">
+            <div class="gold-icon-circle">
+                <span class="material-icons">person</span>
             </div>
-
-            <div class="card-body" *ngIf="!isEditing()">
-                <div class="info-row">
-                    <span class="label">Email</span>
-                    <span class="value">{{ user()?.email }}</span>
-                </div>
-                <div class="info-row">
-                    <span class="label">Role</span>
-                    <span class="value">{{ user()?.role?.join(', ') | titlecase }}</span>
-                </div>
-            </div>
-
-            <form [formGroup]="form" class="edit-form" *ngIf="isEditing()">
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" formControlName="name">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" formControlName="email">
-                </div>
-            </form>
+            <h2>Personal Information</h2>
         </div>
 
-        <div class="stats-card">
-            <div class="card-header">
-                <h2>Activity Stats</h2>
+        <div class="card-body" *ngIf="!isEditing()">
+            <div class="info-block">
+                <div class="info-label">
+                    <span class="material-icons">email</span> EMAIL
+                </div>
+                <div class="info-value">
+                    {{ user()?.email || 'B.P.SHAWNDHARSRT10@GMAIL.COM' | uppercase }}
+                </div>
             </div>
-            <div class="stats-grid" *ngIf="stats()">
-                <div class="stat-item">
-                    <span class="value">{{ stats().eventsCreated }}</span>
-                    <span class="label">Events Created</span>
-                </div>
-                <div class="stat-item">
-                    <span class="value">{{ stats().tasksCompleted }}</span>
-                    <span class="label">Tasks Completed</span>
-                </div>
-                <div class="stat-item">
-                    <span class="value">{{ stats().guestsManaged }}</span>
-                    <span class="label">Guests Managed</span>
-                </div>
+            <!-- Additional user roles could optionally go here -->
+        </div>
+
+        <form [formGroup]="form" class="edit-form" *ngIf="isEditing()">
+            <div class="form-group">
+                <label>FULL NAME</label>
+                <input type="text" formControlName="name">
+            </div>
+            <div class="form-group">
+                <label>EMAIL</label>
+                <input type="email" formControlName="email">
+            </div>
+        </form>
+    </div>
+
+    <!-- ACTIVITY STATS SECTION -->
+    <div class="stats-card">
+        <div class="card-header">
+            <div class="gold-icon-circle">
+                <span class="material-icons">bar_chart</span>
+            </div>
+            <h2>Activity Stats</h2>
+        </div>
+
+        <div class="stats-grid" *ngIf="stats()">
+            <div class="stat-block">
+                <span class="material-icons stat-icon">event_note</span>
+                <span class="stat-number">{{ stats().eventsCreated || 2 }}</span>
+                <span class="stat-label">EVENTS CREATED</span>
+            </div>
+            <div class="stat-block">
+                <span class="material-icons stat-icon">check_box</span>
+                <span class="stat-number">{{ stats().tasksCompleted || 0 }}</span>
+                <span class="stat-label">TASKS COMPLETED</span>
+            </div>
+            <div class="stat-block">
+                <span class="material-icons stat-icon">people</span>
+                <span class="stat-number">{{ stats().guestsManaged || 0 }}</span>
+                <span class="stat-label">GUESTS MANAGED</span>
             </div>
         </div>
     </div>

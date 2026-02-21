@@ -12,6 +12,7 @@ export interface Event {
     description?: string;
     coverImage?: string;
     organizerId: string;
+    createdByName?: string;
     capacity?: number;
     stats?: EventStats;
     guests?: EventGuestList[];

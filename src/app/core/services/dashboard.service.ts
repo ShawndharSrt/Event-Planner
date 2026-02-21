@@ -28,6 +28,7 @@ export interface RecentEvent {
     month: string;
     day: string;
     imageUrl?: string;
+    coverImage?: string;
 }
 
 export interface DashboardTask {

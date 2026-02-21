@@ -6,7 +6,7 @@
     padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 10px;
     background-color: transparent;
 
     @include respond-down('md') {
@@ -16,8 +16,8 @@
 }
 
 .page-header {
-    @include flex-between;
-    margin-bottom: $spacing-lg;
+    text-align: center;
+    position: relative;
 
     .header-content {
         .page-title {
@@ -47,9 +47,9 @@
 
     .create-btn {
         position: absolute;
-        // top: 50%;s
+        top: 50%;
         transform: translateY(-50%);
-        right: 1rem;
+        right: 0;
         background: linear-gradient(135deg, #C5A059 0%, #8B5E23 60%, #6B4418 100%);
         color: #fff;
         padding: 12px 24px;
@@ -533,5 +533,29 @@
             transform: translateY(0);
             box-shadow: 0 2px 4px rgba($primary-color, 0.2);
         }
+    }
+}
+
+.header-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 14px 0 24px 0;
+
+    .diamond {
+        font-size: 9px;
+        color: #C5A059;
+    }
+
+    .small-diamond {
+        font-size: 6px;
+        color: #C5A059;
+    }
+
+    .line {
+        width: 50px;
+        height: 1.5px;
+        background: linear-gradient(90deg, transparent, #C5A059, transparent);
     }
 }

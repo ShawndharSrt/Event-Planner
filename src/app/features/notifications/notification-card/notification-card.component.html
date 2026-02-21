@@ -1,29 +1,28 @@
-<div class="glass-card"
-    [ngClass]="['severity-' + notification.severity.toLowerCase(), notification.read ? 'read' : 'unread']">
-
-    <!-- Left Accent Bar -->
-    <div class="accent-bar"></div>
-
-    <!-- Icon Area -->
-    <div class="icon-wrapper">
+<div class="notification-card-wrapper" [class.unread]="!notification.read">
+    <!-- Icon Container -->
+    <div class="icon-container" [ngClass]="'severity-' + notification.severity.toLowerCase()">
         <mat-icon>{{ getIcon() }}</mat-icon>
     </div>
 
-    <!-- Content -->
-    <div class="content">
-        <div class="header">
-            <!-- <span class="title">{{ notification.severity }}</span> -->
-            <span class="time">{{ notification.createdAt | date:'short' }}</span>
+    <!-- Content Body -->
+    <div class="card-content">
+        <h4 class="card-title">{{ notification.code.replace('_', ' ') | titlecase }}</h4>
+        <div class="card-subtitle-row">
+            <span class="card-message" [innerHTML]="notification.message"></span>
+            @if (notification.eventId) {
+            <span class="tag-badge">Event {{ notification.eventId.slice(-4) }}</span>
+            }
         </div>
-        <p class="message">{{ notification.message }}</p>
     </div>
 
-    <!-- Actions -->
-    <div class="actions">
-        @if (!notification.read) {
-        <button mat-icon-button (click)="onMarkCheck($event)" matTooltip="Mark as read">
-            <mat-icon>check_circle_outline</mat-icon>
+    <!-- Right Actions -->
+    <div class="right-actions">
+        <span class="time">{{ notification.createdAt | date:'shortTime' }}</span>
+        <button class="btn-action" (click)="onMarkCheck($event)">
+            {{ notification.severity === 'CRITICAL' ? 'Review' : 'View' }}
         </button>
-        }
+        <button mat-icon-button class="btn-menu" (click)="$event.stopPropagation()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
     </div>
 </div>

@@ -71,4 +71,14 @@ export class EventService {
         return this.api.post<ApiResponse<any>>('/events/upload-guests', formData);
     }
 
+    uploadCover(eventId: string, file: File): Observable<ApiResponse<any>> {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.api.post<ApiResponse<any>>(`/events/${eventId}/upload-cover`, formData);
+    }
+
+    removeGuestFromEvents(eventId: string, guestId: string): Observable<ApiResponse<Event>> {
+        return this.api.delete<ApiResponse<Event>>(`/events/${eventId}/guests/${guestId}`);
+    }
+
 }

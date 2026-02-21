@@ -92,13 +92,30 @@
 
         <div class="form-section">
             <h2 class="section-title">Cover Image</h2>
-            <div class="image-upload">
-                <div class="upload-placeholder">
-                    <span class="icon">📷</span>
-                    <p>Click to upload or drag and drop</p>
-                    <span class="hint">SVG, PNG, JPG or GIF (max. 800x400px)</span>
+            <div class="image-upload" (click)="fileInput.click()" [class.has-image]="!!coverImagePreview"
+                style="cursor: pointer; position: relative;">
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+                <div class="upload-placeholder" *ngIf="!coverImagePreview">
+                    <span class="icon" style="display: flex; justify-content: center;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"
+                            fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                            <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                    </span>
+                    <p>Click to upload image</p>
+                    <span class="hint">PNG, JPG, SVG or GIF (max. 2MB)</span>
+                </div>
+                <div class="image-preview" *ngIf="coverImagePreview"
+                    style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;">
+                    <img [src]="coverImagePreview" alt="Cover Preview"
+                        style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; margin-bottom: 10px;" />
+                    <button type="button" class="btn-secondary btn-remove" (click)="removeImage($event)">Remove</button>
                 </div>
             </div>
+            <span class="error-msg" *ngIf="imageError" style="display: block; margin-top: 5px;">{{ imageError }}</span>
         </div>
     </div>
 </div>

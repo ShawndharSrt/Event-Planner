@@ -3,6 +3,13 @@
         <div class="header-content">
             <h1 class="page-title">Events Management</h1>
             <p class="page-subtitle">Plan, organize, and oversee your events with clarity.</p>
+            <div class="header-divider">
+                <span class="line"></span>
+                <span class="diamond">&#x25C6;</span>
+                <span class="small-diamond">&#x25C7;</span>
+                <span class="diamond">&#x25C6;</span>
+                <span class="line"></span>
+            </div>
         </div>
         <button class="create-btn" routerLink="/events/new">
             Create Event
@@ -60,8 +67,8 @@
                 </div>
                 <div class="card-footer">
                     <div class="organizer">
-                        <div class="avatar">JD</div>
-                        <span>John Doe</span>
+                        <div class="avatar">{{ getInitials(event.createdByName) }}</div>
+                        <span>{{ event.createdByName || 'Unknown User' }}</span>
                     </div>
                     <mat-icon class="arrow-icon">arrow_forward</mat-icon>
                 </div>

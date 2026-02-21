@@ -34,4 +34,14 @@ export class EventListComponent {
     const percentage = (responded / totalGuests) * 100;
     return Math.round(percentage);
   }
+
+  getInitials(name?: string): string {
+    if (!name) return 'UN';
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase();
+  }
 }

@@ -105,6 +105,20 @@ export class CategoryFormComponent extends BaseFormComponent implements OnChange
                     this.isLoading.set(false);
                 }
             });
+        } else if (this.budgetId) {
+            // Create new category in existing budget
+            this.budgetService.createCategory(this.budgetId, categoryData as any).subscribe({
+                next: () => {
+                    this.snackbarService.show('Category created successfully', 'success');
+                    this.isLoading.set(false);
+                    this.saved.emit();
+                },
+                error: (err) => {
+                    console.error('Failed to create category', err);
+                    this.snackbarService.show('Failed to create category', 'error');
+                    this.isLoading.set(false);
+                }
+            });
         } else {
             // Create new category or budget
             const budgetPayload = {

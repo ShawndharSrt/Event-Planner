@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <style>
+      .icon-stroke { stroke: #B9862B; stroke-width: 1; fill: none; }
+      .icon-stroke-thick { stroke: #1A1A1A; stroke-width: 1.5; fill: none; }
+    </style>
+  </defs>
+  <g transform="translate(50, 50) scale(1.6)">
+    <circle cx="0" cy="0" r="18" class="icon-stroke" stroke-width="0.5" opacity="0.6"/>
+    <circle cx="0" cy="0" r="14" class="icon-stroke" stroke-width="1.2"/>
+    <path d="M -3 -6 L -3 8" class="icon-stroke-thick" />
+    <path d="M -3 -6 C 4 -6, 6 -3, 6 0 C 6 3, 4 5, -3 5" class="icon-stroke" stroke-width="1.5" />
+    <path d="M 4 -1 L 5.5 -2.5 L 7 -1 L 5.5 0.5 Z" fill="#B9862B" />
+  </g>
+</svg>

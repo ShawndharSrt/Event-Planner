@@ -431,7 +431,7 @@ export class EventDetailsComponent {
           return;
         }
 
-        this.guestService.deleteGuest(guestId).subscribe({
+        this.eventService.removeGuestFromEvents(this.eventId()!, guestId).subscribe({
           next: () => {
             this.snackbar.show('Guest removed from event successfully', 'success');
             this.refreshGuests$.next();
