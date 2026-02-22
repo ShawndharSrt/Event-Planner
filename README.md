@@ -1,59 +1,67 @@
-# EventPlanner
+# PlanIt - Event Planning Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+Welcome to **PlanIt**, a modern, luxury-styled event planning application designed to streamline the organization of high-end events. Built with Angular 21, PlanIt offers a comprehensive suite of tools to manage guests, track budgets, and handle seamless communication through email and WhatsApp notifications.
 
-## Development server
+## 🌟 Key Features
 
-To start a local development server, run:
+- **Dynamic Dashboard**: View an overview of your event's status, recent activities, and key metrics.
+- **Budget & Expense Tracking**: Keep finances in check with an intuitive budget tracker, complete with expense adding, editing, and deleting capabilities, visualized using Chart.js.
+- **Guest Management**: Effortlessly manage event attendees, configure user-based filtering, and track RSVPs.
+- **Automated Notifications**: Send invitations and updates to guests via dual-channel notifications (Email & WhatsApp integrations).
+- **Premium UI/UX**: Experience a responsive, carefully crafted interface featuring a sleek, luxury design system, complete with micro-animations and a bespoke icon-only logo.
+- **Secure Authentication**: Includes role-based access control (Admin/User), JWT token expiration logic, and secure password recovery mechanisms.
 
+## 🛠 Tech Stack
+
+- **Frontend Framework**: [Angular 21](https://angular.dev/)
+- **UI Components**: [Angular Material](https://material.angular.io/) & Angular CDK
+- **Styling**: Vanilla CSS with a bespoke luxury design system
+- **Data Visualization**: [Chart.js](https://www.chartjs.org/) & [ng2-charts](https://valor-software.com/ng2-charts/)
+- **Reactive Programming**: [RxJS](https://rxjs.dev/)
+- **Testing**: Vitest & JSdom
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (v18.13.0 or later recommended)
+- npm (v10 or later)
+
+### Installation
+
+1. Clone the repository and navigate into the project directory:
+   ```bash
+   cd event-planner
+   ```
+
+2. Install the project dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the local development server:
+   ```bash
+   npm run start
+   # or
+   ng serve
+   ```
+
+4. Open your browser and navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+## 🏗 Build & Deployment
+
+To compile the project for production, run:
 ```bash
-ng serve
+npm run build
+```
+This will compile the project and store the optimized build artifacts in the `dist/event-planner/` directory.
+
+## 🧪 Testing
+
+To execute unit tests using Vitest, run:
+```bash
+npm run test
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🤝 Contribution
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+We welcome contributions and improvements! Please adhere to the established design system and create a separate branch for new features or bug fixes.
