@@ -72,6 +72,3 @@ npm run test
 - **Communication Integrations**: Extended the event invitation functionality to go beyond standard emails by integrating automated **WhatsApp notifications** via custom backend services.
 - **Performance & State Management**: Integrated efficient caching solutions and refined component states, including the removal of deprecated features (e.g., legacy Activities module) for a cleaner codebase.
 
-## 🤝 Contribution 
-
-We welcome contributions and improvements! Please adhere to the established design system and create a separate branch for new features or bug fixes.
