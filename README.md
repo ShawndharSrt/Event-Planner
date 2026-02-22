@@ -66,7 +66,7 @@ npm run test
 
 - **Notifications Redesign**: The notifications page now features a premium UI matching high-end mockups, complete with CDK Virtual Scroll for the feed, smooth micro-animations, soft shadows, and gold accent styling.
 - **Budget Tracker UI Refresh**: Updated the Budget layout to ensure consistent, elegant styling with the application's forms, modals, and overarching luxury design system.
-- **Enhanced Authentication Flow**: Added a dedicated password recovery flow (`Forgot Password` page), dynamic JWT token expiration handling (redirecting to login), and improved UI visibility on login/signup cards (glassmorphism tweaks).
+- **Enhanced Authentication Flow**: Added a dedicated password recovery flow (`Forgot Password` page), dynamic JWT token expiration handling (redirecting to login), and improved UI visibility on login/signup cards (glassmorphism tweaks). 
 - **User-Based Filtering & Security**: Expanded backend user filtering across key APIs (`/api/dashboard`, `/api/tasks`, `/api/guests`) to ensure rigorous data privacy and precise scoping based on authentication roles (Admin/User).
 - **Localization**: Standardized currency formatting to Indian Rupees (₹ INR) across all dashboard and financial data components.
 - **Communication Integrations**: Extended the event invitation functionality to go beyond standard emails by integrating automated **WhatsApp notifications** via custom backend services.
