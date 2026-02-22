@@ -62,6 +62,6 @@ To execute unit tests using Vitest, run:
 npm run test
 ```
 
-## 🤝 Contribution
+## 🤝 Contribution 
 
 We welcome contributions and improvements! Please adhere to the established design system and create a separate branch for new features or bug fixes.
