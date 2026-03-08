@@ -11,25 +11,62 @@
     </div>
 
     <form [formGroup]="form" class="settings-grid">
-        <!-- General Settings -->
+        <!-- Account Settings -->
         <div class="settings-card">
             <div class="card-header">
-                <span class="material-icons icon">tune</span>
-                <h2>General</h2>
+                <span class="material-icons icon">person</span>
+                <h2>Account Settings</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" formControlName="firstName" placeholder="Enter first name">
+                        <div class="error-msg" *ngIf="form.get('firstName')?.touched && form.get('firstName')?.invalid">
+                            First name is required
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" formControlName="lastName" placeholder="Enter last name">
+                        <div class="error-msg" *ngIf="form.get('lastName')?.touched && form.get('lastName')?.invalid">
+                            Last name is required
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" formControlName="email" placeholder="Enter email address">
+                    <div class="error-msg" *ngIf="form.get('email')?.touched && form.get('email')?.invalid">
+                        <span *ngIf="form.get('email')?.errors?.['required']">Email is required</span>
+                        <span *ngIf="form.get('email')?.errors?.['email']">Invalid email format</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Preferences -->
+        <div class="settings-card">
+            <div class="card-header">
+                <span class="material-icons icon">settings_applications</span>
+                <h2>System Preferences</h2>
             </div>
             <div class="card-body">
                 <div class="form-group">
-                    <label>Application Name</label>
-                    <input type="text" formControlName="appName">
-                    <small>The name displayed in the browser tab</small>
+                    <label>Default Currency</label>
+                    <select formControlName="currency">
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="INR">INR (₹)</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label>Language</label>
-                    <select formControlName="language">
-                        <option value="en">English</option>
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <option value="de">German</option>
+                    <label>Date Format</label>
+                    <select formControlName="dateFormat">
+                        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
                     </select>
                 </div>
             </div>
@@ -97,7 +134,7 @@
                         <span class="material-icons">lock_reset</span>
                         Change Password
                     </button>
-                    <button type="button" class="btn-danger-outline">
+                    <button type="button" class="btn-danger-outline" (click)="authService.logout()">
                         <span class="material-icons">logout</span>
                         Log Out All Devices
                     </button>

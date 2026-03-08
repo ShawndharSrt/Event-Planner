@@ -179,6 +179,36 @@
         font-size: $font-size-xs;
         color: $text-secondary;
     }
+
+    .error-msg {
+        color: $danger-color;
+        font-size: 0.75rem;
+        margin-top: 4px;
+        font-weight: 500;
+        animation: fadeIn 0.3s ease;
+    }
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $spacing-md;
+
+    @include respond-down('md') {
+        grid-template-columns: 1fr;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .toggle-row {
