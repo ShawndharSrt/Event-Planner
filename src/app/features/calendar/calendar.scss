@@ -347,3 +347,18 @@
         padding: 16px;
     }
 }
+
+// Replaces inline style="width: 200px" on premium-dropdown in calendar
+.premium-dropdown--200 {
+    width: 200px;
+}
+
+// Replaces inline style="cursor: pointer" on .current-month
+.current-month--clickable {
+    cursor: pointer;
+}
+
+// File input hidden helper
+.file-input-hidden {
+    display: none;
+}

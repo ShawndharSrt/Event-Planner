@@ -6,7 +6,7 @@
         </div>
         <div class="actions">
             <!-- Premium Dropdown -->
-            <div class="premium-dropdown" [class.is-open]="isDropdownOpen()" style="width: 200px;">
+            <div class="premium-dropdown premium-dropdown--200" [class.is-open]="isDropdownOpen()">
                 <div class="premium-dropdown__trigger" tabindex="0" (click)="toggleDropdown()"
                     (keydown.enter)="toggleDropdown()">
                     <span class="premium-dropdown__selected">{{ selectedEventName() }}</span>
@@ -41,7 +41,7 @@
     <div class="calendar-container">
         <div class="calendar-header">
             <button class="nav-btn" (click)="prev()">←</button>
-            <h2 class="current-month" (click)="today()" style="cursor: pointer" title="Go to Today">{{
+            <h2 class="current-month current-month--clickable" (click)="today()" title="Go to Today">{{
                 currentMonthName() }}</h2>
             <button class="nav-btn" (click)="next()">→</button>
         </div>

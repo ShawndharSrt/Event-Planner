@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CalendarService } from './calendar.service';
+import { CalendarService } from '../../core/services/calendar.service';
 import { CalendarDay, CalendarItem, CalendarView, EventDropdownItem } from './calendar.models';
 
 @Component({
@@ -64,7 +64,6 @@ export class CalendarComponent {
 
   loadDropdownOptions() {
     this.calendarService.getEventsDropdown().subscribe(options => {
-      console.log('Dropdown Options Loaded:', options);
       this.dropdownOptions.set(options);
     });
   }
@@ -80,7 +79,6 @@ export class CalendarComponent {
 
     this.calendarService.getCalendarItems(view, startStr, endStr, eventId ?? undefined)
       .subscribe(items => {
-        console.log('Calendar Items Loaded:', items);
         this.calendarItems.set(items);
       });
   }

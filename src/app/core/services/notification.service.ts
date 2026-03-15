@@ -1,4 +1,4 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Notification } from '../models/notification.model';
 import { tap } from 'rxjs';
 import { ApiService } from './api.service';
@@ -8,10 +8,11 @@ import { ApiResponse } from '../models/api-response.model';
     providedIn: 'root'
 })
 export class NotificationService {
+    private api = inject(ApiService);
     private notifications = signal<Notification[]>([]);
     readonly notifications$ = this.notifications.asReadonly();
 
-    constructor(private api: ApiService) {
+    constructor() {
         this.loadNotifications();
     }
 

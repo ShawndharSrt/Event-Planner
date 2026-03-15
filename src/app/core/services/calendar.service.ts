@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ApiService } from '../../core/services/api.service';
-import { CalendarItem, EventDropdownItem, CalendarView } from './calendar.models';
-import { ApiResponse } from '../../core/models/api-response.model';
+import { ApiService } from './api.service';
+import { CalendarItem, EventDropdownItem, CalendarView } from '../../features/calendar/calendar.models';
+import { ApiResponse } from '../models/api-response.model';
 
 @Injectable({
     providedIn: 'root'

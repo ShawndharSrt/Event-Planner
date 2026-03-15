@@ -1,11 +1,10 @@
-import { Injectable, signal, effect } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, timer, Subscription, of } from 'rxjs';
-import { tap, map, catchError } from 'rxjs/operators';
+import { Observable, timer, Subscription } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
 import { User } from '../models/user.model';
-import { HttpClient, HttpParams } from '@angular/common/http';
 
 export interface RegisterPayload extends Partial<User> {
     firstName?: string;
@@ -22,13 +21,19 @@ export interface AuthResponse {
     providedIn: 'root'
 })
 export class AuthService {
+    private router = inject(Router);
+    private api = inject(ApiService);
+
     // State
-    currentUser = signal<User | null>(null);
-    isAuthenticated = signal<boolean>(false);
+    private _currentUser = signal<User | null>(null);
+    private _isAuthenticated = signal<boolean>(false);
+
+    readonly currentUser = this._currentUser.asReadonly();
+    readonly isAuthenticated = this._isAuthenticated.asReadonly();
 
     private tokenTimer: Subscription | null = null;
 
-    constructor(private router: Router, private api: ApiService, private http: HttpClient) {
+    constructor() {
         this.performAutoLogin();
     }
 
@@ -41,8 +46,8 @@ export class AuthService {
             const now = new Date();
 
             if (expiry && expiry > now) {
-                this.currentUser.set(JSON.parse(storedUser));
-                this.isAuthenticated.set(true);
+                this._currentUser.set(JSON.parse(storedUser));
+                this._isAuthenticated.set(true);
                 this.autoLogout(expiry.getTime() - now.getTime());
             } else {
                 this.logout();
@@ -60,6 +65,7 @@ export class AuthService {
         );
     }
 
+
     register(user: RegisterPayload): Observable<ApiResponse<AuthResponse>> {
         return this.api.post<ApiResponse<AuthResponse>>('/auth/signup', user).pipe(
             tap(response => {
@@ -71,20 +77,13 @@ export class AuthService {
     }
 
 
-    private baseUrl = 'http://localhost:8080';
-
-    forgotPassword(email: string): Observable<ApiResponse<any>> {
-        const params = new HttpParams().set('email', email);
-        return this.http.post<ApiResponse<any>>(
-            `${this.baseUrl}/auth/forgot-password`,
-            null,                // body
-            { params }           // request params
-        );
+    forgotPassword(email: string): Observable<ApiResponse<string>> {
+        return this.api.post<ApiResponse<string>>(`/auth/forgot-password?email=${encodeURIComponent(email)}`, null);
     }
 
     logout(): void {
-        this.currentUser.set(null);
-        this.isAuthenticated.set(false);
+        this._currentUser.set(null);
+        this._isAuthenticated.set(false);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('expires_at');
@@ -115,8 +114,8 @@ export class AuthService {
     private setSession(authResult: AuthResponse): void {
         const { user, token } = authResult;
 
-        this.currentUser.set(user);
-        this.isAuthenticated.set(true);
+        this._currentUser.set(user);
+        this._isAuthenticated.set(true);
 
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(user));
@@ -132,13 +131,11 @@ export class AuthService {
     }
 
     private autoLogout(expirationDuration: number): void {
-        console.log(`Auto-logout scheduled in ${expirationDuration} ms`);
         if (this.tokenTimer) {
             this.tokenTimer.unsubscribe();
         }
 
         this.tokenTimer = timer(expirationDuration).subscribe(() => {
-            console.log('Auto-logout timer triggered. Logging out...');
             this.logout();
         });
     }
@@ -155,28 +152,20 @@ export class AuthService {
 
             if (payload && payload.exp) {
                 let exp = payload.exp;
-                // Check if exp is in milliseconds (common backend error)
-                // If exp is > 100,000,000,000 (11 digits), it's likely ms (current timestamps are ~1.7 trillion in ms, ~1.7 billion in s)
+                // If exp > 100,000,000,000 (11 digits), it's in milliseconds — normalize to seconds
                 if (exp > 100000000000) {
-                    console.warn('WARNING: JWT "exp" claim appears to be in milliseconds. It should be in seconds. Treating as ms.');
                     exp = Math.floor(exp / 1000);
                 }
-
-                const expiry = new Date(exp * 1000);
-                const now = new Date();
-                console.log('Token Expiry:', expiry, 'Current Time:', now);
-                console.log('Time until expiry:', (expiry.getTime() - now.getTime()) / 1000, 'seconds');
-                return expiry;
+                return new Date(exp * 1000);
             }
             return null;
-        } catch (error) {
-            console.error('Error decoding token:', error);
+        } catch {
             return null;
         }
     }
 
     updateProfile(updatedUser: Partial<User>): Observable<ApiResponse<User>> {
-        const currentUser = this.currentUser();
+        const currentUser = this._currentUser();
         if (!currentUser) {
             throw new Error('No user logged in');
         }
@@ -185,7 +174,7 @@ export class AuthService {
             tap(response => {
                 const user = response.data;
                 if (user) {
-                    this.currentUser.set(user);
+                    this._currentUser.set(user);
                     localStorage.setItem('user', JSON.stringify(user));
                 }
             })

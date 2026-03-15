@@ -6,7 +6,7 @@
         </div>
         <div class="event-selector">
             <!-- Premium Dropdown -->
-            <div class="premium-dropdown" [class.is-open]="isDropdownOpen()" style="width: 250px;">
+            <div class="premium-dropdown premium-dropdown--250" [class.is-open]="isDropdownOpen()">
                 <div class="premium-dropdown__trigger" tabindex="0" (click)="toggleDropdown()"
                     (keydown.enter)="toggleDropdown()">
                     <span class="premium-dropdown__selected">{{ selectedEventName() }}</span>

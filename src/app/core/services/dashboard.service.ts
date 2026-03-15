@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
@@ -42,8 +42,7 @@ export interface DashboardTask {
     providedIn: 'root'
 })
 export class DashboardService {
-
-    constructor(private api: ApiService) { }
+    private api = inject(ApiService);
 
     getStats(): Observable<ApiResponse<DashboardOverviewResponse>> {
         return this.api.get<ApiResponse<DashboardOverviewResponse>>('/dashboard/overview');

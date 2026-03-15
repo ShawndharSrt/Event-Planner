@@ -31,7 +31,6 @@ export class ForgotPasswordComponent extends BaseFormComponent {
         if (this.isFormValid()) {
             this.isLoading = true;
             const { email } = this.form.value;
-            console.log(email);
 
             this.authService.forgotPassword(email)
                 .pipe(finalize(() => this.isLoading = false))

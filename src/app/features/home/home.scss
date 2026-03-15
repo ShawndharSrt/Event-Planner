@@ -681,3 +681,17 @@ h3 {
         transform: translateX(-50%) translateY(-5px);
     }
 }
+
+// Replaces inline style="display: flex; gap: 1rem; justify-content: center" on hero-cta
+.hero-cta--flex {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+// Replaces inline style="height: 50px; object-fit: contain; opacity: 0.5" on signature img
+.signature-img--faded {
+    height: 50px;
+    object-fit: contain;
+    opacity: 0.5;
+}

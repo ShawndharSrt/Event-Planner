@@ -133,7 +133,7 @@
                     <div class="card-header-with-actions" *ngIf="selectedTableGuests().length === 0">
                         <h3 class="card-title">Guest List</h3>
                         <div class="header-actions">
-                            <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;"
+                            <input type="file" #fileInput (change)="onFileSelected($event)" class="file-input-hidden"
                                 accept=".xlsx, .xls">
                             <button type="button" class="btn-action btn-import" (click)="fileInput.click()">Import
                                 Guests</button>
@@ -179,11 +179,9 @@
             </ng-template>
             <div class="tab-content">
                 <div class="section-card">
-                    <div class="card-header"
-                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h3 class="card-title" style="margin: 0;">Event Tasks</h3>
-                        <button class="btn-primary" routerLink="/tasks"
-                            style="padding: 8px 16px; font-size: 14px;">Manage
+                    <div class="card-header card-header--space-between">
+                        <h3 class="card-title card-title--no-margin">Event Tasks</h3>
+                        <button class="btn-primary btn-tasks-manage" routerLink="/tasks">Manage
                             Tasks</button>
                     </div>
 

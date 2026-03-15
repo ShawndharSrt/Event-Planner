@@ -1078,3 +1078,27 @@ mat-tab-group {
         filter: grayscale(0.5);
     }
 }
+
+// Replaces inline style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px"
+.card-header--space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $spacing-lg;
+}
+
+// Replaces inline style="margin: 0" on card-title
+.card-title--no-margin {
+    margin: 0;
+}
+
+// Replaces inline style="padding: 8px 16px; font-size: 14px" on tasks manage button
+.btn-tasks-manage {
+    padding: $spacing-sm $spacing-lg;
+    font-size: $font-size-sm;
+}
+
+// Replaces inline style="display: none" on hidden file input
+.file-input-hidden {
+    display: none;
+}

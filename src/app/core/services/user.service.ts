@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
@@ -14,8 +14,7 @@ export interface UserStats {
     providedIn: 'root'
 })
 export class UserService {
-
-    constructor(private api: ApiService) { }
+    private api = inject(ApiService);
 
     getUser(): Observable<ApiResponse<User>> {
         return this.api.get<ApiResponse<User>>('/users/me');

@@ -93,10 +93,11 @@
         <div class="form-section">
             <h2 class="section-title">Cover Image</h2>
             <div class="image-upload" (click)="fileInput.click()" [class.has-image]="!!coverImagePreview"
-                style="cursor: pointer; position: relative;">
-                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+                class="image-upload image-upload--clickable">
+                <input type="file" #fileInput (change)="onFileSelected($event)" accept="image/*"
+                    class="file-input-hidden">
                 <div class="upload-placeholder" *ngIf="!coverImagePreview">
-                    <span class="icon" style="display: flex; justify-content: center;">
+                    <span class="icon icon--flex-center">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
                             stroke-linejoin="round">
@@ -108,14 +109,12 @@
                     <p>Click to upload image</p>
                     <span class="hint">PNG, JPG, SVG or GIF (max. 2MB)</span>
                 </div>
-                <div class="image-preview" *ngIf="coverImagePreview"
-                    style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center;">
-                    <img [src]="coverImagePreview" alt="Cover Preview"
-                        style="max-width: 100%; max-height: 200px; object-fit: contain; border-radius: 8px; margin-bottom: 10px;" />
+                <div class="image-preview" *ngIf="coverImagePreview" class="image-preview image-preview--flex">
+                    <img [src]="coverImagePreview" alt="Cover Preview" class="image-preview__img" />
                     <button type="button" class="btn-secondary btn-remove" (click)="removeImage($event)">Remove</button>
                 </div>
             </div>
-            <span class="error-msg" *ngIf="imageError" style="display: block; margin-top: 5px;">{{ imageError }}</span>
+            <span class="error-msg" *ngIf="imageError" class="error-msg error-msg--block">{{ imageError }}</span>
         </div>
     </div>
 </div>

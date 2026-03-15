@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 import { ApiResponse } from '../models/api-response.model';
@@ -8,7 +8,7 @@ import { Expense, ExpenseFilter } from '../models/budget.model';
     providedIn: 'root'
 })
 export class ExpenseService {
-    constructor(private api: ApiService) { }
+    private api = inject(ApiService);
 
     /**
      * Get expenses for an event

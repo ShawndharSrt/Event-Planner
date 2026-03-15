@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ApiService } from './api.service';
@@ -9,7 +9,7 @@ import { Budget, BudgetWithDetails, BudgetCategory, CreateCategoryDto, UpdateCat
     providedIn: 'root'
 })
 export class BudgetService {
-    constructor(private api: ApiService) { }
+    private api = inject(ApiService);
 
     /**
      * Transform API response to match UI model
